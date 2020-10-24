@@ -10,13 +10,12 @@ public class TableBehaviour : MonoBehaviour
     private string coverLayerName = "Cover";
     private Animator animator;
 
-    void Awake()
-    {
+    void Awake() {
         animator = GetComponent<Animator>();
     }
 
     public void Turn() {
         animator.SetTrigger("Turn");
-        gameObject.layer = LayerMask.NameToLayer("Cover");
+        gameObject.layer = LayerMask.NameToLayer(coverLayerName);
     }
 }

@@ -8,8 +8,9 @@ public class CharacterPlayerInput : MonoBehaviour
 {
     private PlayerInputAction inputAction;
     private CharacterController characterController;
+    private CrosshairController crosshairController;
     private Camera mainCamera;
-    private Vector3 mouseScreenPosition;
+    private Vector3 worldMousePosition;
 
     private void Awake() {
         InitFields();
@@ -20,13 +21,17 @@ public class CharacterPlayerInput : MonoBehaviour
     }
 
     private void Update() {
-        characterController.AimAt(mainCamera.ScreenToWorldPoint(mouseScreenPosition));
+        characterController.AimAt(worldMousePosition);
+        crosshairController.MoveAt(worldMousePosition);
     }
 
     private void InitFields() {
         inputAction = new PlayerInputAction();
         characterController = GetComponent<CharacterController>();
+        crosshairController = GameObject.FindGameObjectWithTag("Crosshair").GetComponent<CrosshairController>();
         mainCamera = Camera.main;
+        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+        worldMousePosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
     private void InitInput() {
@@ -46,6 +51,7 @@ public class CharacterPlayerInput : MonoBehaviour
     }
 
     void OnAim(InputAction.CallbackContext context) {
-        mouseScreenPosition = context.ReadValue<Vector2>();
+        Vector2 mouseScreenPosition = context.ReadValue<Vector2>();
+        worldMousePosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 }

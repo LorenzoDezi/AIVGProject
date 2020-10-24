@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollowBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private Transform transformToFollow;
+    private Transform transformToFollow = default;
 
     private new Transform transform;
     private Vector2 currentVelocity;
@@ -22,11 +22,14 @@ public class CameraFollowBehaviour : MonoBehaviour
         startZValue = transform.position.z;
     }
 
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
+        Follow();
+    }
+
+    private void Follow() {
         Vector3 positionToFollow = transformToFollow.position;
         currentPosition = Vector2.SmoothDamp(
-            transform.position, positionToFollow, 
+            transform.position, positionToFollow,
             ref currentVelocity, smoothTime, maxSpeed);
         currentPosition.z = startZValue;
         transform.position = currentPosition;
