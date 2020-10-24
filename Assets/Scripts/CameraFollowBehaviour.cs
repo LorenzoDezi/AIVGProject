@@ -8,18 +8,27 @@ public class CameraFollowBehaviour : MonoBehaviour
     private Transform transformToFollow;
 
     private new Transform transform;
+    private Vector2 currentVelocity;
     private Vector3 currentPosition;
+    private float startZValue;
+
+    [SerializeField]
+    private float smoothTime = 1f;
+    [SerializeField]
+    private float maxSpeed = 3f;
 
     private void Awake() {
         transform = GetComponent<Transform>();
-        currentPosition = transform.position;
+        startZValue = transform.position.z;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         Vector3 positionToFollow = transformToFollow.position;
-        currentPosition.x = positionToFollow.x;
-        currentPosition.y = positionToFollow.y;
+        currentPosition = Vector2.SmoothDamp(
+            transform.position, positionToFollow, 
+            ref currentVelocity, smoothTime, maxSpeed);
+        currentPosition.z = startZValue;
         transform.position = currentPosition;
     }
 }
