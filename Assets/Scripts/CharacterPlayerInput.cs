@@ -9,6 +9,7 @@ public class CharacterPlayerInput : MonoBehaviour
     private PlayerInputAction inputAction;
     private CharacterController characterController;
     private Camera mainCamera;
+    private Vector3 mouseScreenPosition;
 
     private void Awake() {
         InitFields();
@@ -16,6 +17,10 @@ public class CharacterPlayerInput : MonoBehaviour
 
     private void Start() {
         InitInput();
+    }
+
+    private void Update() {
+        characterController.AimAt(mainCamera.ScreenToWorldPoint(mouseScreenPosition));
     }
 
     private void InitFields() {
@@ -41,7 +46,6 @@ public class CharacterPlayerInput : MonoBehaviour
     }
 
     void OnAim(InputAction.CallbackContext context) {
-        Vector2 mouseScreenPosition = context.ReadValue<Vector2>();
-        characterController.AimAt(mainCamera.ScreenToWorldPoint(mouseScreenPosition));
+        mouseScreenPosition = context.ReadValue<Vector2>();
     }
 }
