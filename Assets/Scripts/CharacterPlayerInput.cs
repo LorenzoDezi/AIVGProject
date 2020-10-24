@@ -10,7 +10,6 @@ public class CharacterPlayerInput : MonoBehaviour
     private CharacterController characterController;
     private CrosshairController crosshairController;
     private Camera mainCamera;
-    private Vector3 worldMousePosition;
 
     private void Awake() {
         InitFields();
@@ -21,8 +20,10 @@ public class CharacterPlayerInput : MonoBehaviour
     }
 
     private void Update() {
+        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+        Vector2 worldMousePosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
         characterController.AimAt(worldMousePosition);
-        crosshairController.MoveAt(worldMousePosition);
+        crosshairController.MoveAt(mouseScreenPosition, mainCamera);
     }
 
     private void InitFields() {
@@ -30,8 +31,6 @@ public class CharacterPlayerInput : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         crosshairController = GameObject.FindGameObjectWithTag("Crosshair").GetComponent<CrosshairController>();
         mainCamera = Camera.main;
-        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
-        worldMousePosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 
     private void InitInput() {
@@ -39,19 +38,11 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.Movement.started += OnMovement;
         playerActions.Movement.performed += OnMovement;
         playerActions.Movement.canceled += OnMovement;
-        playerActions.Aim.started += OnAim;
-        playerActions.Aim.performed += OnAim;
-        playerActions.Aim.canceled += OnAim;
         inputAction.Enable();
     }
 
     void OnMovement(InputAction.CallbackContext context) {
         Vector2 value = context.ReadValue<Vector2>();
         characterController.Move(value);
-    }
-
-    void OnAim(InputAction.CallbackContext context) {
-        Vector2 mouseScreenPosition = context.ReadValue<Vector2>();
-        worldMousePosition = mainCamera.ScreenToWorldPoint(mouseScreenPosition);
     }
 }
