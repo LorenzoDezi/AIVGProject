@@ -8,18 +8,23 @@ public class BulletBehaviour : MonoBehaviour
     [SerializeField]
     private float speed = 5f;
     [SerializeField]
+    private float ttl = 5f;
+    [SerializeField]
     private float damage = 10f;
     [SerializeField]
     private float hitDistance = 1f;
-    [SerializeField]
+    [SerializeField, Tooltip("The layers colliding with the bullet")]
     private LayerMask hitLayers;
-    [SerializeField]
-    private string enemyHitLayerName = "Enemy";
-    private int enemyHitLayer;
+    [SerializeField, Tooltip("The layer that the bullet can damage (Player => enemy and viceversa)")]
+    private LayerMask damageHitLayer;
+    public BulletSpawner Spawner { get; set; }
 
     private void Awake() {
         transform = GetComponent<Transform>();
-        enemyHitLayer = LayerMask.NameToLayer(enemyHitLayerName);
+    }
+
+    private void OnEnable() {
+        //TODO: ttl reset
     }
 
     private void Update() {
@@ -29,15 +34,16 @@ public class BulletBehaviour : MonoBehaviour
             Destroy();
         } else
             transform.position += transform.right * speed * Time.deltaTime;
+        //TODO: ttl update
     }
 
     private void TryToDamage(RaycastHit2D hit) {
         GameObject gameObjectHit = hit.collider.gameObject;
-        if (gameObjectHit.layer == enemyHitLayer)
+        if (gameObjectHit.layer == damageHitLayer.value)
             gameObjectHit.GetComponent<IDamageable>()?.Damage(damage);
     }
 
     private void Destroy() {
-        gameObject.SetActive(false);
+        Spawner?.ReleaseBullet(gameObject);
     }
 }
