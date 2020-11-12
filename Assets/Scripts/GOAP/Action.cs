@@ -4,8 +4,15 @@ using UnityEngine;
 
 namespace GOAP {
 
-    public class Action : MonoBehaviour {
-        public List<WorldState> preconditions;
+    public abstract class Action : ScriptableObject {
+        [SerializeField]
+        private List<WorldState> preconditions;
+        [SerializeField]
+        private List<WorldState> effects;
+        [SerializeField]
+        private int cost;
+
+        //TODO
     }
 
 }

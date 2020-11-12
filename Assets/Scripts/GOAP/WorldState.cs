@@ -27,6 +27,8 @@ namespace GOAP {
 
         private Dictionary<WorldStateType, Func<int>> hashValues;
 
+        public int Hash => key.Value ^ hashValues[type]();
+
         public WorldState() {
             hashValues = new Dictionary<WorldStateType, Func<int>>();
             hashValues.Add(WorldStateType.intType, () => intValue);
@@ -50,6 +52,6 @@ namespace GOAP {
             return other.Hash == this.Hash;
         }
 
-        public int Hash => key.Value ^ hashValues[type]();
+        
     }
 }
