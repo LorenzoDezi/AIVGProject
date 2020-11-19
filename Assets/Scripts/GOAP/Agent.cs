@@ -1,18 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Agent : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+namespace GOAP {
+    public class Agent : MonoBehaviour {
+        [SerializeField]
+        protected List<Action> actions;
+        [SerializeField]
+        protected List<Goal> goals;
+        [SerializeField]
+        protected float replanInterval = 1f;
+        protected WorldStates worldPerception;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        protected Goal currGoal;
+        protected Queue<Action> actionQueue;
+        protected Action currAction;
+        protected Planner planner;
+
+        protected Coroutine checkPlanCoroutine;
+
+        private void Awake() {
+            planner = new Planner(actions);
+        }
+
+        protected virtual void Start() {
+            goals.Sort(Goal.Comparer);
+            checkPlanCoroutine = StartCoroutine(CheckPlan());
+        }
+
+        IEnumerator CheckPlan() {
+            var replanWaitFor = new WaitForSeconds(replanInterval);
+            yield return replanWaitFor;
+        }
     }
 }
+
+

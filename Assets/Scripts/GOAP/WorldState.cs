@@ -15,8 +15,10 @@ namespace GOAP {
     public class WorldState {
         [SerializeField]
         private WorldStateKey key = default;
+        public WorldStateKey Key => key;
         [SerializeField]
         private WorldStateType type;
+        public WorldStateType Type => type;
 
         [SerializeField]
         private int intValue;
@@ -25,15 +27,13 @@ namespace GOAP {
         [SerializeField]
         private GameObject gameObjectValue = default;
 
-        private Dictionary<WorldStateType, Func<int>> hashValues;
-
-        public int Hash => key.Value ^ hashValues[type]();
+        private Dictionary<WorldStateType, Func<int>> valueDict;
 
         public WorldState() {
-            hashValues = new Dictionary<WorldStateType, Func<int>>();
-            hashValues.Add(WorldStateType.intType, () => intValue);
-            hashValues.Add(WorldStateType.boolType, () => Convert.ToInt32(boolValue));
-            hashValues.Add(WorldStateType.gameObjectType, () => gameObjectValue.GetInstanceID());
+            valueDict = new Dictionary<WorldStateType, Func<int>>();
+            valueDict.Add(WorldStateType.intType, () => intValue);
+            valueDict.Add(WorldStateType.boolType, () => Convert.ToInt32(boolValue));
+            valueDict.Add(WorldStateType.gameObjectType, () => gameObjectValue.GetInstanceID());
         }
 
         public WorldState(WorldStateKey key, int value) : this() {
@@ -48,10 +48,32 @@ namespace GOAP {
             boolValue = value;
         }
 
-        public bool Match(WorldState other) {
-            return other.Hash == this.Hash;
+        public WorldState(WorldState state) : this() {
+            key = state.key;
+            type = state.type;
+            boolValue = state.boolValue;
+            intValue = state.intValue;
+            gameObjectValue = state.gameObjectValue;
         }
 
-        
+        public bool Match(WorldState other) {
+            return other.Key == Key && 
+                other.valueDict[other.Type] == valueDict[Type];
+        }
+
+        public override bool Equals(object obj) {
+            if(!(obj is WorldState)) {
+                return base.Equals(obj);
+            } else {
+                return Match((WorldState) obj);
+            }
+        }
+
+        public override int GetHashCode() {
+            var hashCode = -1095949941;
+            hashCode = hashCode * -1521134295 + EqualityComparer<WorldStateKey>.Default.GetHashCode(key);
+            hashCode = hashCode * -1521134295 + valueDict[type]();
+            return hashCode;
+        }
     }
 }

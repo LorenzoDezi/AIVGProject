@@ -6,13 +6,23 @@ namespace GOAP {
 
     public abstract class Action : ScriptableObject {
         [SerializeField]
-        private List<WorldState> preconditions;
+        private WorldStates preconditions;
+        public WorldStates Preconditions => preconditions;
+
         [SerializeField]
-        private List<WorldState> effects;
+        private WorldStates effects;
+        public WorldStates Effects => effects;
+
         [SerializeField]
         private int cost;
 
-        //TODO
+        public virtual bool CheckProceduralConditions() {
+            
+            return true;
+        }
+
+        protected abstract void Activate();
+
     }
 
 }
