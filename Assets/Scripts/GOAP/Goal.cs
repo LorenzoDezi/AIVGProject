@@ -14,7 +14,7 @@ namespace GOAP {
     }
 
 
-    public abstract class Goal {
+    public abstract class Goal : ScriptableObject {
         public static GoalComparer Comparer { get; } = new GoalComparer();
 
         [SerializeField]

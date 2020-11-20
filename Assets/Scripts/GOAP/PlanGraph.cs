@@ -12,6 +12,7 @@ namespace GOAP {
 
         public PlanGraph() {
             Nodes = new List<PlanNode>();
+            connections = new List<PlanConnection>();
         }
 
         public PlanGraph(List<Action> actions) : this() {

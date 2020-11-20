@@ -13,6 +13,7 @@ namespace GOAP {
 
         public PlanNode(WorldStates states) {
             NodeStates = states;
+            PlanConnections = new List<PlanConnection>();
         }
 
         public void AddConnection(PlanConnection connection) {

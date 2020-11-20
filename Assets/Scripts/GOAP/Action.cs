@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,12 +18,15 @@ namespace GOAP {
         [SerializeField]
         private int cost;
 
-        public virtual bool CheckProceduralConditions() {
-            
+        public virtual bool CheckProceduralConditions() {           
             return true;
         }
 
-        protected abstract void Activate();
+        public abstract void Init(GameObject agentGameObj);
+
+        public abstract void Activate();
+
+        public abstract void Update();
 
     }
 

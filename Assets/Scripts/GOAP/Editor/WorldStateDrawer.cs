@@ -3,7 +3,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace GOAP {
+namespace GOAP.Editor {
     [CustomPropertyDrawer(typeof(WorldState))]
     public class WorldStateDrawer : PropertyDrawer {
 

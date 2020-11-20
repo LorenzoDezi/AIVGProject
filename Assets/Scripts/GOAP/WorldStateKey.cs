@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GOAP {
+    [CreateAssetMenu(fileName = "NewWorldStateKey", menuName = "GOAP/WorldStateKey")]
     public class WorldStateKey : ScriptableObject {
-        //TODO: Automatic counter of instances
-        [SerializeField]
-        private int value;
+        public int Value { get; private set; }
 
-        public int Value => value;
+        private void OnEnable() {
+            Value = GetInstanceID();
+        }
+
     }
 
 }

@@ -17,7 +17,7 @@ public class NavigationComponent : MonoBehaviour {
 
     public UnityEvent PathCompleted;
 
-    private void Start() {
+    private void Awake() {
         seeker = GetComponent<Seeker>();
         controller = GetComponent<CharacterController>();
     }
