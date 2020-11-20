@@ -31,7 +31,10 @@ namespace GOAP {
 
         IEnumerator CheckPlan() {
             var replanWaitFor = new WaitForSeconds(replanInterval);
-            yield return replanWaitFor;
+            while(true) {
+                actionQueue = planner.Plan(currGoal, worldPerception);
+                yield return replanWaitFor;
+            }
         }
     }
 }

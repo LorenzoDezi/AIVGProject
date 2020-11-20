@@ -74217,6 +74217,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 327981515277711234, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: actions.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 327981515277711234, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: worldPerception.states.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 327981515277711234, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: worldPerception.states.Array.data[1].type
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_Name
@@ -74279,27 +74294,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
---- !u!1 &2089853290383079074 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
-    type: 3}
-  m_PrefabInstance: {fileID: 2089853290383079073}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2089853290383079075
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2089853290383079074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a757f866eeca28c4ca6dbde16ee9fdbd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PathCompleted:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1001 &6563854298374801428
 PrefabInstance:
   m_ObjectHideFlags: 0

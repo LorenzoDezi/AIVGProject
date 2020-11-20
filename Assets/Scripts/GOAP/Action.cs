@@ -4,7 +4,8 @@ using UnityEngine;
 
 namespace GOAP {
 
-    public abstract class Action : ScriptableObject {
+    public abstract class Action : ScriptableObject { 
+
         [SerializeField]
         private WorldStates preconditions;
         public WorldStates Preconditions => preconditions;

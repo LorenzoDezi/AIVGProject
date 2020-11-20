@@ -14,7 +14,7 @@ namespace GOAP {
     }
 
 
-    public class Goal {
+    public abstract class Goal {
         public static GoalComparer Comparer { get; } = new GoalComparer();
 
         [SerializeField]
@@ -24,6 +24,8 @@ namespace GOAP {
         [SerializeField]
         private int priority;
         public float Priority => priority;
+
+        public abstract void UpdatePriority();
     }
 
 }
