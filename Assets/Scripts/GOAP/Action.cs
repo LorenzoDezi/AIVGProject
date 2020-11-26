@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GOAP {
 
@@ -16,7 +17,14 @@ namespace GOAP {
         public WorldStates Effects => effects;
 
         [SerializeField]
-        private int cost;
+        private float cost;
+
+        public float Cost => cost;
+        public UnityEvent EndAction { get; }
+
+        public Action() {
+            EndAction = new UnityEvent();
+        }
 
         public virtual bool CheckProceduralConditions() {           
             return true;
@@ -27,6 +35,10 @@ namespace GOAP {
         public abstract void Activate();
 
         public abstract void Update();
+
+        protected virtual void Terminate() {
+            EndAction.Invoke();
+        }
 
     }
 

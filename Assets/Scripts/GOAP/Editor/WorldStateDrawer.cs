@@ -21,10 +21,7 @@ namespace GOAP.Editor {
             valuePosition.position += verticalSpacing;
             EditorGUI.PropertyField(valuePosition, property.FindPropertyRelative("key"), GUIContent.none);
             valuePosition.position += verticalSpacing;
-            EditorGUI.PropertyField(valuePosition, property.FindPropertyRelative("type"), GUIContent.none);
-            valuePosition.position += verticalSpacing;
             RenderPropertyValue(valuePosition, property);
-
             EditorGUI.EndProperty();
         }
 
@@ -32,13 +29,12 @@ namespace GOAP.Editor {
             position.position += verticalSpacing;
             EditorGUI.LabelField(position, "Key");
             position.position += verticalSpacing;
-            EditorGUI.LabelField(position, "Type");
-            position.position += verticalSpacing;
             EditorGUI.LabelField(position, "Value");
         }
 
         private void RenderPropertyValue(Rect position, SerializedProperty property) {
-            WorldStateType type = (WorldStateType) property.FindPropertyRelative("type").enumValueIndex;
+            WorldStateKey key = (WorldStateKey) property.FindPropertyRelative("key").objectReferenceValue;
+            WorldStateType type = key.Type;
             switch (type) {
                 case WorldStateType.boolType:
                     EditorGUI.PropertyField(position, property.FindPropertyRelative("boolValue"), GUIContent.none);

@@ -17,7 +17,6 @@ MonoBehaviour:
   effects:
     states:
     - key: {fileID: 11400000, guid: f2cb7c2423e1de8448e889c81f80bd3e, type: 2}
-      type: 0
       intValue: 0
       boolValue: 1
       gameObjectValue: {fileID: 0}

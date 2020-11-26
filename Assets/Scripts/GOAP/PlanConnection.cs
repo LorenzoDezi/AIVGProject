@@ -9,13 +9,11 @@ namespace GOAP {
     public class PlanConnection {
         public PlanNode FromNode;
         public PlanNode ToNode;
-        public Action Action;
-        public float Cost;
+        public float Cost => ToNode.Action.Cost;
 
-        public PlanConnection(PlanNode fromNode, PlanNode toNode, Action action) {
+        public PlanConnection(PlanNode fromNode, PlanNode toNode) {
             FromNode = fromNode;
             ToNode = toNode;
-            Action = action;
         }
     }
 }

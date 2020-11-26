@@ -8,50 +8,48 @@ namespace GOAP {
 
     public class PlanGraph {
         public List<PlanNode> Nodes { get; }
-        List<PlanConnection> connections;
 
         public PlanGraph() {
             Nodes = new List<PlanNode>();
-            connections = new List<PlanConnection>();
         }
 
         public PlanGraph(List<Action> actions) : this() {
-            foreach (Action action in actions)
-                AddConnection(action);
+            actions.ForEach((action) => Nodes.Add(new PlanNode(action)));
+            Nodes.ForEach((node) => AddConnections(node));
         }
 
-        public void AddConnection(Action connectionAction) {
-            PlanNode preconditionsNode = GetPlanNode(connectionAction.Preconditions);
-            PlanConnection planConnection = new PlanConnection(
-                preconditionsNode, GetPlanNode(connectionAction.Effects), connectionAction
-            );
-            connections.Add(planConnection);
-            preconditionsNode.AddConnection(planConnection);
-        }
-
-        private PlanNode GetPlanNode(WorldStates worldStates) {
-            foreach (PlanNode node in Nodes) {
-                if (node.Equals(worldStates)) {
-                    return node;
-                }
+        public void AddConnections(PlanNode node) {
+            List<PlanNode> connectedPlanNodes = GetConnectedNodesFrom(node);
+            foreach(var connectedNode in connectedPlanNodes) {
+                PlanConnection planConnection = new PlanConnection(node, connectedNode);
+                node.AddConnection(planConnection);
             }
-            PlanNode newNode = new PlanNode(worldStates);
-            Nodes.Add(newNode);
-            return newNode;
         }
 
-        public void RemoveConnection(Action action) {
-            PlanConnection connectionToRemove = null;
-            foreach (PlanConnection connection in connections) {
-                if (connection.Action == action) {
-                    connectionToRemove = connection;
+        private List<PlanNode> GetConnectedNodesFrom(PlanNode planNode) {
+            WorldStates preconditionsToSatisfy = planNode.Action.Preconditions;
+            return Nodes.Where((node) => node.Action.Effects.Contains(preconditionsToSatisfy)).ToList();
+        }
+
+        public void AddNode(Action action) {
+            PlanNode newNode = new PlanNode(action);
+            Nodes.Add(newNode);
+            AddConnections(newNode);
+        }
+
+        public void RemoveNode(Action action) {
+            PlanNode toBeRemoved = null;
+            foreach(var node in Nodes) {
+                if (node.Action == action) {
+                    toBeRemoved = node;
                     break;
                 }
             }
-            if (connectionToRemove != null) {
-                connectionToRemove.FromNode.RemoveConnection(connectionToRemove);
-                connections.Remove(connectionToRemove);
-            }
+            Nodes.Remove(toBeRemoved);
+        }
+
+        public void ClearRecords() {
+            Nodes.ForEach((node) => node.ClearRecord());
         }
     }
 }

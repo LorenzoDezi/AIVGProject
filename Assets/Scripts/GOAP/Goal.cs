@@ -15,11 +15,14 @@ namespace GOAP {
 
 
     public abstract class Goal : ScriptableObject {
+
         public static GoalComparer Comparer { get; } = new GoalComparer();
 
         [SerializeField]
         private WorldStates desiredStates;
         public WorldStates DesiredStates => desiredStates;
+
+        public WorldStates AgentWorldPerception { get; set; }
 
         [SerializeField]
         private int priority;

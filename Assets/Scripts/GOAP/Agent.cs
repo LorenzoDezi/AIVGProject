@@ -21,11 +21,42 @@ namespace GOAP {
 
         protected Coroutine checkPlanCoroutine;
 
+        public void UpdatePerception(WorldState state) {
+            worldPerception.Update(state);
+            UpdateGoals();
+        }
+
+        #region monobehaviour calls
         private void Awake() {
             InitActions();
             planner = new Planner(actions);
         }
 
+        protected virtual void Start() {
+            foreach (Goal goal in goals) {
+                goal.AgentWorldPerception = worldPerception;
+            }
+            UpdateGoals();
+            checkPlanCoroutine = StartCoroutine(CheckPlan());
+        }
+
+        private void Update() {
+            currAction?.Update();
+        }
+        #endregion
+
+        #region coroutines
+        private IEnumerator CheckPlan() {
+            var replanWaitFor = new WaitForSeconds(replanInterval);
+            while (true) {
+                actionQueue = planner.Plan(currGoal, worldPerception);
+                NextCurrAction();
+                yield return replanWaitFor;
+            }
+        } 
+        #endregion
+
+        #region private methods
         private void InitActions() {
             actions = new List<Action>();
             for (int i = 0; i < actionTemplates.Count; i++) {
@@ -34,22 +65,29 @@ namespace GOAP {
             }
         }
 
-        protected virtual void Start() {
-            goals.Sort(Goal.Comparer);
-            checkPlanCoroutine = StartCoroutine(CheckPlan());
-        }
-
-        private void Update() {
-            currAction?.Update();
-        }
-
-        IEnumerator CheckPlan() {
-            var replanWaitFor = new WaitForSeconds(replanInterval);
-            while(true) {
-                actionQueue = planner.Plan(currGoal, worldPerception);
-                yield return replanWaitFor;
+        private void NextCurrAction() {
+            if (actionQueue.Count == 0) {
+                currAction = null;
+                return;
             }
+            currAction = actionQueue.Dequeue();
+            currAction.EndAction.AddListener(OnEndAction);
         }
+
+        private void OnEndAction() {
+            currAction.EndAction.RemoveListener(OnEndAction);
+            NextCurrAction();
+        }
+
+        private void UpdateGoals() {
+            foreach (Goal goal in goals)
+                goal.UpdatePriority();
+            goals.Sort(Goal.Comparer);
+            currGoal = goals.First();
+        } 
+        #endregion
+
+
     }
 }
 

@@ -7,18 +7,12 @@ using UnityEngine;
 
 namespace GOAP {
 
-    public enum WorldStateType {
-        boolType, intType, gameObjectType
-    }
 
     [Serializable]
     public class WorldState {
         [SerializeField]
         private WorldStateKey key = default;
         public WorldStateKey Key => key;
-        [SerializeField]
-        private WorldStateType type;
-        public WorldStateType Type => type;
 
         [SerializeField]
         private int intValue;
@@ -38,27 +32,28 @@ namespace GOAP {
 
         public WorldState(WorldStateKey key, int value) : this() {
             this.key = key;
-            type = WorldStateType.intType;
             intValue = value;           
         }
 
         public WorldState(WorldStateKey key, bool value) : this() {
             this.key = key;
-            type = WorldStateType.boolType;
             boolValue = value;
         }
 
         public WorldState(WorldState state) : this() {
-            key = state.key;
-            type = state.type;
-            boolValue = state.boolValue;
-            intValue = state.intValue;
-            gameObjectValue = state.gameObjectValue;
+            Update(state);
+        }
+
+        public void Update(WorldState newWorldState) {
+            key = newWorldState.key;
+            intValue = newWorldState.intValue;
+            boolValue = newWorldState.boolValue;
+            gameObjectValue = newWorldState.gameObjectValue;
         }
 
         public bool Match(WorldState other) {
             return other.Key == Key && 
-                other.valueDict[other.Type] == valueDict[Type];
+                other.valueDict[other.Key.Type] == valueDict[Key.Type];
         }
 
         public override bool Equals(object obj) {
@@ -72,7 +67,7 @@ namespace GOAP {
         public override int GetHashCode() {
             var hashCode = -1095949941;
             hashCode = hashCode * -1521134295 + EqualityComparer<WorldStateKey>.Default.GetHashCode(key);
-            hashCode = hashCode * -1521134295 + valueDict[type]();
+            hashCode = hashCode * -1521134295 + valueDict[Key.Type]();
             return hashCode;
         }
     }

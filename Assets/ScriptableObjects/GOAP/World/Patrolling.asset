@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29eebde321350134f83ce40f24bfe27d, type: 3}
   m_Name: Patrolling
   m_EditorClassIdentifier: 
-  value: 0
+  type: 0
