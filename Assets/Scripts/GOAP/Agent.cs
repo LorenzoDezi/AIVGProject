@@ -62,12 +62,8 @@ namespace GOAP {
         private void InitActions() {
             actions = new List<Action>();
             for (int i = 0; i < actionTemplates.Count; i++) {
-                actions.Add((Action)ScriptableObject.CreateInstance(actionTemplates[i].GetType()));
-                actions[i].Init(gameObject, 
-                    actionTemplates[i].Preconditions, 
-                    actionTemplates[i].Effects, 
-                    actionTemplates[i].Cost
-                );
+                actions.Add((Action) ScriptableObject.CreateInstance(actionTemplates[i].GetType()));
+                actions[i].Init(gameObject, actionTemplates[i]);
             }
         }
 

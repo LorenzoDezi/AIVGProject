@@ -15,4 +15,10 @@ public class EnemyGuardAgent : Agent
                 ((PatrolAction)action).PatrolPoints = patrolPoints;
         }
     }
+
+    public void OnDeath() {
+        currAction = null;
+        StopCoroutine(checkPlanCoroutine);
+        Destroy(this);
+    }
 }

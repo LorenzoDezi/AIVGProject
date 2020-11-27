@@ -43,7 +43,8 @@ GameObject:
   - component: {fileID: 6563854298345398786}
   - component: {fileID: 6563854298345398796}
   - component: {fileID: 2123887068}
-  m_Layer: 0
+  - component: {fileID: 1946518154}
+  m_Layer: 11
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -129,6 +130,44 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &1946518154
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563854298345398784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d593f50a3b5ca70498bc1cf89fa8b146, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  DeathEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6563854298345398787}
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6563854298345398786}
+        m_MethodName: OnDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6563854298506983455
 GameObject:
   m_ObjectHideFlags: 0
@@ -255,7 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262ae1b5269e6a14e975631a878e3f3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootInterval: 1
+  shootInterval: 0.2
   bulletSpawn: {fileID: 2083008100}
 --- !u!1 &6816799615307032381
 GameObject:

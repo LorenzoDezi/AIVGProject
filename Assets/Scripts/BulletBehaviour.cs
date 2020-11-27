@@ -39,8 +39,8 @@ public class BulletBehaviour : MonoBehaviour
 
     private void TryToDamage(RaycastHit2D hit) {
         GameObject gameObjectHit = hit.collider.gameObject;
-        if (gameObjectHit.layer == damageHitLayer.value)
-            gameObjectHit.GetComponent<IDamageable>()?.Damage(damage);
+        if (damageHitLayer.ContainsLayer(gameObjectHit.layer))
+            gameObjectHit.GetComponent<HealthComponent>().Damage(damage);
     }
 
     private void Destroy() {

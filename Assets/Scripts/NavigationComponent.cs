@@ -12,15 +12,11 @@ public class NavigationComponent : MonoBehaviour {
     private Path path;
 
     private float waypointDistTreshold = 1;
+    private float waypointDistSqrTreshold;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
 
     public UnityEvent PathCompleted;
-
-    private void Awake() {
-        seeker = GetComponent<Seeker>();
-        controller = GetComponent<CharacterController>();
-    }
 
     public void MoveTo(Transform targetPosition) {
         this.targetPosition = targetPosition;
@@ -32,6 +28,13 @@ public class NavigationComponent : MonoBehaviour {
         controller.Move(Vector2.zero);
     }
 
+    private void Awake() {
+        seeker = GetComponent<Seeker>();
+        waypointDistSqrTreshold = waypointDistTreshold >= 1 ?  
+            waypointDistTreshold * waypointDistTreshold : waypointDistTreshold;
+        controller = GetComponent<CharacterController>();
+    }
+
     private void OnEnable() {
         seeker.pathCallback += OnPathCalculated;
     }
@@ -40,21 +43,11 @@ public class NavigationComponent : MonoBehaviour {
         seeker.pathCallback -= OnPathCalculated;
     }
 
-    private void OnPathCalculated(Path p) {
-        Debug.Log("A path was calculated. Did it fail with an error? " + p.error);
-        if (p.error)
-            return;
-        path = p;
-        currentWaypoint = 0;
-    }
-
     private void Update() {
         if (path == null)
             return;
-        float sqrDistanceTreshold = waypointDistTreshold * waypointDistTreshold; //TODO Refactor
         float sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
-        Debug.LogFormat("Sqr distance to waypoint {0}", sqrDistanceToWaypoint);
-        while (sqrDistanceToWaypoint < sqrDistanceTreshold) {
+        while (sqrDistanceToWaypoint < waypointDistSqrTreshold) {
             if (currentWaypoint + 1 < path.vectorPath.Count) {
                 currentWaypoint++;
                 sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
@@ -67,4 +60,18 @@ public class NavigationComponent : MonoBehaviour {
         Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         controller.Move(dir);
     }
+
+    private void OnPathCalculated(Path p) {
+        if (p.error) {
+            Debug.LogErrorFormat("Error calculating path {0}", p.errorLog);
+            return;
+        }
+        path = p;
+        currentWaypoint = 0;
+    }
+
+    public void OnDeath() {
+        Stop();
+        Destroy(this);
+    }  
 }

@@ -30,7 +30,7 @@ namespace GOAP {
             return true;
         }
 
-        public abstract void Init(GameObject agentGameObj, WorldStates preconditions, WorldStates effects, float cost);
+        public abstract void Init(GameObject agentGameObj, Action actionTemplate);
 
         public abstract void Activate();
 

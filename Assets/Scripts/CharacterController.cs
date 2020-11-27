@@ -46,4 +46,9 @@ public class CharacterController : MonoBehaviour
     public void AimAt(Vector3 worldPosition) {
         aimPosition = worldPosition;
     }
+
+    public void OnDeath() {
+        gameObject.layer = 0;
+        //TODO death animation
+    }
 }

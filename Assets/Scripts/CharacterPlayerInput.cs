@@ -61,4 +61,10 @@ public class CharacterPlayerInput : MonoBehaviour
     void OnStopShooting(InputAction.CallbackContext context) {
         isShooting = false;
     }
+
+    public void OnDeath() {
+        inputAction.Disable();
+        characterController.Move(Vector2.zero);
+        Destroy(this);
+    }
 }
