@@ -26,8 +26,8 @@ public class GunController : MonoBehaviour
 
     private void Shoot() {
         var bullet = spawner.GetBullet(gameObject.tag);
-        bullet.transform.position = bulletSpawn.transform.position;
-        bullet.transform.right = bulletSpawn.transform.right;
+        bullet.transform.position = bulletSpawn.position;
+        bullet.transform.right = bulletSpawn.right;
     }
 
 }

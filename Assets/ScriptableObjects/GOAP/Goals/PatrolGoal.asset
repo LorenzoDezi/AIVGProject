@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea6f802eeb34b51478340160c20ee4e7, type: 3}
+  m_Name: PatrolGoal
+  m_EditorClassIdentifier: 
+  desiredStates:
+    states:
+    - key: {fileID: 11400000, guid: f2cb7c2423e1de8448e889c81f80bd3e, type: 2}
+      intValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+  enemySeen: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+  lowPriority: 0
+  highPriority: 10

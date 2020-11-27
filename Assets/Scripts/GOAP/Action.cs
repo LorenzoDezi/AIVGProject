@@ -9,15 +9,15 @@ namespace GOAP {
     public abstract class Action : ScriptableObject { 
 
         [SerializeField]
-        private WorldStates preconditions;
+        protected WorldStates preconditions;
         public WorldStates Preconditions => preconditions;
 
         [SerializeField]
-        private WorldStates effects;
+        protected WorldStates effects;
         public WorldStates Effects => effects;
 
         [SerializeField]
-        private float cost;
+        protected float cost;
 
         public float Cost => cost;
         public UnityEvent EndAction { get; }
@@ -30,9 +30,11 @@ namespace GOAP {
             return true;
         }
 
-        public abstract void Init(GameObject agentGameObj);
+        public abstract void Init(GameObject agentGameObj, WorldStates preconditions, WorldStates effects, float cost);
 
         public abstract void Activate();
+
+        public abstract void Deactivate();
 
         public abstract void Update();
 

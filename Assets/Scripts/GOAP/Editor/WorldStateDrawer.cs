@@ -34,18 +34,20 @@ namespace GOAP.Editor {
 
         private void RenderPropertyValue(Rect position, SerializedProperty property) {
             WorldStateKey key = (WorldStateKey) property.FindPropertyRelative("key").objectReferenceValue;
-            WorldStateType type = key.Type;
-            switch (type) {
-                case WorldStateType.boolType:
-                    EditorGUI.PropertyField(position, property.FindPropertyRelative("boolValue"), GUIContent.none);
-                    break;
-                case WorldStateType.intType:
-                    EditorGUI.PropertyField(position, property.FindPropertyRelative("intValue"), GUIContent.none);
-                    break;
-                case WorldStateType.gameObjectType:
-                    EditorGUI.PropertyField(position, property.FindPropertyRelative("gameObjectValue"), GUIContent.none);
-                    break;
-            }
+            if(key != null) {
+                WorldStateType type = key.Type;
+                switch (type) {
+                    case WorldStateType.boolType:
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("boolValue"), GUIContent.none);
+                        break;
+                    case WorldStateType.intType:
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("intValue"), GUIContent.none);
+                        break;
+                    case WorldStateType.gameObjectType:
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("gameObjectValue"), GUIContent.none);
+                        break;
+                }
+            }           
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {

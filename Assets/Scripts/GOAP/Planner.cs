@@ -80,7 +80,8 @@ namespace GOAP {
         //TODO: Refactor and heuristic cache in some way
         public int HeuristicEstimate(WorldStates worldPerception, WorldStates desiredStates, 
             PlanNode node) {
-            return (worldPerception + node.Effects).SatisfactionCount(desiredStates + node.Preconditions);
+            WorldStates updatedPerception = worldPerception + node.Effects;
+            return updatedPerception.Count - updatedPerception.SatisfactionCount(desiredStates + node.Preconditions);
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {

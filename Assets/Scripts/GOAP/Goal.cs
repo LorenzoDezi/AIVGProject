@@ -22,11 +22,10 @@ namespace GOAP {
         private WorldStates desiredStates;
         public WorldStates DesiredStates => desiredStates;
 
-        public WorldStates AgentWorldPerception { get; set; }
-
-        [SerializeField]
-        private int priority;
+        protected float priority;
         public float Priority => priority;
+
+        public abstract void Init(GameObject agentObj);
 
         public abstract void UpdatePriority();
     }

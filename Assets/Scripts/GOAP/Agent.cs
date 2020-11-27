@@ -4,15 +4,19 @@ using System.Linq;
 using UnityEngine;
 
 namespace GOAP {
+
     public class Agent : MonoBehaviour {
         [SerializeField]
-        protected List<Action> actionTemplates;
+        private List<Action> actionTemplates = default;
         protected List<Action> actions;
         [SerializeField]
+        private List<Goal> goalTemplates = default;
         protected List<Goal> goals;
         [SerializeField]
         protected float replanInterval = 1f;
+        [SerializeField]
         protected WorldStates worldPerception;
+        public WorldStates WorldPerception => worldPerception;
 
         protected Goal currGoal;
         protected Queue<Action> actionQueue;
@@ -27,20 +31,18 @@ namespace GOAP {
         }
 
         #region monobehaviour calls
-        private void Awake() {
+        protected virtual void Awake() {
             InitActions();
+            InitGoals();
             planner = new Planner(actions);
         }
 
-        protected virtual void Start() {
-            foreach (Goal goal in goals) {
-                goal.AgentWorldPerception = worldPerception;
-            }
+        protected virtual void Start() {           
             UpdateGoals();
             checkPlanCoroutine = StartCoroutine(CheckPlan());
         }
 
-        private void Update() {
+        protected virtual void Update() {
             currAction?.Update();
         }
         #endregion
@@ -61,7 +63,19 @@ namespace GOAP {
             actions = new List<Action>();
             for (int i = 0; i < actionTemplates.Count; i++) {
                 actions.Add((Action)ScriptableObject.CreateInstance(actionTemplates[i].GetType()));
-                actions[i].Init(gameObject);
+                actions[i].Init(gameObject, 
+                    actionTemplates[i].Preconditions, 
+                    actionTemplates[i].Effects, 
+                    actionTemplates[i].Cost
+                );
+            }
+        }
+
+        private void InitGoals() {
+            goals = new List<Goal>();
+            for(int i = 0; i < goalTemplates.Count; i++) {
+                goals.Add((Goal)ScriptableObject.CreateInstance(goalTemplates[i].GetType()));
+                goals[i].Init(gameObject);
             }
         }
 
@@ -70,20 +84,25 @@ namespace GOAP {
                 currAction = null;
                 return;
             }
-            currAction = actionQueue.Dequeue();
-            currAction.EndAction.AddListener(OnEndAction);
+            Action nextAction = actionQueue.Dequeue();
+            if(nextAction != currAction) {
+                currAction = nextAction;
+                currAction.Activate();
+                currAction.EndAction.AddListener(OnEndAction);
+            }            
         }
 
         private void OnEndAction() {
+            currAction.Deactivate();
             currAction.EndAction.RemoveListener(OnEndAction);
             NextCurrAction();
         }
 
         private void UpdateGoals() {
-            foreach (Goal goal in goals)
+            foreach (Goal goal in goalTemplates)
                 goal.UpdatePriority();
-            goals.Sort(Goal.Comparer);
-            currGoal = goals.First();
+            goalTemplates.Sort(Goal.Comparer);
+            currGoal = goalTemplates.First();
         } 
         #endregion
 

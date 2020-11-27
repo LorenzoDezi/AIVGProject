@@ -11,7 +11,7 @@ public class NavigationComponent : MonoBehaviour {
     private CharacterController controller;
     private Path path;
 
-    private float waypointDistTreshold = 2;
+    private float waypointDistTreshold = 1;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
 
@@ -25,6 +25,11 @@ public class NavigationComponent : MonoBehaviour {
     public void MoveTo(Transform targetPosition) {
         this.targetPosition = targetPosition;
         seeker.StartPath(transform.position, targetPosition.position);
+    }
+
+    public void Stop() {
+        path = null;
+        controller.Move(Vector2.zero);
     }
 
     private void OnEnable() {
@@ -46,15 +51,17 @@ public class NavigationComponent : MonoBehaviour {
     private void Update() {
         if (path == null)
             return;
-        float sqrDistanceTreshold = waypointDistTreshold * waypointDistTreshold;
+        float sqrDistanceTreshold = waypointDistTreshold * waypointDistTreshold; //TODO Refactor
         float sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
+        Debug.LogFormat("Sqr distance to waypoint {0}", sqrDistanceToWaypoint);
         while (sqrDistanceToWaypoint < sqrDistanceTreshold) {
             if (currentWaypoint + 1 < path.vectorPath.Count) {
                 currentWaypoint++;
                 sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
             } else {
                 PathCompleted.Invoke();
-                break;
+                Stop();
+                return;
             }
         }
         Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;

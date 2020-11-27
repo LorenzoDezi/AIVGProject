@@ -15,11 +15,12 @@ namespace GOAP {
 
         public int Count => states.Count;
 
-        public WorldStates() { }
-
-        public WorldStates(WorldStates worldStates) {
+        public WorldStates() {
             states = new List<WorldState>();
             stateDict = new Dictionary<WorldStateKey, WorldState>();
+        }
+
+        public WorldStates(WorldStates worldStates) : this() {
             foreach(WorldState state in worldStates) {
                 if (!stateDict.ContainsKey(state.Key)) {
                     var copyState = new WorldState(state);
@@ -33,6 +34,10 @@ namespace GOAP {
             WorldStates result = new WorldStates(op1);
             op1.Update(op2);
             return result;
+        }
+
+        public WorldState this[WorldStateKey key] {
+            get => stateDict.ContainsKey(key) ? stateDict[key] : null;
         }
 
         public void Update(WorldStates worldStates) {

@@ -16,10 +16,13 @@ namespace GOAP {
 
         [SerializeField]
         private int intValue;
+        public int IntValue => intValue;
         [SerializeField]
         private bool boolValue;
+        public bool BoolValue => boolValue;
         [SerializeField]
         private GameObject gameObjectValue = default;
+        public GameObject GameObjectValue => gameObjectValue;
 
         private Dictionary<WorldStateType, Func<int>> valueDict;
 
@@ -53,7 +56,7 @@ namespace GOAP {
 
         public bool Match(WorldState other) {
             return other.Key == Key && 
-                other.valueDict[other.Key.Type] == valueDict[Key.Type];
+                other.valueDict[other.Key.Type]() == valueDict[Key.Type]();
         }
 
         public override bool Equals(object obj) {

@@ -18,6 +18,8 @@ namespace GOAP {
         private WorldStateType type;
         public WorldStateType Type => type;
 
+        public string Name => name;
+
         public int Value { get; private set; }
 
         private void OnEnable() {
