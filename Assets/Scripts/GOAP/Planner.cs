@@ -87,7 +87,8 @@ namespace GOAP {
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
             List<PlanNodeRecord> open = new List<PlanNodeRecord>();
             foreach (PlanNode node in graph.Nodes) {
-                if (node.Satisfy(goal.DesiredStates)) {
+                if (node.Satisfy(goal.DesiredStates) 
+                    && node.Action.CheckProceduralConditions()) {
                     PlanNodeRecord nodeRecord = node.Record;
                     nodeRecord.WorldPerception = worldPerception;
                     nodeRecord.DesiredStates = goal.DesiredStates;

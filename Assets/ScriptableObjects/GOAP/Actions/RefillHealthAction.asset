@@ -25,7 +25,7 @@ MonoBehaviour:
           m_Calls: []
   cost: 5
   healthRefilledKey: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
-  checkForHealthStationsRadius: 5
+  checkForHealthStationsRadius: 20
   healthStationLayer:
     serializedVersion: 2
     m_Bits: 8192

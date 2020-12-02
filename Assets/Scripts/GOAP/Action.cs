@@ -30,11 +30,9 @@ namespace GOAP {
             return true;
         }
 
-        public virtual void Init(GameObject agentGameObj, Action actionTemplate) {
-            name = actionTemplate.name;
-            this.preconditions = new WorldStates(actionTemplate.Preconditions);
-            this.effects = new WorldStates(actionTemplate.Effects);
-            this.cost = actionTemplate.Cost;
+        public virtual void Init(GameObject agentGameObj) {
+            this.preconditions = new WorldStates(Preconditions);
+            this.effects = new WorldStates(Effects);
         }
 
         public abstract void Activate();

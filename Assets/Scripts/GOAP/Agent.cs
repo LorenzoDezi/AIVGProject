@@ -16,7 +16,6 @@ namespace GOAP {
         protected List<Goal> goals;
         public List<Goal> Goals => goals;
 
-        protected Goal currGoal;
         protected Queue<Action> actionQueue;
         protected Action currAction;
         public Action CurrAction => currAction; 
@@ -43,7 +42,7 @@ namespace GOAP {
         }
 
         protected virtual void Start() {           
-            UpdateCurrGoal();
+            UpdateGoals();
             checkPlanCoroutine = StartCoroutine(CheckPlan());
         }
 
@@ -56,9 +55,19 @@ namespace GOAP {
         private IEnumerator CheckPlan() {
             var replanWaitFor = new WaitForSeconds(replanInterval);
             while (true) {
-                //If plan fails? What happens?
-                actionQueue = planner.Plan(currGoal, worldPerception);
-                NextCurrAction();
+                foreach(Goal goal in goals) {
+                    actionQueue = planner.Plan(goal, worldPerception);
+                    if(actionQueue.Count > 0) {
+                        Action nextAction = actionQueue.Dequeue();
+                        if(nextAction != currAction) {
+                            DisableCurrAction();
+                            currAction = nextAction;
+                            EnableCurrAction();
+                        }                       
+                        break;
+                    }
+                    yield return new WaitForEndOfFrame();
+                }
                 yield return replanWaitFor;
             }
         } 
@@ -68,8 +77,8 @@ namespace GOAP {
         private void InitActions() {
             actions = new List<Action>();
             for (int i = 0; i < actionTemplates.Count; i++) {
-                actions.Add((Action) ScriptableObject.CreateInstance(actionTemplates[i].GetType()));
-                actions[i].Init(gameObject, actionTemplates[i]);
+                actions.Add(Instantiate(actionTemplates[i]));
+                actions[i].Init(gameObject);
             }
         }
 
@@ -78,32 +87,32 @@ namespace GOAP {
             for(int i = 0; i < goalTemplates.Count; i++) {
                 goals.Add((Goal)ScriptableObject.CreateInstance(goalTemplates[i].GetType()));
                 goals[i].Init(gameObject, goalTemplates[i]);
-                goals[i].PriorityChanged.AddListener(UpdateCurrGoal);
+                goals[i].PriorityChanged.AddListener(UpdateGoals);
             }
         }
 
-        private void NextCurrAction() {
-            if (actionQueue.Count == 0) {
-                currAction = null;
-                return;
+        private void EnableCurrAction() {
+            currAction.Activate();
+            currAction.EndAction.AddListener(OnEndAction);
+        }
+
+        private void DisableCurrAction() {
+            if (currAction != null) {
+                currAction.Deactivate();
+                currAction.EndAction.RemoveListener(OnEndAction);
             }
-            Action nextAction = actionQueue.Dequeue();
-            if(nextAction != currAction) {
-                currAction = nextAction;
-                currAction.Activate();
-                currAction.EndAction.AddListener(OnEndAction);
-            }            
         }
 
         private void OnEndAction() {
-            currAction.Deactivate();
-            currAction.EndAction.RemoveListener(OnEndAction);
-            NextCurrAction();
+            DisableCurrAction();
+            if(actionQueue.Count > 0) {
+                currAction = actionQueue.Dequeue();
+                EnableCurrAction();
+            }
         }
 
-        private void UpdateCurrGoal() {
+        private void UpdateGoals() {
             goals.Sort(Goal.Comparer);
-            currGoal = goals.Last();
         }
         
         protected void Clear() {

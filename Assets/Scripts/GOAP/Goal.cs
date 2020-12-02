@@ -10,7 +10,7 @@ namespace GOAP {
 
     public class GoalComparer : IComparer<Goal> {
         public int Compare(Goal x, Goal y) {
-            return Convert.ToInt32(x.Priority - y.Priority);
+            return Convert.ToInt32(y.Priority - x.Priority);
         }
     }
 

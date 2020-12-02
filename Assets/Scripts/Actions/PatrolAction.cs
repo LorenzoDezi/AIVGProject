@@ -15,15 +15,16 @@ public class PatrolAction : GOAP.Action {
     private NavigationComponent navigationComp;
     private Transform transform;
 
-    public override void Init(GameObject agentGameObj, GOAP.Action actionTemplate) {
-        base.Init(agentGameObj, actionTemplate);
+    public override void Init(GameObject agentGameObj) {
+        base.Init(agentGameObj);
         navigationComp = agentGameObj.GetComponent<NavigationComponent>();
-        navigationComp.PathCompleted.AddListener(OnPathCompleted);
         transform = agentGameObj.transform;
         characterController = agentGameObj.GetComponent<CharacterController>();
     }
 
     public override void Activate() {
+        Debug.LogFormat("Activated called on action {0}", name);
+        navigationComp.PathCompleted.AddListener(OnPathCompleted);
         Transform closerPatrolPoint = null;
         float minSqrDistance = Mathf.Infinity;
         for (int i = 0; i < PatrolPoints.Count; i++) {
@@ -38,6 +39,7 @@ public class PatrolAction : GOAP.Action {
     }
 
     public override void Deactivate() {
+        Debug.LogFormat("Deactivated called on action {0}", name);
         navigationComp.Stop();
         navigationComp.PathCompleted.RemoveListener(OnPathCompleted);
     }
