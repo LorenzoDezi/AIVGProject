@@ -16,9 +16,7 @@ public class PatrolAction : GOAP.Action {
     private Transform transform;
 
     public override void Init(GameObject agentGameObj, GOAP.Action actionTemplate) {
-        this.preconditions = new WorldStates(actionTemplate.Preconditions);
-        this.effects = new WorldStates(actionTemplate.Effects);
-        this.cost = actionTemplate.Cost;
+        base.Init(agentGameObj, actionTemplate);
         navigationComp = agentGameObj.GetComponent<NavigationComponent>();
         navigationComp.PathCompleted.AddListener(OnPathCompleted);
         transform = agentGameObj.transform;

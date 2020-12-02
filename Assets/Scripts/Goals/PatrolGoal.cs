@@ -18,14 +18,27 @@ public class PatrolGoal : Goal {
 
     WorldStates agentWorldStates;
 
-    public override void Init(GameObject agentObj) {
+    public override void Init(GameObject agentObj, Goal goalTemplate) {
+        base.Init(agentObj, goalTemplate);
+        PatrolGoal patrolGoalTemplate = goalTemplate as PatrolGoal;
+        enemySeen = patrolGoalTemplate.enemySeen;
+        lowPriority = patrolGoalTemplate.lowPriority;
+        highPriority = patrolGoalTemplate.highPriority;
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
+        WorldState enemySeenState = agentWorldStates[enemySeen];
+        if(enemySeenState == null) {
+            enemySeenState = new WorldState(enemySeen, false);
+            agentWorldStates.Add(enemySeenState);
+        }
+        priority = enemySeenState.BoolValue ? lowPriority : highPriority;
+        enemySeenState.StateChangeEvent.AddListener(UpdatePriority);
     }
 
-    public override void UpdatePriority() {
+    protected override void UpdatePriority() {
         WorldState enemySeenState = agentWorldStates[enemySeen];
         if (enemySeenState != null)
             priority = enemySeenState.BoolValue ? lowPriority : highPriority;
+        base.UpdatePriority();
     }
 }
 

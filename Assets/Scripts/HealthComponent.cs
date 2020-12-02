@@ -9,10 +9,11 @@ public class HealthComponent : MonoBehaviour
 {
     [SerializeField]
     private float maxHealth;
+    public float MaxHealth => maxHealth;
 
     public float CurrHealth { get; private set; }
-    public HealthChangeEvent HealthChangeEvent = new HealthChangeEvent();
-    public UnityEvent DeathEvent = new UnityEvent();
+    public HealthChangeEvent HealthChange = new HealthChangeEvent();
+    public UnityEvent Death = new UnityEvent();
 
     private void Start() {
         CurrHealth = maxHealth;
@@ -21,19 +22,19 @@ public class HealthComponent : MonoBehaviour
     public void Damage(float damage) {
         if(damage < CurrHealth) {
             CurrHealth -= damage;
-        } else {
+        } else if (CurrHealth > 0) {
             Die();
         }
-        HealthChangeEvent.Invoke(CurrHealth);
+        HealthChange.Invoke(CurrHealth);
     }
 
     public void Restore(float amount) {
         CurrHealth = Mathf.Clamp(CurrHealth + amount, 0f, maxHealth);
-        HealthChangeEvent.Invoke(CurrHealth);
+        HealthChange.Invoke(CurrHealth);
     }
 
     public void Die() {
-        DeathEvent.Invoke();
+        Death.Invoke();
         Destroy(this);
     }
 }

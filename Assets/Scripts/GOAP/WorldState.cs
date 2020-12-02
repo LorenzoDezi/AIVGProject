@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GOAP {
 
@@ -16,13 +17,32 @@ namespace GOAP {
 
         [SerializeField]
         private int intValue;
-        public int IntValue => intValue;
+        public int IntValue {
+            get => intValue;
+            set {
+                intValue = value;
+            }
+        }
+
         [SerializeField]
         private bool boolValue;
-        public bool BoolValue => boolValue;
+        public bool BoolValue {
+            get => boolValue;
+            set {
+                boolValue = value;
+            }
+        }
+
         [SerializeField]
         private GameObject gameObjectValue = default;
-        public GameObject GameObjectValue => gameObjectValue;
+        public GameObject GameObjectValue {
+            get => gameObjectValue;
+            set {
+                gameObjectValue = value;
+            }
+        }
+
+        public UnityEvent StateChangeEvent = new UnityEvent();
 
         private Dictionary<WorldStateType, Func<int>> valueDict;
 
@@ -52,6 +72,7 @@ namespace GOAP {
             intValue = newWorldState.intValue;
             boolValue = newWorldState.boolValue;
             gameObjectValue = newWorldState.gameObjectValue;
+            StateChangeEvent.Invoke();
         }
 
         public bool Match(WorldState other) {

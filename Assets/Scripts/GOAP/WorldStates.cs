@@ -24,8 +24,7 @@ namespace GOAP {
             foreach(WorldState state in worldStates) {
                 if (!stateDict.ContainsKey(state.Key)) {
                     var copyState = new WorldState(state);
-                    states.Add(copyState);
-                    stateDict.Add(copyState.Key, copyState);
+                    Add(copyState);
                 }
             }
         }
@@ -50,9 +49,13 @@ namespace GOAP {
             if (stateDict.ContainsKey(state.Key))
                 stateDict[state.Key].Update(state);
             else {
-                states.Add(state);
-                stateDict.Add(state.Key, state);
+                Add(state);
             }
+        }
+
+        public void Add(WorldState state) {
+            states.Add(state);
+            stateDict.Add(state.Key, state);
         }
 
         public int SatisfactionCount(WorldStates toBeSatisfied) {

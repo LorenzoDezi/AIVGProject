@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GOAP {
 
@@ -25,9 +26,18 @@ namespace GOAP {
         protected float priority;
         public float Priority => priority;
 
-        public abstract void Init(GameObject agentObj);
+        [NonSerialized]
+        public UnityEvent PriorityChanged = new UnityEvent(); 
 
-        public abstract void UpdatePriority();
+        public virtual void Init(GameObject agentObj, Goal goalTemplate) {
+            name = goalTemplate.name;
+            priority = goalTemplate.Priority;
+            desiredStates = new WorldStates(goalTemplate.desiredStates);
+        }
+
+        protected virtual void UpdatePriority() {
+            PriorityChanged.Invoke();
+        }
     }
 
 }
