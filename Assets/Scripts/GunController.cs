@@ -7,6 +7,18 @@ public class GunController : MonoBehaviour
     private float lastShotTime;
     [SerializeField]
     private float shootInterval = 0.5f;
+    [SerializeField]
+    private int maxShotsPerClip = 5;
+    private int currentShotsInClip;
+
+    [SerializeField]
+    private float timeToReload = 1f;
+    [SerializeField]
+    private SpriteRenderer reloadSprite;
+    private float currentReloadTime;
+    private Coroutine reloadCoroutine;
+
+    public bool HasShotsInClip => currentShotsInClip > 0;
 
     [SerializeField]
     private Transform bulletSpawn;
@@ -15,13 +27,29 @@ public class GunController : MonoBehaviour
     private void Start() {
         spawner = GameManager.BulletSpawner;
         lastShotTime = shootInterval;
+        currentShotsInClip = maxShotsPerClip;
+        reloadSprite.enabled = false;
     }
 
     public void TryToShoot() {
-        if((Time.time - lastShotTime) >= shootInterval) {
+        if((Time.time - lastShotTime) >= shootInterval && HasShotsInClip) {
             lastShotTime = Time.time;
             Shoot();
+            currentShotsInClip--;
         }
+    }
+
+    public void Reload() {
+        if(reloadCoroutine == null && currentShotsInClip != maxShotsPerClip)
+            reloadCoroutine = StartCoroutine(ReloadCoroutine());
+    }
+
+    private IEnumerator ReloadCoroutine() {
+        reloadSprite.enabled = true;
+        yield return new WaitForSeconds(timeToReload);
+        currentShotsInClip = maxShotsPerClip;
+        reloadSprite.enabled = false;
+        reloadCoroutine = null;
     }
 
     private void Shoot() {
@@ -29,5 +57,7 @@ public class GunController : MonoBehaviour
         bullet.transform.position = bulletSpawn.position;
         bullet.transform.right = bulletSpawn.right;
     }
+
+    
 
 }

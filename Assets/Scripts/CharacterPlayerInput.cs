@@ -46,6 +46,7 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.Movement.canceled += OnMovement;
         playerActions.Shoot.started += OnStartShooting;
         playerActions.Shoot.canceled += OnStopShooting;
+        playerActions.Reload.started += OnReload;
         inputAction.Enable();
     }
 
@@ -60,6 +61,10 @@ public class CharacterPlayerInput : MonoBehaviour
 
     void OnStopShooting(InputAction.CallbackContext context) {
         isShooting = false;
+    }
+
+    void OnReload(InputAction.CallbackContext context) {
+        gunController.Reload();
     }
 
     public void OnDeath() {
