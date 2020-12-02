@@ -29,10 +29,8 @@ namespace GOAP {
         [NonSerialized]
         public UnityEvent PriorityChanged = new UnityEvent(); 
 
-        public virtual void Init(GameObject agentObj, Goal goalTemplate) {
-            name = goalTemplate.name;
-            priority = goalTemplate.Priority;
-            desiredStates = new WorldStates(goalTemplate.desiredStates);
+        public virtual void Init(GameObject agentObj) {
+            desiredStates = new WorldStates(desiredStates);
         }
 
         protected virtual void UpdatePriority() {

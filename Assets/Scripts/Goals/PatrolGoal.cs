@@ -18,12 +18,8 @@ public class PatrolGoal : Goal {
 
     WorldStates agentWorldStates;
 
-    public override void Init(GameObject agentObj, Goal goalTemplate) {
-        base.Init(agentObj, goalTemplate);
-        PatrolGoal patrolGoalTemplate = goalTemplate as PatrolGoal;
-        enemySeen = patrolGoalTemplate.enemySeen;
-        lowPriority = patrolGoalTemplate.lowPriority;
-        highPriority = patrolGoalTemplate.highPriority;
+    public override void Init(GameObject agentObj) {
+        base.Init(agentObj);
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
         WorldState enemySeenState = agentWorldStates[enemySeen];
         if(enemySeenState == null) {

@@ -7,7 +7,7 @@ namespace GOAP {
 
     public class Agent : MonoBehaviour {
 
-        #region Goals and actions
+        #region Goals and actions attributes
         [SerializeField]
         private List<Action> actionTemplates = default;
         protected List<Action> actions;
@@ -80,16 +80,7 @@ namespace GOAP {
                 actions.Add(Instantiate(actionTemplates[i]));
                 actions[i].Init(gameObject);
             }
-        }
-
-        private void InitGoals() {
-            goals = new List<Goal>();
-            for(int i = 0; i < goalTemplates.Count; i++) {
-                goals.Add((Goal)ScriptableObject.CreateInstance(goalTemplates[i].GetType()));
-                goals[i].Init(gameObject, goalTemplates[i]);
-                goals[i].PriorityChanged.AddListener(UpdateGoals);
-            }
-        }
+        } 
 
         private void EnableCurrAction() {
             currAction.Activate();
@@ -111,10 +102,19 @@ namespace GOAP {
             }
         }
 
+        private void InitGoals() {
+            goals = new List<Goal>();
+            for (int i = 0; i < goalTemplates.Count; i++) {
+                goals.Add(Instantiate(goalTemplates[i]));
+                goals[i].Init(gameObject);
+                goals[i].PriorityChanged.AddListener(UpdateGoals);
+            }
+        }
+
         private void UpdateGoals() {
             goals.Sort(Goal.Comparer);
         }
-        
+
         protected void Clear() {
             if(currAction != null) {
                 currAction.Deactivate();

@@ -15,9 +15,8 @@ public class StayAliveGoal : Goal {
     [SerializeField, Tooltip("priority = (maxHealth - currHealth) * healthPriorityMultiplier")]
     private float healthPriorityMultiplier = 0.1f;
 
-    public override void Init(GameObject agentObj, Goal goalTemplate) {
-        base.Init(agentObj, goalTemplate);
-        healthPriorityMultiplier = (goalTemplate as StayAliveGoal).healthPriorityMultiplier;
+    public override void Init(GameObject agentObj) {
+        base.Init(agentObj);
         var healthComponent = agentObj.GetComponent<HealthComponent>();
         maxHealth = healthComponent.MaxHealth;
         priority = 0f;

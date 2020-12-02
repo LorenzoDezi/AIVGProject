@@ -23,7 +23,6 @@ public class PatrolAction : GOAP.Action {
     }
 
     public override void Activate() {
-        Debug.LogFormat("Activated called on action {0}", name);
         navigationComp.PathCompleted.AddListener(OnPathCompleted);
         Transform closerPatrolPoint = null;
         float minSqrDistance = Mathf.Infinity;
@@ -39,7 +38,6 @@ public class PatrolAction : GOAP.Action {
     }
 
     public override void Deactivate() {
-        Debug.LogFormat("Deactivated called on action {0}", name);
         navigationComp.Stop();
         navigationComp.PathCompleted.RemoveListener(OnPathCompleted);
     }
