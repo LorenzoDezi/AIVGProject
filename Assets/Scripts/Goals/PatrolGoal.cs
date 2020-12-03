@@ -23,7 +23,7 @@ public class PatrolGoal : Goal {
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
         WorldState enemySeenState = agentWorldStates[enemySeen];
         if(enemySeenState == null) {
-            enemySeenState = new WorldState(enemySeen, false);
+            enemySeenState = new WorldState(enemySeen, null);
             agentWorldStates.Add(enemySeenState);
         }
         priority = enemySeenState.BoolValue ? lowPriority : highPriority;

@@ -16,7 +16,7 @@ namespace GOAP {
         public WorldStates WorldPerception {
             get => worldPerception;
             set {
-                worldPerception = value + node.Effects;
+                worldPerception = new WorldStates(value, node.Effects);
             }
         }
 
@@ -24,7 +24,7 @@ namespace GOAP {
         public WorldStates DesiredStates {
             get => desiredStates;
             set {
-                desiredStates = node.Preconditions + value;
+                desiredStates = new WorldStates(node.Preconditions, value);
             }
         }
 
@@ -80,8 +80,9 @@ namespace GOAP {
         //TODO: Refactor and heuristic cache in some way
         public int HeuristicEstimate(WorldStates worldPerception, WorldStates desiredStates, 
             PlanNode node) {
-            WorldStates updatedPerception = worldPerception + node.Effects;
-            return updatedPerception.Count - updatedPerception.SatisfactionCount(desiredStates + node.Preconditions);
+            WorldStates updatedPerception = new WorldStates(worldPerception, node.Effects);
+            return updatedPerception.Count - updatedPerception.SatisfactionCount(
+                new WorldStates(desiredStates, node.Preconditions));
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {

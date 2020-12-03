@@ -9,6 +9,7 @@ using UnityEngine;
 namespace GOAP {
     [Serializable]
     public class WorldStates : IEnumerable<WorldState> {
+
         [SerializeField]
         private List<WorldState> states;
         private Dictionary<WorldStateKey, WorldState> stateDict;
@@ -29,14 +30,8 @@ namespace GOAP {
             }
         }
 
-        public static WorldStates operator + (WorldStates op1, WorldStates op2) {
-            WorldStates result = new WorldStates(op1);
-            result.Update(op2);
-            return result;
-        }
-
-        public WorldState this[WorldStateKey key] {
-            get => stateDict.ContainsKey(key) ? stateDict[key] : null;
+        public WorldStates(WorldStates original, WorldStates update) : this(original) {
+            Update(update);
         }
 
         public void Update(WorldStates worldStates) {
@@ -58,6 +53,14 @@ namespace GOAP {
             stateDict.Add(state.Key, state);
         }
 
+        public bool Contains(WorldStates desiredStates) {
+            return desiredStates.All(states.Contains);
+        }
+
+        public bool Contains(WorldState state) {
+            return states.Contains(state);
+        }
+
         public int SatisfactionCount(WorldStates toBeSatisfied) {
             int count = 0;
             foreach(WorldState state in toBeSatisfied) {
@@ -67,13 +70,8 @@ namespace GOAP {
             return count;
         }
 
-
-        public bool Contains(WorldStates desiredStates) {
-            return desiredStates.All(states.Contains);
-        }
-
-        public bool Contains(WorldState state) {
-            return states.Contains(state);
+        public WorldState this[WorldStateKey key] {
+            get => stateDict.ContainsKey(key) ? stateDict[key] : null;
         }
 
         public override bool Equals(object obj) {

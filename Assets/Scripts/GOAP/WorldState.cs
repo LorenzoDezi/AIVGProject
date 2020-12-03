@@ -54,6 +54,11 @@ namespace GOAP {
             gameObjectValue.GetInstanceID() : int.MaxValue);
         }
 
+        public WorldState(WorldStateKey key, GameObject value) : this() {
+            this.key = key;
+            this.gameObjectValue = value;
+        }
+
         public WorldState(WorldStateKey key, int value) : this() {
             this.key = key;
             intValue = value;           
