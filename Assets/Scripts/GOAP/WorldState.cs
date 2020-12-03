@@ -50,7 +50,8 @@ namespace GOAP {
             valueDict = new Dictionary<WorldStateType, Func<int>>();
             valueDict.Add(WorldStateType.intType, () => intValue);
             valueDict.Add(WorldStateType.boolType, () => Convert.ToInt32(boolValue));
-            valueDict.Add(WorldStateType.gameObjectType, () => gameObjectValue.GetInstanceID());
+            valueDict.Add(WorldStateType.gameObjectType, () => gameObjectValue != null ? 
+            gameObjectValue.GetInstanceID() : int.MaxValue);
         }
 
         public WorldState(WorldStateKey key, int value) : this() {

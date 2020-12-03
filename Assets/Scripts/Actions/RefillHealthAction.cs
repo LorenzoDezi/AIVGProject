@@ -15,7 +15,6 @@ public class RefillHealthAction : GOAP.Action {
     //TODO Avoid all this serialized fields with key
     [SerializeField]
     private WorldStateKey healthRefilledKey;
-    private WorldStates worldPerception;
 
     [SerializeField]
     private float checkForHealthStationsRadius = 5f;

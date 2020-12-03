@@ -31,7 +31,7 @@ namespace GOAP {
 
         public static WorldStates operator + (WorldStates op1, WorldStates op2) {
             WorldStates result = new WorldStates(op1);
-            op1.Update(op2);
+            result.Update(op2);
             return result;
         }
 

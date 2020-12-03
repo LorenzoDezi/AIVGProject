@@ -24,7 +24,7 @@ namespace GOAP {
         public WorldStates DesiredStates {
             get => desiredStates;
             set {
-                desiredStates = value + node.Preconditions;
+                desiredStates = node.Preconditions + value;
             }
         }
 

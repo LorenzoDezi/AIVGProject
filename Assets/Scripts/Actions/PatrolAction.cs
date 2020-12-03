@@ -15,15 +15,31 @@ public class PatrolAction : GOAP.Action {
     private NavigationComponent navigationComp;
     private Transform transform;
 
+    [SerializeField]
+    private WorldStateKey patrollingKey;
+    private WorldState currPatrollingState;
+
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
         navigationComp = agentGameObj.GetComponent<NavigationComponent>();
         transform = agentGameObj.transform;
         characterController = agentGameObj.GetComponent<CharacterController>();
+        currPatrollingState = new WorldState(patrollingKey, false);
+        agent.UpdatePerception(currPatrollingState);
     }
 
     public override void Activate() {
         navigationComp.PathCompleted.AddListener(OnPathCompleted);
+        SetPatrolToCloserPatrolPoint();
+        SetPatrollingWorldState(true);
+    }
+
+
+    public override void Update() {
+
+    }
+
+    private void SetPatrolToCloserPatrolPoint() {
         Transform closerPatrolPoint = null;
         float minSqrDistance = Mathf.Infinity;
         for (int i = 0; i < PatrolPoints.Count; i++) {
@@ -40,10 +56,12 @@ public class PatrolAction : GOAP.Action {
     public override void Deactivate() {
         navigationComp.Stop();
         navigationComp.PathCompleted.RemoveListener(OnPathCompleted);
+        SetPatrollingWorldState(false);
     }
 
-    public override void Update() {
-        
+    private void SetPatrollingWorldState(bool value) {
+        currPatrollingState.BoolValue = value;
+        agent.UpdatePerception(currPatrollingState);
     }
 
     private void SetPatrolTo(Transform closerPatrolPoint) {
@@ -56,8 +74,6 @@ public class PatrolAction : GOAP.Action {
         if (currPatrolIndex >= PatrolPoints.Count)
             currPatrolIndex = 0;
         SetPatrolTo(PatrolPoints[currPatrolIndex]);
-    }
-
-    
+    } 
 }
 
