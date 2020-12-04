@@ -7,13 +7,12 @@ public class EnemyGuardAgent : Agent
 {
     [SerializeField]
     private List<Transform> patrolPoints;
-    private WorldState currRefilledState;
 
     protected override void Awake() {
         base.Awake();
         foreach(var action in actions) {
             if (action is PatrolAction)
-                ((PatrolAction)action).PatrolPoints = patrolPoints;
+                ((PatrolAction) action).PatrolPoints = patrolPoints;
         }        
     }
 

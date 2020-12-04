@@ -73,11 +73,10 @@ namespace GOAP {
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
-            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
             //DEBUG
-            if(goal is StayAliveGoal) {
-                ; //Debug point
-            }
+            if (goal is BoolPriorityGoal)
+                ;
+            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
             foreach (PlanNode node in graph.Nodes) {
                 if (node.Satisfy(goal.DesiredStates) 
                     && node.Action.CheckProceduralConditions()) {

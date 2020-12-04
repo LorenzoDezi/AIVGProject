@@ -28,6 +28,8 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     public override bool CheckProceduralConditions() {
+        if (healthComponent.CurrHealth == healthComponent.MaxHealth)
+            return false;
         nearestHealthStation = Physics2D.OverlapCircle(
             navigationComponent.transform.position, checkForHealthStationsRadius, healthStationLayer
         )?.transform;

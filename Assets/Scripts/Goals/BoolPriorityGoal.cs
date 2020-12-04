@@ -6,34 +6,34 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "PatrolGoal", menuName = "GOAP/Goals/PatrolGoal")]
-public class PatrolGoal : Goal {
+[CreateAssetMenu(fileName = "BoolPriorityGoal", menuName = "GOAP/Goals/BoolPriorityGoal")]
+public class BoolPriorityGoal : Goal {
 
     [SerializeField]
-    WorldStateKey enemySeen;
+    WorldState BoolState;
     [SerializeField]
-    private float lowPriority;
+    private float priorityIfFalse;
     [SerializeField]
-    private float highPriority;
+    private float priorityIfTrue;
 
     WorldStates agentWorldStates;
 
     public override void Init(GameObject agentObj) {
         base.Init(agentObj);
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
-        WorldState enemySeenState = agentWorldStates[enemySeen];
+        WorldState enemySeenState = agentWorldStates[BoolState.Key];
         if(enemySeenState == null) {
-            enemySeenState = new WorldState(enemySeen, null);
+            enemySeenState = new WorldState(BoolState);
             agentWorldStates.Add(enemySeenState);
         }
-        priority = enemySeenState.BoolValue ? lowPriority : highPriority;
+        priority = enemySeenState.BoolValue ? priorityIfTrue : priorityIfFalse;
         enemySeenState.StateChangeEvent.AddListener(UpdatePriority);
     }
 
     protected override void UpdatePriority() {
-        WorldState enemySeenState = agentWorldStates[enemySeen];
+        WorldState enemySeenState = agentWorldStates[BoolState.Key];
         if (enemySeenState != null)
-            priority = enemySeenState.BoolValue ? lowPriority : highPriority;
+            priority = enemySeenState.BoolValue ? priorityIfTrue : priorityIfFalse;
         base.UpdatePriority();
     }
 }

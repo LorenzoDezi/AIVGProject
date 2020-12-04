@@ -29,10 +29,12 @@ public class EnemyVisualSensor : Sensor {
     private Vector2 enemyScaleOffset = new Vector2();
     private Collider2D[] results = new Collider2D[1];
 
+    public GameObject EnemyVisible { get; private set; }
+
     protected override void Awake() {
         base.Awake();
         transform = GetComponent<Transform>();
-        currWorldStateTracked = new WorldState(keyToUpdate, null);
+        currWorldStateTracked = new WorldState(keyToUpdate, false);
         contactFilter.SetLayerMask(enemyLayerMask);
         contactFilter.useTriggers = true;
     }
@@ -43,12 +45,12 @@ public class EnemyVisualSensor : Sensor {
 
     IEnumerator CheckTargetWithDelay(float delay) {
         while (true) {
-            SetEnemySeen(GetEnemyVisible());
+            SetEnemySeen(GetVisibleEnemy());
             yield return new WaitForSeconds(delay);
         }
     }
 
-    GameObject GetEnemyVisible() {
+    GameObject GetVisibleEnemy() {
         GameObject enemy = null;
         if (Physics2D.OverlapCircle(transform.position, visionLenght,
             contactFilter, results) == 1) {
@@ -67,7 +69,8 @@ public class EnemyVisualSensor : Sensor {
     }
 
     private void SetEnemySeen(GameObject enemy) {
-        currWorldStateTracked.GameObjectValue = enemy;
+        EnemyVisible = enemy;
+        currWorldStateTracked.BoolValue = enemy != null;
         agentToUpdate.UpdatePerception(currWorldStateTracked);
     }
 

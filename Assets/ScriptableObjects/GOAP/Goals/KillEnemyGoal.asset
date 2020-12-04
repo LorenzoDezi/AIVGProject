@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea6f802eeb34b51478340160c20ee4e7, type: 3}
-  m_Name: PatrolGoal
+  m_Name: KillEnemyGoal
   m_EditorClassIdentifier: 
   desiredStates:
     states:
-    - key: {fileID: 11400000, guid: f2cb7c2423e1de8448e889c81f80bd3e, type: 2}
+    - key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
       intValue: 0
       boolValue: 1
       gameObjectValue: {fileID: 0}
@@ -29,5 +29,5 @@ MonoBehaviour:
     StateChangeEvent:
       m_PersistentCalls:
         m_Calls: []
-  priorityIfFalse: 5
-  priorityIfTrue: 0
+  priorityIfFalse: 0
+  priorityIfTrue: 5

@@ -74689,11 +74689,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: goalTemplates.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -74735,6 +74735,21 @@ PrefabInstance:
       propertyPath: goalTemplates.Array.data[1]
       value: 
       objectReference: {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: b8f64bfbc93209b4fbdd130f7398e193,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: goalTemplates.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: c8b322678cdfff843bdc39f5de0a3324,
         type: 2}
     - target: {fileID: 727441786284930137, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -74894,6 +74909,19 @@ MonoBehaviour:
   visionAngle: 120
   visionLenght: 8
   checkTargetDelay: 0.2
+--- !u!114 &2089853290383079077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2089853290383079074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 127c14220190f0a43aebd821452afe9f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyToUpdate: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
 --- !u!114 &2089853290383079078 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb,

@@ -9,7 +9,7 @@ namespace GOAP {
 
     [RequireComponent(typeof(Agent))]
     public abstract class Sensor : MonoBehaviour {
-        //TODO: Maybe Sensor Agent?
+        //TODO: Add AgentSensor for single agent sensors, and not WORLD - if you decide to keep perception and World separated
         [SerializeField]
         protected WorldStateKey keyToUpdate;
         protected WorldState currWorldStateTracked;

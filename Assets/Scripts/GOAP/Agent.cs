@@ -34,6 +34,10 @@ namespace GOAP {
             worldPerception.Update(state);
         }
 
+        public void UpdatePerception(WorldStates states) {
+            worldPerception.Update(states);
+        }
+
         #region monobehaviour calls
         protected virtual void Awake() {
             InitActions();

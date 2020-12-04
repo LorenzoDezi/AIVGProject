@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GunController : MonoBehaviour
 {
@@ -18,11 +19,13 @@ public class GunController : MonoBehaviour
     private float currentReloadTime;
     private Coroutine reloadCoroutine;
 
-    public bool HasShotsInClip => currentShotsInClip > 0;
-
     [SerializeField]
     private Transform bulletSpawn;
     private BulletSpawner spawner;
+
+    public UnityEvent Reloaded = new UnityEvent();
+    public UnityEvent EmptyClip = new UnityEvent();
+    public bool HasShotsInClip => currentShotsInClip > 0;
 
     private void Start() {
         spawner = GameManager.BulletSpawner;
@@ -36,6 +39,8 @@ public class GunController : MonoBehaviour
             lastShotTime = Time.time;
             Shoot();
             currentShotsInClip--;
+            if (currentShotsInClip == 0)
+                EmptyClip.Invoke();
         }
     }
 
@@ -49,6 +54,7 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(timeToReload);
         currentShotsInClip = maxShotsPerClip;
         reloadSprite.enabled = false;
+        Reloaded.Invoke();
         reloadCoroutine = null;
     }
 

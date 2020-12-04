@@ -8,7 +8,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "PatrolAction", menuName = "GOAP/Actions/PatrolAction")]
 public class PatrolAction : GOAP.Action {
-
+    //TODO Refactor patrol points, avoid EnemyGuardAgent - it breaks the logic
     public List<Transform> PatrolPoints { get; set; }
     private int currPatrolIndex;
     private CharacterController characterController;
