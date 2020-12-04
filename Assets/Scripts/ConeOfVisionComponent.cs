@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-/// <summary>
-/// Structure about informations on a cone of vision ray
-/// </summary>
 public struct ConeRayInfo {
     public bool hasHit;
     public Vector3 hitPoint;
@@ -21,9 +18,6 @@ public struct ConeRayInfo {
     }
 }
 
-/// <summary>
-/// Structure for edge detection
-/// </summary>
 public struct EdgeInfo {
     public Vector3 pointA;
     public Vector3 pointB;
@@ -39,16 +33,11 @@ public struct EdgeInfo {
 public class ConeOfVisionComponent : MonoBehaviour {
 
     #region Cone of vision parameters
-    [Header("Cone of vision parameters")]
     [SerializeField]
+    private EnemyVisualSensor visualSensor;
     private float coneOfVisionLenght;
-    public float ConeOfVisionLength => coneOfVisionLenght;
-    [SerializeField]
     private float coneOfVisionAngle;
-    public float ConeOfVisionAngle => coneOfVisionAngle;
-    [SerializeField]
     private LayerMask obstacleLayer;
-    public LayerMask ObstacleLayer => obstacleLayer; 
     #endregion
 
 
@@ -81,6 +70,9 @@ public class ConeOfVisionComponent : MonoBehaviour {
         meshFilter = GetComponent<MeshFilter>();
         mesh = new Mesh();
         meshFilter.mesh = mesh;
+        coneOfVisionAngle = visualSensor.VisionAngle;
+        coneOfVisionLenght = visualSensor.VisionLenght;
+        obstacleLayer = visualSensor.ObstacleLayerMask;
     }
 
     private void LateUpdate() {

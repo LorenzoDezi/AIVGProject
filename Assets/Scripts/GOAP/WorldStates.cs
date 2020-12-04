@@ -30,14 +30,16 @@ namespace GOAP {
             }
         }
 
-        public WorldStates(WorldStates original, WorldStates update) : this(original) {
-            Update(update);
-        }
-
         public void Update(WorldStates worldStates) {
             foreach (WorldState state in worldStates) {
                 Update(state);
             }
+        }
+
+        public WorldStates Updated(WorldStates update) {
+            WorldStates copy = new WorldStates(this);
+            copy.Update(update);
+            return copy;
         }
 
         public void Update(WorldState state) {

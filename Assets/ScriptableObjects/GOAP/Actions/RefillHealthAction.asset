@@ -13,14 +13,7 @@ MonoBehaviour:
   m_Name: RefillHealthAction
   m_EditorClassIdentifier: 
   preconditions:
-    states:
-    - key: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
-      intValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    states: []
   effects:
     states:
     - key: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}

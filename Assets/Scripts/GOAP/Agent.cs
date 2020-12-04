@@ -54,19 +54,21 @@ namespace GOAP {
         #region coroutines
         private IEnumerator CheckPlan() {
             var replanWaitFor = new WaitForSeconds(replanInterval);
+            Action newAction;
             while (true) {
-                foreach(Goal goal in goals) {
+                newAction = null;
+                foreach(Goal goal in goals.ToList()) {
                     actionQueue = planner.Plan(goal, worldPerception);
                     if(actionQueue.Count > 0) {
-                        Action nextAction = actionQueue.Dequeue();
-                        if(nextAction != currAction) {
-                            DisableCurrAction();
-                            currAction = nextAction;
-                            EnableCurrAction();
-                        }                       
+                        newAction = actionQueue.Dequeue();                                              
                         break;
                     }
                     yield return new WaitForEndOfFrame();
+                }
+                if (newAction != currAction) {
+                    DisableCurrAction();
+                    currAction = newAction;
+                    EnableCurrAction();
                 }
                 yield return replanWaitFor;
             }
@@ -83,14 +85,17 @@ namespace GOAP {
         } 
 
         private void EnableCurrAction() {
-            currAction.Activate();
-            currAction.EndAction.AddListener(OnEndAction);
+            if(currAction != null) {
+                currAction.Activate();
+                currAction.EndAction.AddListener(OnEndAction);
+            }           
         }
 
         private void DisableCurrAction() {
             if (currAction != null) {
                 currAction.Deactivate();
                 currAction.EndAction.RemoveListener(OnEndAction);
+                currAction = null;
             }
         }
 
