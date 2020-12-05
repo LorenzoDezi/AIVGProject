@@ -28,7 +28,7 @@ namespace GOAP {
 
         private List<PlanNode> GetConnectedNodesFrom(PlanNode planNode) {
             WorldStates preconditionsToSatisfy = planNode.Action.Preconditions;
-            return Nodes.Where((node) => node != planNode && node.Action.Effects.Contains(preconditionsToSatisfy)).ToList();
+            return Nodes.Where((node) => node != planNode && node.Action.Effects.LinkedWith(preconditionsToSatisfy)).ToList();
         }
 
         public void AddNode(Action action) {

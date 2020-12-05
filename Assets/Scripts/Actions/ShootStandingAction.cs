@@ -13,6 +13,9 @@ public class ShootStandingAction : GOAP.Action {
     private GunController gunController;
     private CharacterController charController;
     private Transform target;
+    [SerializeField]
+    private float shootInterval = 0.5f;
+    private float timeSinceLastShoot;
 
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
@@ -22,7 +25,8 @@ public class ShootStandingAction : GOAP.Action {
     }
 
     public override void Activate() {
-        target = enemySensor.EnemyVisible.transform;        
+        target = enemySensor.EnemyVisible.transform;
+        timeSinceLastShoot = shootInterval;
     }
 
     public override void Deactivate() {
@@ -31,6 +35,12 @@ public class ShootStandingAction : GOAP.Action {
 
     public override void Update() {
         charController.AimAt(target.position);
+        if (timeSinceLastShoot >= shootInterval) {
+            gunController.TryToShoot();
+            timeSinceLastShoot = 0f;
+        } else {
+            timeSinceLastShoot += Time.deltaTime;
+        }
     }
 }
 

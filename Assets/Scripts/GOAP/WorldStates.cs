@@ -59,6 +59,10 @@ namespace GOAP {
             return desiredStates.All(states.Contains);
         }
 
+        public bool LinkedWith(WorldStates others) {
+            return others.Count != 0 && others.Any(states.Contains);
+        }
+
         public bool Contains(WorldState state) {
             return states.Contains(state);
         }

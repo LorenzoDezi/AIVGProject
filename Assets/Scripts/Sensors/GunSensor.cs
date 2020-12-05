@@ -12,11 +12,12 @@ public class GunSensor : Sensor {
         currWorldStateTracked = new WorldState(keyToUpdate, true);
         agentToUpdate.UpdatePerception(currWorldStateTracked);
         var gunController = GetComponentInChildren<GunController>();
-        gunController?.EmptyClip.AddListener(UpdatePerception);
+        gunController?.EmptyClip.AddListener(() => UpdatePerception(false));
+        gunController?.Reloaded.AddListener(() => UpdatePerception(true));
     }
 
-    private void UpdatePerception() {
-        currWorldStateTracked.BoolValue = false;
+    private void UpdatePerception(bool value) {
+        currWorldStateTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(currWorldStateTracked);
     }
 }
