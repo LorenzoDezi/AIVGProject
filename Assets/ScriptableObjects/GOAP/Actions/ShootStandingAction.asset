@@ -37,4 +37,5 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-  cost: 0
+  cost: 5
+  shootInterval: 0.5

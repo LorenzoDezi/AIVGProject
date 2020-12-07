@@ -21,12 +21,13 @@ public class ReloadAction : GOAP.Action {
 
     private void OnReload() {
         gunController.Reloaded.RemoveListener(OnReload);
-        Terminate();
+        Terminate(true);
     }
 
-    public override void Activate() {
+    public override bool Activate() {
         gunController.Reloaded.AddListener(OnReload);
         gunController.Reload();
+        return true;
     }
 
     public override void Deactivate() {

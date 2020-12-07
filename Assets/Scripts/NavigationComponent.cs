@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public class PathCompletedEvent : UnityEvent<bool> { }
+
 public class NavigationComponent : MonoBehaviour {
 
     private Transform targetPosition;
@@ -16,7 +18,7 @@ public class NavigationComponent : MonoBehaviour {
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
 
-    public UnityEvent PathCompleted;
+    public PathCompletedEvent PathCompleted = new PathCompletedEvent();
 
     public void MoveTo(Transform targetPosition) {
         this.targetPosition = targetPosition;
@@ -52,7 +54,7 @@ public class NavigationComponent : MonoBehaviour {
                 currentWaypoint++;
                 sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
             } else {
-                PathCompleted.Invoke();
+                PathCompleted.Invoke(true);
                 Stop();
                 return;
             }
@@ -64,6 +66,7 @@ public class NavigationComponent : MonoBehaviour {
     private void OnPathCalculated(Path p) {
         if (p.error) {
             Debug.LogErrorFormat("Error calculating path {0}", p.errorLog);
+            PathCompleted.Invoke(false);
             return;
         }
         path = p;

@@ -7,15 +7,16 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ShootStandingAction", menuName = "GOAP/Actions/ShootStandingAction")]
-public class ShootStandingAction : GOAP.Action {
+public class CombatAction : GOAP.Action {
 
-    private EnemyVisualSensor enemySensor;
-    private GunController gunController;
-    private CharacterController charController;
-    private Transform target;
+    protected EnemyVisualSensor enemySensor;
+    protected GunController gunController;
+    protected CharacterController charController;
+    protected Transform target;
+
     [SerializeField]
-    private float shootInterval = 0.5f;
-    private float timeSinceLastShoot;
+    protected float shootInterval = 0.5f;
+    protected float timeSinceLastShoot;
 
     public override void Init(GameObject agentGameObj) {
 
@@ -26,15 +27,14 @@ public class ShootStandingAction : GOAP.Action {
         enemySensor = agentGameObj.GetComponent<EnemyVisualSensor>();
     }
 
-    public override void Activate() {
+    public override bool Activate() {
 
-        if(enemySensor.VisibleEnemy == null) {
-            Terminate();
-            return;
-        }
+        if(enemySensor.VisibleEnemy == null)
+            return false;
 
         target = enemySensor.VisibleEnemy.transform;
         timeSinceLastShoot = shootInterval;
+        return true;
     }
 
     public override void Deactivate() {

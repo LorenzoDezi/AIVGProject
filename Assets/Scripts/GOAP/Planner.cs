@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace GOAP {
 
@@ -31,11 +32,12 @@ namespace GOAP {
 
         public PlanNodeRecord(PlanNode node) {
             this.node = node;
+            CostSoFar = node.Action.Cost;
         }
 
         public void Reset() {
             HeuristicCost = 0;
-            CostSoFar = 0f;
+            CostSoFar = node.Action.Cost;
             Closed = false;
             Open = false;
             NextNode = null;
@@ -43,8 +45,8 @@ namespace GOAP {
             DesiredGoalStates = null;
         }
 
-        public int CompareTo(object obj) {
-            return TotalCost.CompareTo(obj);
+        public int CompareTo(object obj) {            
+            return TotalCost.CompareTo(((PlanNodeRecord) obj).TotalCost);
         }
     }
 
@@ -73,9 +75,6 @@ namespace GOAP {
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
-            //DEBUG
-            if (goal is BoolPriorityGoal)
-                ;
             List<PlanNodeRecord> open = new List<PlanNodeRecord>();
             foreach (PlanNode node in graph.Nodes) {
                 if (node.Satisfy(goal.DesiredStates) 
@@ -91,6 +90,12 @@ namespace GOAP {
             bool found = false;
             PlanNodeRecord curr = null;
             while (open.Count > 0) {
+                //DEBUG
+                Debug.LogWarning("Open list:");
+                foreach(var node in open) {
+                    Debug.LogWarning(node.Action.name);
+                    Debug.LogWarning(node.CostSoFar);
+                }
                 curr = open.Min();
                 if (curr.IsSatisfied) {
                     found = true;

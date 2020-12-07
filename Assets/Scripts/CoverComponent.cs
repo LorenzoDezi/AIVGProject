@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.Events;
 public class CoverComponent : MonoBehaviour
 {
     private new Transform transform;
+    public Transform Transform => transform;
 
     [SerializeField]
     private LayerMask toCoverFromMask;
@@ -18,8 +20,10 @@ public class CoverComponent : MonoBehaviour
     private float checkCoverInterval = 1f;
     private Coroutine checkCoverCoroutine;
 
-    public bool CanCover { get;  private set; }
-    
+    private bool canCover;
+    public bool IsOccupied { get; set; }
+    public bool IsAvailable => canCover && !IsOccupied;
+
     void Awake()
     {
         transform = GetComponent<Transform>();
@@ -29,7 +33,7 @@ public class CoverComponent : MonoBehaviour
 
         var wait = new WaitForSeconds(checkCoverInterval);
         while(hasTransformInSight) {
-            CanCover = transform.HasObstacleInBetween(transfToCoverFrom, obstacleMask);
+            canCover = transform.HasObstacleInBetween(transfToCoverFrom, obstacleMask);
             //if (CanCover)
             //    Debug.LogFormat("{0} can cover from player", gameObject.name);
             yield return wait;
@@ -53,6 +57,8 @@ public class CoverComponent : MonoBehaviour
             checkCoverCoroutine = null;
         }
     }
+
+    
 
     private void SetTransformInSight(GameObject obj, bool inSight) {
 

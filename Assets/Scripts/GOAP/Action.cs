@@ -6,6 +6,8 @@ using UnityEngine.Events;
 
 namespace GOAP {
 
+    public class EndActionEvent : UnityEvent<bool> { }
+
     public abstract class Action : ScriptableObject { 
 
         [SerializeField]
@@ -22,10 +24,10 @@ namespace GOAP {
         protected Agent agent;
 
         public float Cost => cost;
-        public UnityEvent EndAction { get; }
+        public EndActionEvent EndAction { get; }
 
         public Action() {
-            EndAction = new UnityEvent();
+            EndAction = new EndActionEvent();
         }
 
         public virtual bool CheckProceduralConditions() {           
@@ -38,14 +40,14 @@ namespace GOAP {
             this.agent = agentGameObj.GetComponent<Agent>();
         }
 
-        public abstract void Activate();
+        public abstract bool Activate();
 
         public abstract void Deactivate();
 
         public abstract void Update();
 
-        protected virtual void Terminate() {
-            EndAction.Invoke();
+        protected virtual void Terminate(bool success) {
+            EndAction.Invoke(success);
         }
 
     }

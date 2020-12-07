@@ -28,10 +28,11 @@ public class PatrolAction : GOAP.Action {
         agent.UpdatePerception(currPatrollingState);
     }
 
-    public override void Activate() {
+    public override bool Activate() {
         navigationComp.PathCompleted.AddListener(OnPathCompleted);
         SetPatrolToCloserPatrolPoint();
         SetPatrollingWorldState(true);
+        return true;
     }
 
 
@@ -69,7 +70,7 @@ public class PatrolAction : GOAP.Action {
         navigationComp.MoveTo(closerPatrolPoint);
     }
 
-    private void OnPathCompleted() {
+    private void OnPathCompleted(bool success) {
         currPatrolIndex++;
         if (currPatrolIndex >= PatrolPoints.Count)
             currPatrolIndex = 0;
