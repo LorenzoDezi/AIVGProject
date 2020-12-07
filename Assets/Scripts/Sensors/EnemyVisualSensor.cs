@@ -14,6 +14,7 @@ public class EnemyVisualSensor : Sensor {
     [SerializeField]
     private LayerMask obstacleLayerMask;
 
+
     public LayerMask ObstacleLayerMask => obstacleLayerMask;
     [SerializeField]
     private float visionAngle = 90f;
@@ -23,13 +24,16 @@ public class EnemyVisualSensor : Sensor {
     public float VisionLenght => visionLenght;
     [SerializeField]
     private float checkTargetDelay = 0.2f;
+    [SerializeField]
+    private float sqrMinLoseSightDistance = 10f;
+    public Vector3 LastSeenPosition { get; private set; }
+    public Vector3 LastSeenDirection { get; private set; }
 
     private ContactFilter2D contactFilter = new ContactFilter2D();
     private new Transform transform;
-    private Vector2 enemyScaleOffset = new Vector2();
     private Collider2D[] results = new Collider2D[1];
 
-    public GameObject EnemyVisible { get; private set; }
+    public GameObject VisibleEnemy { get; private set; }
 
     protected override void Awake() {
         base.Awake();
@@ -40,43 +44,68 @@ public class EnemyVisualSensor : Sensor {
     }
 
     private void Start() {
-        StartCoroutine("CheckTargetWithDelay", checkTargetDelay);
+        StartCoroutine(CheckTargetWithDelay(checkTargetDelay));
     }
 
     IEnumerator CheckTargetWithDelay(float delay) {
-        while (true) {
-            SetEnemySeen(GetVisibleEnemy());
-            yield return new WaitForSeconds(delay);
+
+        var wait = new WaitForSeconds(delay);
+        bool spotted = false;
+        Transform visibleEnemyTransf = null;
+
+        while (true) { 
+
+            if(spotted) {
+                if(transform.SqrDistance(visibleEnemyTransf) > sqrMinLoseSightDistance) {
+                    VisibleEnemy = null;
+                    SetEnemySeen(false);
+                    spotted = false;
+                } 
+            } 
+            
+            else {
+                GameObject visibleEnemy = GetVisibleEnemy();
+                if(visibleEnemy != null) {
+                    VisibleEnemy = visibleEnemy;
+                    SetEnemySeen(true);
+                    visibleEnemyTransf = VisibleEnemy.transform;
+                    spotted = true;
+                }
+            }
+
+            yield return wait;
         }
     }
 
     GameObject GetVisibleEnemy() {
+
         GameObject enemy = null;
+
         if (Physics2D.OverlapCircle(transform.position, visionLenght,
             contactFilter, results) == 1) {
+
             var enemyCollider = results[0];
             Transform enemyTransform = enemyCollider.transform;
             Vector2 dirToPlayer = (enemyTransform.position - transform.position).normalized;
-            if (Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f) {
-                Vector2 position = enemyTransform.position;
-                enemyScaleOffset.y = enemyTransform.localScale.y / 3f;
-                if (CheckLineOfSight(position)) {
-                    enemy = enemyCollider.gameObject;
+
+            if (Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
+                !transform.HasObstacleInBetween(enemyTransform, obstacleLayerMask)) {
+
+                enemy = enemyCollider.gameObject;
+
+                if (enemy != null) {
+                    LastSeenPosition = enemyTransform.position;
+                    LastSeenDirection = enemyTransform.right;
                 }
             }
         }
+
         return enemy;      
     }
 
-    private void SetEnemySeen(GameObject enemy) {
-        EnemyVisible = enemy;
-        currWorldStateTracked.BoolValue = enemy != null;
+    private void SetEnemySeen(bool value) {
+        currWorldStateTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(currWorldStateTracked);
-    }
-
-    private bool CheckLineOfSight(Vector2 colliderPosition) {
-        var hit = Physics2D.Linecast(transform.position, colliderPosition, obstacleLayerMask);
-        return hit.collider == null;
     }
 }
 

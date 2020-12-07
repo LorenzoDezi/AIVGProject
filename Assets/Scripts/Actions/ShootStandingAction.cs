@@ -18,14 +18,22 @@ public class ShootStandingAction : GOAP.Action {
     private float timeSinceLastShoot;
 
     public override void Init(GameObject agentGameObj) {
+
         base.Init(agentGameObj);
+
         gunController = agentGameObj.GetComponentInChildren<GunController>();
         charController = agentGameObj.GetComponent<CharacterController>();
         enemySensor = agentGameObj.GetComponent<EnemyVisualSensor>();
     }
 
     public override void Activate() {
-        target = enemySensor.EnemyVisible.transform;
+
+        if(enemySensor.VisibleEnemy == null) {
+            Terminate();
+            return;
+        }
+
+        target = enemySensor.VisibleEnemy.transform;
         timeSinceLastShoot = shootInterval;
     }
 
@@ -34,7 +42,9 @@ public class ShootStandingAction : GOAP.Action {
     }
 
     public override void Update() {
+
         charController.AimAt(target.position);
+
         if (timeSinceLastShoot >= shootInterval) {
             gunController.TryToShoot();
             timeSinceLastShoot = 0f;
