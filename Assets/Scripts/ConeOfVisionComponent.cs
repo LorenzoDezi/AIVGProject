@@ -40,7 +40,6 @@ public class ConeOfVisionComponent : MonoBehaviour {
     private LayerMask obstacleLayer;
     #endregion
 
-
     #region Mesh creation parameters
     [Header("Mesh Generation Parameters")]
     private Mesh mesh;
@@ -81,7 +80,7 @@ public class ConeOfVisionComponent : MonoBehaviour {
     }
 
     private void SetConeRayInfo(Vector2 direction, float angle) {
-        var rotatedDir = Math2D.RotatedVector(direction, angle);
+        var rotatedDir = direction.RotatedBy(angle);
         var hit = Physics2D.Raycast(transform.position, rotatedDir, coneOfVisionLenght, obstacleLayer);
         rayInfo.hasHit = hit.collider != null;
         rayInfo.angle = angle;
