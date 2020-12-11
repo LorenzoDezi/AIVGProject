@@ -1,5 +1,12 @@
 ﻿using UnityEngine;
 
+public static class LayerMaskExtensions {
+
+    public static bool ContainsLayer(this LayerMask layerMask, int layer) {
+        return layerMask == (layerMask | (1 << layer));
+    }
+}
+
 public static class Math2D {
 
     public static Vector3 RotatedBy(this Vector2 vector, float angle) {
@@ -11,6 +18,7 @@ public static class Math2D {
 }
 
 public static class TransformExtensions {
+
     public static bool HasObstacleInBetween(this Transform from, Transform to, LayerMask obstacleLayerMask) {
         return Physics2D.Linecast(from.position, to.position, obstacleLayerMask);
     }

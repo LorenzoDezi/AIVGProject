@@ -43,7 +43,7 @@ public class RefillHealthAction : GOAP.Action {
         if (nearestHealthStation == null)
             return false;
 
-        navigationComponent.MoveTo(nearestHealthStation);
+        navigationComponent.MoveTo(nearestHealthStation.position);
         navigationComponent.PathCompleted.AddListener(Refill);
         return true;
     }

@@ -67,7 +67,7 @@ public class PatrolAction : GOAP.Action {
 
     private void SetPatrolTo(Transform closerPatrolPoint) {
         characterController.AimAt(closerPatrolPoint.position);
-        navigationComp.MoveTo(closerPatrolPoint);
+        navigationComp.MoveTo(closerPatrolPoint.position);
     }
 
     private void OnPathCompleted(bool success) {

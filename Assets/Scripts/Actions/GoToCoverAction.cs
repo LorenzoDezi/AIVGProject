@@ -39,7 +39,7 @@ public class GoToCoverAction : ShootAction {
             Terminate(false);
             return;
         }
-        navComponent.MoveTo(currBestCover.Transform);
+        navComponent.MoveTo(currBestCover.Transform.position);
     }
 
     private void OnPathCompleted(bool success) {

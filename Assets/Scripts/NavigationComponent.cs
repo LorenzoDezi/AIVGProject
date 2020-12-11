@@ -8,7 +8,6 @@ public class PathCompletedEvent : UnityEvent<bool> { }
 
 public class NavigationComponent : MonoBehaviour {
 
-    private Transform targetPosition;
     private Seeker seeker;
     private CharacterController controller;
     private Path path;
@@ -20,9 +19,8 @@ public class NavigationComponent : MonoBehaviour {
 
     public PathCompletedEvent PathCompleted = new PathCompletedEvent();
 
-    public void MoveTo(Transform targetPosition) {
-        this.targetPosition = targetPosition;
-        seeker.StartPath(transform.position, targetPosition.position);
+    public void MoveTo(Vector3 position) {
+        seeker.StartPath(transform.position, position);
     }
 
     public void Stop() {
