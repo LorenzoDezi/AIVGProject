@@ -4,21 +4,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
-public class GunSensor : Sensor {
+public class GunSensor : MonoBehaviour {
 
-    protected override void Awake() {
-        base.Awake();
-        currWorldStateTracked = new WorldState(keyToUpdate, true);
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+    private Agent agentToUpdate;
+    [SerializeField]
+    private WorldStateKey weaponLoadedKey;
+    private WorldState weaponLoadedWSTracked;
+
+    protected void Awake() {
+
+        agentToUpdate = GetComponent<Agent>();
+
+        weaponLoadedWSTracked = new WorldState(weaponLoadedKey, true);
+        agentToUpdate.UpdatePerception(weaponLoadedWSTracked);
+
         var gunController = GetComponentInChildren<GunController>();
         gunController?.EmptyClip.AddListener(() => UpdatePerception(false));
         gunController?.Reloaded.AddListener(() => UpdatePerception(true));
     }
 
     private void UpdatePerception(bool value) {
-        currWorldStateTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+        weaponLoadedWSTracked.BoolValue = value;
+        agentToUpdate.UpdatePerception(weaponLoadedWSTracked);
     }
 }
 

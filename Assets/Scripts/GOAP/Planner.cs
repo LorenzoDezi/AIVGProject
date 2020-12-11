@@ -90,8 +90,6 @@ namespace GOAP {
             bool found = false;
             PlanNodeRecord curr = null;
             while (open.Count > 0) {
-                //DEBUG
-                Debug.LogWarning("Open list:");
                 foreach(var node in open) {
                     Debug.LogWarning(node.Action.name);
                     Debug.LogWarning(node.CostSoFar);

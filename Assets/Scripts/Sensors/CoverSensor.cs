@@ -8,9 +8,17 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class CoverSensor : Sensor {
+public class CoverSensor : MonoBehaviour {
 
     private new Transform transform;
+    private Agent agentToUpdate;
+
+    [SerializeField]
+    private WorldStateKey coverAvailableKey;
+    private WorldState coverAvailableWSTracked;
+    [SerializeField]
+    private WorldStateKey inCoverKey;
+    private WorldState inCoverWSTracked;
 
     [SerializeField]
     private LayerMask coverMask;
@@ -22,9 +30,6 @@ public class CoverSensor : Sensor {
     private float bestCoverCheckInterval = 1f;
     private Coroutine bestCoverCheckCoroutine;
 
-    [SerializeField]
-    private WorldStateKey inCoverKey;
-    private WorldState inCoverWorldState;
 
     private CoverComponent currCover;
     public CoverComponent CurrCover {
@@ -48,18 +53,18 @@ public class CoverSensor : Sensor {
     public UnityEvent BestCoverChanged;
 
     #region monobehaviour methods
-    protected override void Awake() {
+    protected void Awake() {
 
-        base.Awake();
+        agentToUpdate = GetComponent<Agent>();
+        transform = GetComponent<Transform>();
 
         coversAvailable = new List<CoverComponent>();
         BestCoverChanged = new UnityEvent();
-        //TODO: keyToUpdate -> how to avoid this delirium
-        currWorldStateTracked = new WorldState(keyToUpdate, false);
-        inCoverWorldState = new WorldState(inCoverKey, false);
 
-        transform = GetComponent<Transform>();
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+        coverAvailableWSTracked = new WorldState(coverAvailableKey, false);
+        inCoverWSTracked = new WorldState(inCoverKey, false);
+        agentToUpdate.UpdatePerception(inCoverWSTracked);
+        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -113,8 +118,8 @@ public class CoverSensor : Sensor {
     #region private methods
     private void GoInCover() {
         currCover.IsOccupied = true;
-        inCoverWorldState.BoolValue = true;
-        agentToUpdate.UpdatePerception(inCoverWorldState);
+        inCoverWSTracked.BoolValue = true;
+        agentToUpdate.UpdatePerception(inCoverWSTracked);
         if (inCoverCheckCoroutine == null) {
             inCoverCheckCoroutine = StartCoroutine(CheckStillInCover());
         }
@@ -139,10 +144,9 @@ public class CoverSensor : Sensor {
 
         BestCover = newBestCover;
         BestCoverChanged.Invoke();
-        currWorldStateTracked.BoolValue = BestCover != null;
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+        coverAvailableWSTracked.BoolValue = BestCover != null;
+        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
 
-        //DEBUG
         if (BestCover != null)
             Debug.LogFormat("Best Cover is: {0} for {1}", BestCover.name, name);
         else

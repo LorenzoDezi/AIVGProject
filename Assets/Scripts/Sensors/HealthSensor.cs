@@ -1,26 +1,45 @@
 ﻿using GOAP;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class HealthSensor : Sensor {
+public class HealthSensor : MonoBehaviour {
 
     private HealthComponent healthComp;
+    private Agent agentToUpdate;
 
-    protected override void Awake() {
-        base.Awake();
-        currWorldStateTracked = new WorldState(keyToUpdate, true);
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+    [SerializeField]
+    private WorldStateKey healthFullKey;
+    private WorldState healthFullWSTracked;
+
+    [SerializeField]
+    private WorldStateKey stressLevelKey;
+    private WorldState stressLevelWSTracked;
+
+    private float lastHealthRegistered;
+
+    protected void Awake() {
+
+        agentToUpdate = GetComponent<Agent>();
+
+        healthFullWSTracked = new WorldState(healthFullKey, true);
+        agentToUpdate.UpdatePerception(healthFullWSTracked);
+        stressLevelWSTracked = new WorldState(stressLevelKey, 0);
+        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+
         healthComp = GetComponent<HealthComponent>();
-        healthComp?.HealthChange.AddListener(UpdatePerception);
+        lastHealthRegistered = healthComp.MaxHealth;
+        healthComp?.HealthChange.AddListener(UpdatePerception);    
     }
 
     private void UpdatePerception(float currHealth) {
-        currWorldStateTracked.BoolValue = healthComp.MaxHealth == currHealth;
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+
+        if (currHealth < lastHealthRegistered)
+            stressLevelWSTracked.IntValue += 1;
+        else if (currHealth > lastHealthRegistered)
+            stressLevelWSTracked.IntValue = 0;
+        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+
+        healthFullWSTracked.BoolValue = healthComp.MaxHealth == currHealth;
+        agentToUpdate.UpdatePerception(healthFullWSTracked);
     }
 }
 

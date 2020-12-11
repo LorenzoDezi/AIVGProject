@@ -6,10 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ShootStandingAction", menuName = "GOAP/Actions/ShootStandingAction")]
-public class CombatAction : GOAP.Action {
+[CreateAssetMenu(fileName = "ShootAction", menuName = "GOAP/Actions/ShootStandingAction")]
+public class ShootAction : GOAP.Action {
 
-    protected EnemyVisualSensor enemySensor;
+    protected EnemyVisualSensor visualSensor;
     protected GunController gunController;
     protected CharacterController charController;
     protected Transform target;
@@ -24,15 +24,15 @@ public class CombatAction : GOAP.Action {
 
         gunController = agentGameObj.GetComponentInChildren<GunController>();
         charController = agentGameObj.GetComponent<CharacterController>();
-        enemySensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
     }
 
     public override bool Activate() {
 
-        if(enemySensor.VisibleEnemy == null)
+        if(visualSensor.VisibleEnemy == null)
             return false;
 
-        target = enemySensor.VisibleEnemy.transform;
+        target = visualSensor.VisibleEnemy.transform;
         timeSinceLastShoot = shootInterval;
         return true;
     }

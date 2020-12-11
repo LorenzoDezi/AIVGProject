@@ -38,17 +38,24 @@ public class RefillHealthAction : GOAP.Action {
         return nearestHealthStation != null;
     }
 
-    public override void Activate() {
-        if (nearestHealthStation != null) {
-            navigationComponent.MoveTo(nearestHealthStation);
-            navigationComponent.PathCompleted.AddListener(Refill);
-        }
+    public override bool Activate() {
+
+        if (nearestHealthStation == null)
+            return false;
+
+        navigationComponent.MoveTo(nearestHealthStation);
+        navigationComponent.PathCompleted.AddListener(Refill);
+        return true;
     }
 
-    private void Refill() {
-        healthComponent.Restore(healthComponent.MaxHealth);
-        navigationComponent.PathCompleted.RemoveListener(Refill);
-        Terminate();
+    private void Refill(bool success) {
+
+        if(success) {
+            healthComponent.Restore(healthComponent.MaxHealth);
+            navigationComponent.PathCompleted.RemoveListener(Refill);
+        }
+        
+        Terminate(success);
     }
 
     public override void Deactivate() { }

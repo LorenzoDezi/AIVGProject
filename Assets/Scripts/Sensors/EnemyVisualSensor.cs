@@ -7,7 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class EnemyVisualSensor : Sensor {
+public class EnemyVisualSensor : MonoBehaviour {
+
+    private Agent agentToUpdate;
+    [SerializeField]
+    private WorldStateKey enemySeenKey;
+    private WorldState enemySeenWSTracked;
+
     [Header("Visible and obstacle layers")]
     [SerializeField]
     private LayerMask enemyLayerMask;
@@ -35,10 +41,10 @@ public class EnemyVisualSensor : Sensor {
 
     public GameObject VisibleEnemy { get; private set; }
 
-    protected override void Awake() {
-        base.Awake();
+    protected void Awake() {
+        agentToUpdate = GetComponent<Agent>();
         transform = GetComponent<Transform>();
-        currWorldStateTracked = new WorldState(keyToUpdate, false);
+        enemySeenWSTracked = new WorldState(enemySeenKey, false);
         contactFilter.SetLayerMask(enemyLayerMask);
         contactFilter.useTriggers = true;
     }
@@ -104,8 +110,8 @@ public class EnemyVisualSensor : Sensor {
     }
 
     private void SetEnemySeen(bool value) {
-        currWorldStateTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(currWorldStateTracked);
+        enemySeenWSTracked.BoolValue = value;
+        agentToUpdate.UpdatePerception(enemySeenWSTracked);
     }
 }
 

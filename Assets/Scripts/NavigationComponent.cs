@@ -13,7 +13,7 @@ public class NavigationComponent : MonoBehaviour {
     private CharacterController controller;
     private Path path;
 
-    private float waypointDistTreshold = 1;
+    private float waypointDistTreshold = 0.25f;
     private float waypointDistSqrTreshold;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;

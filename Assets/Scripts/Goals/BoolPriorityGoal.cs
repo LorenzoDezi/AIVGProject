@@ -23,21 +23,21 @@ public class BoolPriorityGoal : Goal {
         base.Init(agentObj);
 
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
-        WorldState enemySeenState = agentWorldStates[BoolState.Key];
-        if(enemySeenState == null) {
-            enemySeenState = new WorldState(BoolState);
-            agentWorldStates.Add(enemySeenState);
+        WorldState currState = agentWorldStates[BoolState.Key];
+        if(currState == null) {
+            currState = new WorldState(BoolState);
+            agentWorldStates.Add(currState);
         }
 
-        priority = enemySeenState.BoolValue ? priorityIfTrue : priorityIfFalse;
-        enemySeenState.StateChangeEvent.AddListener(UpdatePriority);
+        priority = currState.BoolValue ? priorityIfTrue : priorityIfFalse;
+        currState.StateChangeEvent.AddListener(UpdatePriority);
     }
 
     protected override void UpdatePriority() {
 
-        WorldState enemySeenState = agentWorldStates[BoolState.Key];
-        if (enemySeenState != null)
-            priority = enemySeenState.BoolValue ? priorityIfTrue : priorityIfFalse;
+        WorldState currState = agentWorldStates[BoolState.Key];
+        if (currState != null)
+            priority = currState.BoolValue ? priorityIfTrue : priorityIfFalse;
 
         base.UpdatePriority();
     }
