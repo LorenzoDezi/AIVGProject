@@ -14,9 +14,21 @@ public class HealthSensor : MonoBehaviour {
     private WorldStateKey stressLevelKey;
     private WorldState stressLevelWSTracked;
 
+    [SerializeField]
+    private WorldStateKey inCoverKey;
+    private bool needCoverCheck;
+
+    [SerializeField]
+    private float stressLevelDecreaseForSecond = 0.2f;
+    [SerializeField]
+    private float stressLevelDecreaseInCover = 0.5f;
+    [SerializeField]
+    private float stressLevelIncreasePerHealthPoint = 0.1f;
+
+
     private float lastHealthRegistered;
 
-    protected void Awake() {
+    private void Awake() {
 
         agentToUpdate = GetComponent<Agent>();
 
@@ -30,12 +42,32 @@ public class HealthSensor : MonoBehaviour {
         healthComp?.HealthChange.AddListener(UpdatePerception);    
     }
 
+    private void Start() {
+        needCoverCheck = agentToUpdate.WorldPerception[inCoverKey] != null;
+    }
+
+    private void Update() {
+
+        if (stressLevelWSTracked.FloatValue <= 0f)
+            return;
+        float decreaseForSecond = stressLevelDecreaseForSecond;
+        if (needCoverCheck && agentToUpdate.WorldPerception[inCoverKey].BoolValue)
+            decreaseForSecond = stressLevelDecreaseInCover;
+        stressLevelWSTracked.FloatValue -= decreaseForSecond * Time.deltaTime;
+        if (stressLevelWSTracked.FloatValue <= 0f)
+            stressLevelWSTracked.FloatValue = 0f;
+        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+    }
+
     private void UpdatePerception(float currHealth) {
 
-        if (currHealth < lastHealthRegistered)
-            stressLevelWSTracked.IntValue += 1;
-        else if (currHealth > lastHealthRegistered)
-            stressLevelWSTracked.IntValue = 0;
+        float healthDecrease = lastHealthRegistered - currHealth;
+        lastHealthRegistered = currHealth;
+        if (healthDecrease > 0)
+            stressLevelWSTracked.FloatValue += healthDecrease * stressLevelIncreasePerHealthPoint;
+        else if (healthDecrease < 0) {
+            stressLevelWSTracked.FloatValue = 0f;
+        }
         agentToUpdate.UpdatePerception(stressLevelWSTracked);
 
         healthFullWSTracked.BoolValue = healthComp.MaxHealth == currHealth;

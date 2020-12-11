@@ -43,6 +43,9 @@ namespace GOAP.Editor {
                     case WorldStateType.intType:
                         EditorGUI.PropertyField(position, property.FindPropertyRelative("intValue"), GUIContent.none);
                         break;
+                    case WorldStateType.floatType:
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("floatValue"), GUIContent.none);
+                        break;
                     case WorldStateType.gameObjectType:
                         EditorGUI.PropertyField(position, property.FindPropertyRelative("gameObjectValue"), GUIContent.none);
                         break;

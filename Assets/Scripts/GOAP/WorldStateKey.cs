@@ -8,7 +8,7 @@ using UnityEngine;
 namespace GOAP {
 
     public enum WorldStateType {
-        boolType, intType, gameObjectType
+        boolType, intType, floatType, gameObjectType
     }
 
     [CreateAssetMenu(fileName = "NewWorldStateKey", menuName = "GOAP/WorldStateKey")]

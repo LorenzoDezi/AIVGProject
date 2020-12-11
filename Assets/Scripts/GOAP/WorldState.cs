@@ -25,6 +25,15 @@ namespace GOAP {
         }
 
         [SerializeField]
+        private float floatValue;
+        public float FloatValue {
+            get => floatValue;
+            set {
+                floatValue = value;
+            }
+        }
+
+        [SerializeField]
         private bool boolValue;
         public bool BoolValue {
             get => boolValue;
@@ -48,7 +57,8 @@ namespace GOAP {
 
         public WorldState() {
             valueDict = new Dictionary<WorldStateType, Func<int>>();
-            valueDict.Add(WorldStateType.intType, () => intValue);
+            valueDict.Add(WorldStateType.intType, () => Convert.ToInt32(floatValue));
+            valueDict.Add(WorldStateType.floatType, () => intValue);
             valueDict.Add(WorldStateType.boolType, () => Convert.ToInt32(boolValue));
             valueDict.Add(WorldStateType.gameObjectType, () => gameObjectValue != null ? 
             gameObjectValue.GetInstanceID() : int.MaxValue);

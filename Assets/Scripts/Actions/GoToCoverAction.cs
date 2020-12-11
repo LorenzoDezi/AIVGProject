@@ -17,6 +17,10 @@ public class GoToCoverAction : ShootAction {
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
+    public override bool CheckProceduralConditions() {
+        return coverSensor.BestCover != null;
+    }
+
     public override bool Activate() {
         if(!base.Activate() || coverSensor.BestCover == null) {
             return false;

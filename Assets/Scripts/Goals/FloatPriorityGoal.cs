@@ -1,16 +1,12 @@
 ﻿using GOAP;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
-public class IntPriorityGoal : Goal {
+[CreateAssetMenu(fileName = "FloatPriorityGoal", menuName = "GOAP/Goals/FloatPriorityGoal")]
+public class FloatPriorityGoal : Goal {
 
     [SerializeField]
-    WorldState IntState;
-    [SerializeField, Tooltip("priority = state.IntValue * priorityMultiplier")]
+    WorldState FloatState;
+    [SerializeField, Tooltip("priority = state.FloatValue * priorityMultiplier")]
     private float priorityMultiplier;
 
     WorldStates agentWorldStates;
@@ -20,21 +16,21 @@ public class IntPriorityGoal : Goal {
         base.Init(agentObj);
 
         agentWorldStates = agentObj.GetComponent<Agent>().WorldPerception;
-        WorldState currState = agentWorldStates[IntState.Key];
+        WorldState currState = agentWorldStates[FloatState.Key];
         if (currState == null) {
-            currState = new WorldState(IntState);
+            currState = new WorldState(FloatState);
             agentWorldStates.Add(currState);
         }
 
-        priority = currState.IntValue * priorityMultiplier;
+        priority = currState.FloatValue * priorityMultiplier;
         currState.StateChangeEvent.AddListener(UpdatePriority);
     }
 
     protected override void UpdatePriority() {
 
-        WorldState currState = agentWorldStates[IntState.Key];
+        WorldState currState = agentWorldStates[FloatState.Key];
         if (currState != null)
-            priority = currState.IntValue * priorityMultiplier;
+            priority = currState.FloatValue * priorityMultiplier;
 
         base.UpdatePriority();
     }
