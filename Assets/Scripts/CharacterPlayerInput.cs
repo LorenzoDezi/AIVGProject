@@ -10,6 +10,7 @@ public class CharacterPlayerInput : MonoBehaviour
     private CharacterController characterController;
     private CrosshairController crosshairController;
     private GunController gunController;
+    private KnifeController knifeController;
     private Camera mainCamera;
 
     private bool isShooting;
@@ -35,6 +36,7 @@ public class CharacterPlayerInput : MonoBehaviour
         inputAction = new PlayerInputAction();
         characterController = GetComponent<CharacterController>();
         gunController = GetComponentInChildren<GunController>();
+        knifeController = GetComponentInChildren<KnifeController>();
         crosshairController = GameObject.FindGameObjectWithTag("Crosshair").GetComponent<CrosshairController>();
         mainCamera = Camera.main;
     }
@@ -46,6 +48,8 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.Movement.canceled += OnMovement;
         playerActions.Shoot.started += OnStartShooting;
         playerActions.Shoot.canceled += OnStopShooting;
+        playerActions.KnifeAttack.started += OnStartKnifeAttack;
+        playerActions.KnifeAttack.canceled += OnStopKnifeAttack;
         playerActions.Reload.started += OnReload;
         inputAction.Enable();
     }
@@ -57,6 +61,14 @@ public class CharacterPlayerInput : MonoBehaviour
 
     void OnStartShooting(InputAction.CallbackContext context) {
         isShooting = true;
+    }
+
+    void OnStartKnifeAttack(InputAction.CallbackContext context) {
+        knifeController.IsAttacking = true;
+    }
+
+    void OnStopKnifeAttack(InputAction.CallbackContext context) {
+        knifeController.IsAttacking = false;
     }
 
     void OnStopShooting(InputAction.CallbackContext context) {
