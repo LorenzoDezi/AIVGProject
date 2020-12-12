@@ -65,6 +65,7 @@ public class CharacterPlayerInput : MonoBehaviour
 
     void OnStartKnifeAttack(InputAction.CallbackContext context) {
         knifeController.IsAttacking = true;
+        isShooting = false;
     }
 
     void OnStopKnifeAttack(InputAction.CallbackContext context) {

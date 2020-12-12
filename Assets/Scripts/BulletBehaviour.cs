@@ -9,6 +9,7 @@ public class BulletBehaviour : MonoBehaviour
     private float speed = 5f;
     [SerializeField]
     private float ttl = 5f;
+    private float currentTtl;
     [SerializeField]
     private float damage = 10f;
     [SerializeField]
@@ -24,17 +25,24 @@ public class BulletBehaviour : MonoBehaviour
     }
 
     private void OnEnable() {
-        //TODO: ttl reset
+        currentTtl = 0f;
     }
 
     private void Update() {
+
         var hit = Physics2D.Raycast(transform.position, transform.right, hitDistance, hitLayers.value);
-        if(hit) {
+
+        if (hit) {
             TryToDamage(hit);
             Destroy();
+            return;
         } else
             transform.position += transform.right * speed * Time.deltaTime;
-        //TODO: ttl update
+
+        currentTtl += Time.deltaTime;
+        if(currentTtl >= ttl) {
+            Destroy();
+        }
     }
 
     private void TryToDamage(RaycastHit2D hit) {

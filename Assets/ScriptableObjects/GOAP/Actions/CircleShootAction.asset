@@ -40,7 +40,7 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-  cost: 0
+  cost: 2
   shootInterval: 0.5
   distance: 5
   obstacleLayerMask:

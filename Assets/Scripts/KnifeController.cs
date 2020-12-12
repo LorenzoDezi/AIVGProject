@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+public class EnemyNearEvent : UnityEvent<bool> { }
 
 public class KnifeController : MonoBehaviour {
 
@@ -20,8 +24,11 @@ public class KnifeController : MonoBehaviour {
             animator.SetBool("IsAttacking", value);
         }
     }
+
     private bool isEnemyNear;
     private HealthComponent enemyHealth;
+    [NonSerialized]
+    public EnemyNearEvent EnemyNear = new EnemyNearEvent();
 
     void Awake()
     {
@@ -33,17 +40,23 @@ public class KnifeController : MonoBehaviour {
         if (!enemyLayerMask.ContainsLayer(collision.gameObject.layer))
             return;
 
-        isEnemyNear = true;
-        enemyHealth = collision.gameObject.GetComponent<HealthComponent>();
+        var healthComp = collision.gameObject.GetComponent<HealthComponent>();
+        if(healthComp != null) {
+            isEnemyNear = true;
+            EnemyNear.Invoke(true);
+            enemyHealth = healthComp;
+        }        
     }
 
     private void OnTriggerExit2D(Collider2D collision) {
 
         if (!enemyLayerMask.ContainsLayer(collision.gameObject.layer))
             return;
-
-        isEnemyNear = false;
-        enemyHealth = null;
+        if(isEnemyNear && enemyHealth.GetInstanceID() == collision.GetInstanceID()) {
+            isEnemyNear = false;
+            EnemyNear.Invoke(false);
+            enemyHealth = null;
+        }        
     }
 
     public void Attack() {

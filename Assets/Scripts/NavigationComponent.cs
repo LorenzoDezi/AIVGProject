@@ -17,6 +17,26 @@ public class NavigationComponent : MonoBehaviour {
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
 
+    [SerializeField]
+    private float recalculatePathToTargetInterval = 0.5f;
+    private Coroutine pathTargetCoroutine;
+    private Transform target;
+    public Transform Target {
+        get => target;
+        set {
+
+            target = value;
+            bool hadTarget = pathTargetCoroutine != null;
+
+            if (value == null && hadTarget) {
+                StopCoroutine(pathTargetCoroutine);
+                pathTargetCoroutine = null;
+            } else if (!hadTarget) {
+                pathTargetCoroutine = StartCoroutine(RecalculatePathToTarget());
+            }
+        }
+    }
+
     public PathCompletedEvent PathCompleted = new PathCompletedEvent();
 
     public void MoveTo(Vector3 position) {
@@ -59,6 +79,16 @@ public class NavigationComponent : MonoBehaviour {
         }
         Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
         controller.Move(dir);
+    }
+
+    private IEnumerator RecalculatePathToTarget() {
+
+        var wait = new WaitForSeconds(recalculatePathToTargetInterval);
+
+        while(true) {
+            MoveTo(target.position);
+            yield return wait;
+        }
     }
 
     private void OnPathCalculated(Path p) {
