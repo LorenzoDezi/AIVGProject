@@ -57,6 +57,14 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""GrenadeLaunch"",
+                    ""type"": ""Button"",
+                    ""id"": ""d2622763-e6ad-4db2-8d01-279596e6a77f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -158,6 +166,17 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""action"": ""KnifeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31ce7ece-b99b-470a-b085-d782a6bb54e5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GrenadeLaunch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -171,6 +190,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_KnifeAttack = m_Player.FindAction("KnifeAttack", throwIfNotFound: true);
+        m_Player_GrenadeLaunch = m_Player.FindAction("GrenadeLaunch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -225,6 +245,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Shoot;
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_KnifeAttack;
+    private readonly InputAction m_Player_GrenadeLaunch;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -234,6 +255,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @KnifeAttack => m_Wrapper.m_Player_KnifeAttack;
+        public InputAction @GrenadeLaunch => m_Wrapper.m_Player_GrenadeLaunch;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -258,6 +280,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @KnifeAttack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKnifeAttack;
                 @KnifeAttack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKnifeAttack;
                 @KnifeAttack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnKnifeAttack;
+                @GrenadeLaunch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrenadeLaunch;
+                @GrenadeLaunch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrenadeLaunch;
+                @GrenadeLaunch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnGrenadeLaunch;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +302,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @KnifeAttack.started += instance.OnKnifeAttack;
                 @KnifeAttack.performed += instance.OnKnifeAttack;
                 @KnifeAttack.canceled += instance.OnKnifeAttack;
+                @GrenadeLaunch.started += instance.OnGrenadeLaunch;
+                @GrenadeLaunch.performed += instance.OnGrenadeLaunch;
+                @GrenadeLaunch.canceled += instance.OnGrenadeLaunch;
             }
         }
     }
@@ -288,5 +316,6 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
         void OnKnifeAttack(InputAction.CallbackContext context);
+        void OnGrenadeLaunch(InputAction.CallbackContext context);
     }
 }

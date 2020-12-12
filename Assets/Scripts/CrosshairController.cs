@@ -5,6 +5,7 @@ using UnityEngine;
 public class CrosshairController : MonoBehaviour
 {
     private new Transform transform;
+    public Transform Transform => transform;
     private Vector2 maxScreenPosition;
 
     void Awake() {

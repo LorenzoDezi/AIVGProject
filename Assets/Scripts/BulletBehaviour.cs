@@ -18,10 +18,11 @@ public class BulletBehaviour : MonoBehaviour
     private LayerMask hitLayers;
     [SerializeField, Tooltip("The layer that the bullet can damage (Player => enemy and viceversa)")]
     private LayerMask damageHitLayer;
-    public BulletSpawner Spawner { get; set; }
+    private BulletSpawner spawner;
 
     private void Awake() {
         transform = GetComponent<Transform>();
+        spawner = GameManager.BulletSpawner;
     }
 
     private void OnEnable() {
@@ -52,6 +53,6 @@ public class BulletBehaviour : MonoBehaviour
     }
 
     private void Destroy() {
-        Spawner?.ReleaseBullet(gameObject);
+        spawner.ReleaseBullet(gameObject);
     }
 }

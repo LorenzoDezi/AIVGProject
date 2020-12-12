@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class CharacterPlayerInput : MonoBehaviour
 {
     private PlayerInputAction inputAction;
+    private GrenadeController grenadeLauncher;
     private CharacterController characterController;
     private CrosshairController crosshairController;
     private GunController gunController;
@@ -35,6 +36,7 @@ public class CharacterPlayerInput : MonoBehaviour
     private void InitFields() {
         inputAction = new PlayerInputAction();
         characterController = GetComponent<CharacterController>();
+        grenadeLauncher = GetComponentInChildren<GrenadeController>();
         gunController = GetComponentInChildren<GunController>();
         knifeController = GetComponentInChildren<KnifeController>();
         crosshairController = GameObject.FindGameObjectWithTag("Crosshair").GetComponent<CrosshairController>();
@@ -50,6 +52,7 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.Shoot.canceled += OnStopShooting;
         playerActions.KnifeAttack.started += OnStartKnifeAttack;
         playerActions.KnifeAttack.canceled += OnStopKnifeAttack;
+        playerActions.GrenadeLaunch.started += LaunchGrenade;
         playerActions.Reload.started += OnReload;
         inputAction.Enable();
     }
@@ -66,6 +69,10 @@ public class CharacterPlayerInput : MonoBehaviour
     void OnStartKnifeAttack(InputAction.CallbackContext context) {
         knifeController.IsAttacking = true;
         isShooting = false;
+    }
+
+    void LaunchGrenade(InputAction.CallbackContext context) {
+        grenadeLauncher.LaunchAt(crosshairController.Transform.position);
     }
 
     void OnStopKnifeAttack(InputAction.CallbackContext context) {

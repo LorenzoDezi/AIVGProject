@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &182847146
 Transform:
   m_ObjectHideFlags: 0
@@ -116,9 +116,11 @@ GameObject:
   - component: {fileID: 2089853290383079076}
   - component: {fileID: 2089853290383079077}
   - component: {fileID: 2089853290383079079}
+  - component: {fileID: 1595948070}
+  - component: {fileID: 1595948071}
   m_Layer: 12
   m_Name: Enemy
-  m_TagString: Player
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -204,6 +206,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a757f866eeca28c4ca6dbde16ee9fdbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  recalculatePathToTargetInterval: 0.1
 --- !u!114 &495220353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,12 +226,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c8b322678cdfff843bdc39f5de0a3324, type: 2}
   - {fileID: 11400000, guid: 96766584bb4c778449fd69037b9e232d, type: 2}
   - {fileID: 11400000, guid: fc1c80b7ccc55ca4da1ff8594b2234b3, type: 2}
+  - {fileID: 11400000, guid: 2338c23bf877ec3408a1cceb6cc9d29b, type: 2}
   goalTemplates:
   - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
-  replanInterval: 1
+  replanInterval: 0.5
   worldPerception:
     states: []
   patrolPoints:
@@ -276,7 +280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d593f50a3b5ca70498bc1cf89fa8b146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 1000
   Death:
     m_PersistentCalls:
       m_Calls:
@@ -320,6 +324,7 @@ MonoBehaviour:
   stressLevelDecreaseForSecond: 0.1
   stressLevelDecreaseInCover: 1
   stressLevelIncreasePerHealthPoint: 0.2
+  maxStressLevel: 10
 --- !u!114 &2089853290383079076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+  enemyNearKey: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -343,6 +349,7 @@ MonoBehaviour:
   visionLenght: 8
   checkTargetDelay: 0.2
   sqrMinLoseSightDistance: 200
+  enemyNearTresholdDistance: 9
 --- !u!114 &2089853290383079077
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -378,6 +385,40 @@ MonoBehaviour:
   BestCoverChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1595948070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4433dc191db7f8e45834551460d7ffda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1595948071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 1
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &8077473535487675237
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,6 +596,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Gun
+      objectReference: {fileID: 0}
+    - target: {fileID: 3789864329941056109, guid: 9da5d4cd1be4ef84395165b92745a672,
+        type: 3}
+      propertyPath: m_TagString
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 3789864329941056110, guid: 9da5d4cd1be4ef84395165b92745a672,
         type: 3}
