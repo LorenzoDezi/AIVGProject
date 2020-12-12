@@ -6,6 +6,7 @@ public class HealthSensor : MonoBehaviour {
     private HealthComponent healthComp;
     private Agent agentToUpdate;
 
+    [Header("World State Keys")]
     [SerializeField]
     private WorldStateKey healthFullKey;
     private WorldState healthFullWSTracked;
@@ -18,12 +19,16 @@ public class HealthSensor : MonoBehaviour {
     private WorldStateKey inCoverKey;
     private bool needCoverCheck;
 
+
+    [Header("Stress parameters")]
     [SerializeField]
     private float stressLevelDecreaseForSecond = 0.2f;
     [SerializeField]
     private float stressLevelDecreaseInCover = 0.5f;
     [SerializeField]
     private float stressLevelIncreasePerHealthPoint = 0.1f;
+    [SerializeField]
+    private float maxStressLevel = 10f;
 
 
     private float lastHealthRegistered;
@@ -63,7 +68,7 @@ public class HealthSensor : MonoBehaviour {
 
         float healthDecrease = lastHealthRegistered - currHealth;
         lastHealthRegistered = currHealth;
-        if (healthDecrease > 0)
+        if (healthDecrease > 0 && stressLevelWSTracked.FloatValue < maxStressLevel)
             stressLevelWSTracked.FloatValue += healthDecrease * stressLevelIncreasePerHealthPoint;
         else if (healthDecrease < 0) {
             stressLevelWSTracked.FloatValue = 0f;

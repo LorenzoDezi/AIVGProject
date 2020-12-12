@@ -14,6 +14,10 @@ public class EnemyVisualSensor : MonoBehaviour {
     private WorldStateKey enemySeenKey;
     private WorldState enemySeenWSTracked;
 
+    [SerializeField]
+    private WorldStateKey enemyNearKey;
+    private WorldState enemyNearWSTracked;
+
     [Header("Visible and obstacle layers")]
     [SerializeField]
     private LayerMask enemyLayerMask;
@@ -32,6 +36,9 @@ public class EnemyVisualSensor : MonoBehaviour {
     private float checkTargetDelay = 0.2f;
     [SerializeField]
     private float sqrMinLoseSightDistance = 10f;
+    [SerializeField]
+    private float enemyNearTresholdDistance = 0.1f;
+    private float currEnemyDistance;
     public Vector3 LastSeenPosition { get; private set; }
     public Vector3 LastSeenDirection { get; private set; }
 
@@ -39,12 +46,15 @@ public class EnemyVisualSensor : MonoBehaviour {
     private new Transform transform;
     private Collider2D[] results = new Collider2D[1];
 
+    private bool enemySpotted;
+    public bool EnemySpotted => enemySpotted;
     public GameObject VisibleEnemy { get; private set; }
 
     protected void Awake() {
         agentToUpdate = GetComponent<Agent>();
         transform = GetComponent<Transform>();
         enemySeenWSTracked = new WorldState(enemySeenKey, false);
+        enemyNearWSTracked = new WorldState(enemyNearKey, false);
         contactFilter.SetLayerMask(enemyLayerMask);
         contactFilter.useTriggers = true;
     }
@@ -56,30 +66,35 @@ public class EnemyVisualSensor : MonoBehaviour {
     IEnumerator CheckTargetWithDelay(float delay) {
 
         var wait = new WaitForSeconds(delay);
-        bool spotted = false;
         Transform visibleEnemyTransf = null;
 
         while (true) { 
 
-            if(spotted) {
-                if(transform.SqrDistance(visibleEnemyTransf) > sqrMinLoseSightDistance) {
-                    VisibleEnemy = null;
-                    SetEnemySeen(false);
-                    spotted = false;
-                } 
-            } 
-            
-            else {
+            if(enemySpotted) {
+                CheckEnemyDistance(visibleEnemyTransf);
+            } else {
                 GameObject visibleEnemy = GetVisibleEnemy();
                 if(visibleEnemy != null) {
                     VisibleEnemy = visibleEnemy;
-                    SetEnemySeen(true);
+                    UpdateEnemySeenWS(true);
                     visibleEnemyTransf = VisibleEnemy.transform;
-                    spotted = true;
+                    enemySpotted = true;
                 }
             }
 
             yield return wait;
+        }
+    }
+
+    private void CheckEnemyDistance(Transform visibleEnemy) {
+
+        currEnemyDistance = transform.SqrDistance(visibleEnemy);
+        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);
+
+        if (currEnemyDistance > sqrMinLoseSightDistance) {
+            VisibleEnemy = null;
+            UpdateEnemySeenWS(false);
+            enemySpotted = false;
         }
     }
 
@@ -109,9 +124,14 @@ public class EnemyVisualSensor : MonoBehaviour {
         return enemy;      
     }
 
-    private void SetEnemySeen(bool value) {
+    private void UpdateEnemySeenWS(bool value) {
         enemySeenWSTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(enemySeenWSTracked);
+    }
+
+    private void UpdateEnemyNearWS(bool value) {
+        enemyNearWSTracked.BoolValue = value;
+        agentToUpdate.UpdatePerception(enemyNearWSTracked);
     }
 }
 

@@ -23,7 +23,7 @@ public class ShootAction : GOAP.Action {
 
     public override bool Activate() {
 
-        if(visualSensor.VisibleEnemy == null)
+        if(!visualSensor.EnemySpotted)
             return false;
 
         target = visualSensor.VisibleEnemy.transform;

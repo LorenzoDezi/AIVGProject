@@ -20,7 +20,7 @@ public class KnifeAttackAction : GOAP.Action {
 
     public override bool Activate() {
 
-        if (visualSensor.VisibleEnemy == null)
+        if (!visualSensor.EnemySpotted)
             return false;
 
         navComponent.Target = visualSensor.VisibleEnemy.transform;
