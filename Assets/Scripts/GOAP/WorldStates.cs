@@ -93,11 +93,11 @@ namespace GOAP {
         }
 
         IEnumerator<WorldState> IEnumerable<WorldState>.GetEnumerator() {
-            return ((IEnumerable<WorldState>)states).GetEnumerator();
+            return states.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator() {
-            return ((IEnumerable<WorldState>)states).GetEnumerator();
+            return states.GetEnumerator();
         }
     }
 }

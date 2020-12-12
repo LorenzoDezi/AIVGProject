@@ -1,9 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace GOAP {
+
+#if UNITY_EDITOR
+    public class PlanCompletedEvent : UnityEvent<List<Action>> { }
+#endif
 
     public class Agent : MonoBehaviour {
 
@@ -29,6 +35,11 @@ namespace GOAP {
         protected Planner planner;
 
         protected Coroutine checkPlanCoroutine;
+
+#if UNITY_EDITOR
+        [NonSerialized]
+        public PlanCompletedEvent PlanCompleted = new PlanCompletedEvent();
+#endif
 
         public void UpdatePerception(WorldState state) {
             worldPerception.Update(state);
@@ -67,7 +78,10 @@ namespace GOAP {
 
                 foreach(Goal goal in goals.ToList()) {
                     actionQueue = planner.Plan(goal, worldPerception);
-                    if(actionQueue.Count > 0) {
+#if UNITY_EDITOR
+                    PlanCompleted.Invoke(actionQueue.ToList());
+#endif
+                    if (actionQueue.Count > 0) {
                         newAction = actionQueue.Dequeue();                                              
                         break;
                     }
