@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 402218591}
   - component: {fileID: 402218592}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GrenadeSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -91,7 +91,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1684131636}
   - component: {fileID: 1684131637}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GrenadeGizmo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: fa02f9bbf1981504fbc51c75a54b355f, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 5028770264267137468}
   - component: {fileID: 5028770263839522003}
   - component: {fileID: 7810718427281659346}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Grenade
   m_TagString: Grenade
   m_Icon: {fileID: 0}
@@ -210,10 +210,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rendererTransform: {fileID: 402218591}
   radiusRenderer: {fileID: 1684131637}
+  damageableLayerMask:
+    serializedVersion: 2
+    m_Bits: 6144
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+  damage: 100
   linearSpeed: 5
   rotationSpeed: 500
   timeToExplode: 2
-  explosionRadius: 5
+  explosionRadius: 2.5
 --- !u!58 &7810718427281659346
 CircleCollider2D:
   m_ObjectHideFlags: 0

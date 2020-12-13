@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 727441786284930137}
   - component: {fileID: 4238676141369403258}
   - component: {fileID: 2089853290383079076}
+  - component: {fileID: 744502580}
   - component: {fileID: 2089853290383079077}
   - component: {fileID: 2089853290383079079}
   - component: {fileID: 1595948070}
@@ -350,6 +351,22 @@ MonoBehaviour:
   checkTargetDelay: 0.2
   sqrMinLoseSightDistance: 200
   enemyNearTresholdDistance: 9
+--- !u!114 &744502580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d02d9a2e337c8c49a91cf98d280f3be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dangerLayerMask:
+    serializedVersion: 2
+    m_Bits: 16384
+  inDangerKey: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
 --- !u!114 &2089853290383079077
 MonoBehaviour:
   m_ObjectHideFlags: 0

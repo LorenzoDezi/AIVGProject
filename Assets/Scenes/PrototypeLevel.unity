@@ -74036,6 +74036,11 @@ PrefabInstance:
       propertyPath: patrolPoints.Array.data[3]
       value: 
       objectReference: {fileID: 2079341305}
+    - target: {fileID: 727441786284930137, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: maxHealth
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_Name
@@ -74595,46 +74600,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55da4823d8741dd4cac7d72827820ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1475297724 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
-    type: 3}
-  m_PrefabInstance: {fileID: 2089853290383079073}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1475297736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475297724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  smoothType: 1
-  subdivisions: 2
-  iterations: 2
-  strength: 0.5
-  uniformLength: 1
-  maxSegmentLength: 2
-  bezierTangentLength: 0.4
-  offset: 0.2
-  factor: 0.1
---- !u!114 &1475297737
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475297724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4433dc191db7f8e45834551460d7ffda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1575668920
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -74779,7 +74744,7 @@ PrefabInstance:
     - target: {fileID: 727441786284930137, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: maxHealth
-      value: 1000
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2089853290383079075, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -75008,6 +74973,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Granade
+      objectReference: {fileID: 0}
+    - target: {fileID: 5028770264267137466, guid: 9291d676f60244446a511ceb05f5b7d0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5028770264267137468, guid: 9291d676f60244446a511ceb05f5b7d0,
         type: 3}
