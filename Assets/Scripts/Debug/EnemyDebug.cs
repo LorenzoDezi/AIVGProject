@@ -14,7 +14,11 @@ public class EnemyDebug : MonoBehaviour
     [NonSerialized]
     public CoverSensor coverSensor;
     [NonSerialized]
+    public HealthComponent healthComponent;
+    [NonSerialized]
     public List<GOAP.Action> currentPlan = new List<GOAP.Action>();
+    [NonSerialized]
+    public bool isDead;
 
     void Awake()
     {
@@ -22,6 +26,12 @@ public class EnemyDebug : MonoBehaviour
         agent.PlanCompleted.AddListener((plan) => currentPlan = plan);
         visualSensor = GetComponent<EnemyVisualSensor>();
         coverSensor = GetComponent<CoverSensor>();
+        healthComponent = GetComponent<HealthComponent>();
+        healthComponent.Death.AddListener(OnDeath);
+    }
+
+    private void OnDeath() {
+        isDead = true;
     }
 
 }

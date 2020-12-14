@@ -219,7 +219,7 @@ MonoBehaviour:
   damage: 100
   linearSpeed: 5
   rotationSpeed: 500
-  timeToExplode: 2
+  timeToExplode: 1.5
   explosionRadius: 2.5
 --- !u!58 &7810718427281659346
 CircleCollider2D:
@@ -236,4 +236,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 2

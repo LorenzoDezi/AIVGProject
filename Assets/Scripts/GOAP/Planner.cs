@@ -75,7 +75,7 @@ namespace GOAP {
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
-            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
+            List<PlanNodeRecord> open = new List<PlanNodeRecord>();            
             foreach (PlanNode node in graph.Nodes) {
                 if (node.Satisfy(goal.DesiredStates) 
                     && node.Action.CheckProceduralConditions()) {
@@ -89,12 +89,13 @@ namespace GOAP {
             }
             bool found = false;
             PlanNodeRecord curr = null;
-            while (open.Count > 0) {
-                foreach(var node in open) {
+            while (open.Count > 0) {                
+                foreach (var node in open) {
                     Debug.LogWarning(node.Action.name);
                     Debug.LogWarning(node.CostSoFar);
                 }
                 curr = open.Min();
+                
                 if (curr.IsSatisfied) {
                     found = true;
                     break;

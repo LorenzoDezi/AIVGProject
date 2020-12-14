@@ -1,8 +1,11 @@
-﻿using System.Collections;
+﻿using Pathfinding;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class GrenadeBehaviour : MonoBehaviour
+public class GrenadeBehaviour : MonoBehaviour, IDangerous
 {
     private new Transform transform;
     private BulletSpawner spawner;
@@ -34,6 +37,10 @@ public class GrenadeBehaviour : MonoBehaviour
     [SerializeField]
     private float explosionRadius;
 
+    public float DangerRadius => explosionRadius;
+    public Vector3 DangerSource => transform.position;
+    public DangerEndEvent DangerEnd { get; } = new DangerEndEvent();
+
     private Vector3 targetPosition;
     private bool hasTarget;
     private Vector3 dirTowardTarget;
@@ -47,6 +54,7 @@ public class GrenadeBehaviour : MonoBehaviour
         }
     }
 
+
     private void Awake() {
         transform = GetComponent<Transform>();
         collider = GetComponent<CircleCollider2D>();
@@ -57,7 +65,8 @@ public class GrenadeBehaviour : MonoBehaviour
         spawner = GameManager.BulletSpawner;
         collider.enabled = false;
         radiusRenderer.enabled = false;
-        collider.radius = explosionRadius;
+        collider.radius = explosionRadius + 2f;
+
         Transform radiusTransform = radiusRenderer.transform;
         Vector3 localScale = radiusTransform.localScale;
         localScale.x = explosionRadius;
@@ -87,6 +96,7 @@ public class GrenadeBehaviour : MonoBehaviour
 
     private IEnumerator ExplodeCoroutine() {
         yield return new WaitForSeconds(timeToExplode);
+        DangerEnd.Invoke(this);
         radiusRenderer.enabled = false;
         collider.enabled = false;
         ApplyDamage();

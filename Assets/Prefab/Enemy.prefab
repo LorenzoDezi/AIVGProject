@@ -228,11 +228,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 96766584bb4c778449fd69037b9e232d, type: 2}
   - {fileID: 11400000, guid: fc1c80b7ccc55ca4da1ff8594b2234b3, type: 2}
   - {fileID: 11400000, guid: 2338c23bf877ec3408a1cceb6cc9d29b, type: 2}
+  - {fileID: 11400000, guid: b7ecf513b52b1c04aad77b46812046f4, type: 2}
   goalTemplates:
   - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
+  - {fileID: 11400000, guid: 7f109ac643a456c4980b2630939a9537, type: 2}
   replanInterval: 0.5
   worldPerception:
     states: []
@@ -367,6 +369,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 16384
   inDangerKey: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
+  dangerAroundKey: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
 --- !u!114 &2089853290383079077
 MonoBehaviour:
   m_ObjectHideFlags: 0

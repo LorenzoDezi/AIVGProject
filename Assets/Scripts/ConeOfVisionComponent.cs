@@ -56,7 +56,8 @@ public class ConeOfVisionComponent : MonoBehaviour {
     private new Transform transform;
     private ConeRayInfo rayInfo = new ConeRayInfo();
     private List<Vector3> hitPoints = new List<Vector3>();
-    private EdgeInfo edgeInfo = new EdgeInfo(); 
+    private EdgeInfo edgeInfo = new EdgeInfo();
+    private Vector3 rotatedDir = new Vector3();
     #endregion
 
     public Vector3 GetDirectionFromAngle(float angleInDegrees) {
@@ -80,7 +81,7 @@ public class ConeOfVisionComponent : MonoBehaviour {
     }
 
     private void SetConeRayInfo(Vector2 direction, float angle) {
-        var rotatedDir = direction.RotatedBy(angle);
+        direction.RotatedBy(angle, ref rotatedDir);
         var hit = Physics2D.Raycast(transform.position, rotatedDir, coneOfVisionLenght, obstacleLayer);
         rayInfo.hasHit = hit.collider != null;
         rayInfo.angle = angle;

@@ -15,8 +15,13 @@ public class EnemyDebugEditor : Editor {
         DrawDefaultInspector();
         serializedObject.Update();
         EnemyDebug enemyDebug = (EnemyDebug) target;
-        if (enemyDebug.agent == null)
+        if (enemyDebug.agent == null || enemyDebug.isDead || enemyDebug.agent.Goals == null)
             return;
+        GUILayout.Label("Goal list and priorities");
+        foreach(var goal in enemyDebug.agent.Goals) {
+            GUILayout.Label(goal.name + ": " + goal.Priority);
+        }
+        CarriageAndReturn(1);
         GUILayout.Label("Current Plan");
         foreach(var action in enemyDebug.currentPlan) {
             GUILayout.Label("   " + action.name);
