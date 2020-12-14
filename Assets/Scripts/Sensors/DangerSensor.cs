@@ -22,8 +22,9 @@ public class DangerSensor : MonoBehaviour {
 
         agentToUpdate = GetComponent<Agent>();
         inDangerWSTracked = new WorldState(inDangerKey, false);
-        dangerAroundWSTracked = new WorldState(dangerAroundKey, false);
         agentToUpdate.UpdatePerception(inDangerWSTracked);
+        dangerAroundWSTracked = new WorldState(dangerAroundKey, false);
+        agentToUpdate.UpdatePerception(dangerAroundWSTracked);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {

@@ -20,7 +20,7 @@ public class HealthComponent : MonoBehaviour
     }
 
     public void Damage(float damage) {
-        if(damage < CurrHealth) {
+        if (damage < CurrHealth) {
             CurrHealth -= damage;
         } else if (CurrHealth > 0) {
             Die();
@@ -34,6 +34,7 @@ public class HealthComponent : MonoBehaviour
     }
 
     public void Die() {
+        CurrHealth = 0f;
         Death.Invoke();
         Destroy(this);
     }
