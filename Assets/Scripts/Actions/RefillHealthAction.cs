@@ -50,15 +50,16 @@ public class RefillHealthAction : GOAP.Action {
 
     private void Refill(bool success) {
 
-        if(success) {
+        navigationComponent.PathCompleted.RemoveListener(Refill);
+        if (success) {
             healthComponent.Restore(healthComponent.MaxHealth);
-            navigationComponent.PathCompleted.RemoveListener(Refill);
-        }
-        
+        }      
         Terminate(success);
     }
 
-    public override void Deactivate() { }
+    public override void Deactivate() {
+        navigationComponent.PathCompleted.RemoveListener(Refill);
+    }
 
     public override void Update() { }
 
