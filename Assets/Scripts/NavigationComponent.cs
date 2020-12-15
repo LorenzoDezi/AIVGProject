@@ -38,6 +38,7 @@ public class NavigationComponent : MonoBehaviour {
     }
 
     public PathCompletedEvent PathCompleted = new PathCompletedEvent();
+    public UnityEvent PathStarted = new UnityEvent();
 
     public void MoveTo(Vector3 position) {
         seeker.StartPath(transform.position, position);
@@ -97,6 +98,7 @@ public class NavigationComponent : MonoBehaviour {
             PathCompleted.Invoke(false);
             return;
         }
+        PathStarted.Invoke();
         path = p;
         currentWaypoint = 0;
     }

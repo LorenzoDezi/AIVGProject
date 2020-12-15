@@ -6,7 +6,10 @@ public class ShootAction : GOAP.Action {
     protected EnemyVisualSensor visualSensor;
     protected GunController gunController;
     protected CharacterController charController;
+    protected Transform transform;
     protected Transform target;
+    [SerializeField]
+    protected LayerMask obstacleLayerMask;
 
     [SerializeField]
     protected float shootInterval = 0.5f;
@@ -19,6 +22,7 @@ public class ShootAction : GOAP.Action {
         gunController = agentGameObj.GetComponentInChildren<GunController>();
         charController = agentGameObj.GetComponent<CharacterController>();
         visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        transform = agentGameObj.GetComponent<Transform>();
     }
 
     public override bool Activate() {
@@ -39,12 +43,14 @@ public class ShootAction : GOAP.Action {
 
         charController.AimAt(target.position);
 
-        if (timeSinceLastShoot >= shootInterval) {
+        if (timeSinceLastShoot >= shootInterval && 
+            !target.HasObstacleInBetween(transform, obstacleLayerMask)) {
+
             gunController.TryToShoot();
             timeSinceLastShoot = 0f;
-        } else {
+
+        } else
             timeSinceLastShoot += Time.deltaTime;
-        }
     }
 }
 

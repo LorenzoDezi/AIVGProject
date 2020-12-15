@@ -10,11 +10,14 @@ public class GameManager : MonoBehaviour
     private string playerTag = "Player";
     [SerializeField]
     private BulletSpawner bulletSpawner;
+    [SerializeField]
+    private GameObject player;
     private static GameManager instance;
 
 
     public static string EnemyTag => instance.enemyTag;
     public static string PlayerTag => instance.playerTag;
+    public static GameObject Player => instance.player;
     public static BulletSpawner BulletSpawner => instance.bulletSpawner;
 
     private void Awake() {

@@ -12,7 +12,6 @@ public class RefillHealthAction : GOAP.Action {
     private NavigationComponent navigationComponent;
     private HealthComponent healthComponent;
     private Transform nearestHealthStation;
-    //TODO Avoid all this serialized fields with key
     [SerializeField]
     private WorldStateKey healthRefilledKey;
 

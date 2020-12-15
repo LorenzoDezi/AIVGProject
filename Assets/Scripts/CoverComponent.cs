@@ -21,6 +21,7 @@ public class CoverComponent : MonoBehaviour
     private Coroutine checkCoverCoroutine;
 
     private bool canCover;
+    public bool CanCover => canCover;
     public bool IsOccupied { get; set; }
     public bool IsAvailable => canCover && !IsOccupied;
 

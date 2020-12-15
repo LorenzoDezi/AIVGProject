@@ -10,6 +10,8 @@ using UnityEngine;
 public class EnemyVisualSensor : MonoBehaviour {
 
     private Agent agentToUpdate;
+    private HealthComponent healthComp;
+
     [SerializeField]
     private WorldStateKey enemySeenKey;
     private WorldState enemySeenWSTracked;
@@ -48,10 +50,13 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     private bool enemySpotted;
     public bool EnemySpotted => enemySpotted;
+    private Transform visibleEnemyTransform;
     public GameObject VisibleEnemy { get; private set; }
 
     protected void Awake() {
         agentToUpdate = GetComponent<Agent>();
+        healthComp = GetComponent<HealthComponent>();
+        healthComp.HealthChange.AddListener(OnEnemyAttack);
         transform = GetComponent<Transform>();
         enemySeenWSTracked = new WorldState(enemySeenKey, false);
         enemyNearWSTracked = new WorldState(enemyNearKey, false);
@@ -66,19 +71,24 @@ public class EnemyVisualSensor : MonoBehaviour {
     IEnumerator CheckTargetWithDelay(float delay) {
 
         var wait = new WaitForSeconds(delay);
-        Transform visibleEnemyTransf = null;
+        visibleEnemyTransform = null;
 
         while (true) { 
 
             if(enemySpotted) {
-                CheckEnemyDistance(visibleEnemyTransf);
+
+                UpdateEnemyDistance();
+
+                if (currEnemyDistance > sqrMinLoseSightDistance) {
+                    VisibleEnemy = null;
+                    UpdateEnemySeenWS(false);
+                    enemySpotted = false;
+                }
+
             } else {
                 GameObject visibleEnemy = GetVisibleEnemy();
                 if(visibleEnemy != null) {
-                    VisibleEnemy = visibleEnemy;
-                    UpdateEnemySeenWS(true);
-                    visibleEnemyTransf = VisibleEnemy.transform;
-                    enemySpotted = true;
+                    SpotEnemy(visibleEnemy);
                 }
             }
 
@@ -86,16 +96,23 @@ public class EnemyVisualSensor : MonoBehaviour {
         }
     }
 
-    private void CheckEnemyDistance(Transform visibleEnemy) {
+    private void UpdateEnemyDistance() {
 
-        currEnemyDistance = transform.SqrDistance(visibleEnemy);
-        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);
+        currEnemyDistance = transform.SqrDistance(visibleEnemyTransform);
+        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);    
+    }
 
-        if (currEnemyDistance > sqrMinLoseSightDistance) {
-            VisibleEnemy = null;
-            UpdateEnemySeenWS(false);
-            enemySpotted = false;
+    private void OnEnemyAttack(float currHealth) {
+        if(!enemySpotted && currHealth < healthComp.MaxHealth) {
+            SpotEnemy(GameManager.Player);
         }
+    }
+
+    private void SpotEnemy(GameObject visibleEnemy) {
+        VisibleEnemy = visibleEnemy;
+        UpdateEnemySeenWS(true);
+        visibleEnemyTransform = VisibleEnemy.transform;
+        enemySpotted = true;
     }
 
     GameObject GetVisibleEnemy() {

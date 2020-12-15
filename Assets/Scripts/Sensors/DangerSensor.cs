@@ -5,6 +5,10 @@ using UnityEngine;
 public class DangerSensor : MonoBehaviour {
 
     private Agent agentToUpdate;
+    private new Transform transform;
+
+    [SerializeField]
+    private LayerMask obstacleMask;
     [SerializeField]
     private LayerMask dangerLayerMask;
     [SerializeField]
@@ -21,6 +25,8 @@ public class DangerSensor : MonoBehaviour {
     private void Awake() {
 
         agentToUpdate = GetComponent<Agent>();
+        transform = GetComponent<Transform>();
+
         inDangerWSTracked = new WorldState(inDangerKey, false);
         agentToUpdate.UpdatePerception(inDangerWSTracked);
         dangerAroundWSTracked = new WorldState(dangerAroundKey, false);
@@ -29,12 +35,14 @@ public class DangerSensor : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if(dangerLayerMask.ContainsLayer(collision.gameObject.layer)) {
-            //the last danger is the one took into consideration
-            var danger = collision.GetComponent<IDangerous>();
-            DangerRadius = danger.DangerRadius;
-            DangerSource = danger.DangerSource;
+            var danger = collision.GetComponent<IDangerous>();            
+            if(!Physics2D.Linecast(danger.DangerSource, transform.position, obstacleMask)) {
+                //the last danger is the one took into consideration
+                DangerRadius = danger.DangerRadius;
+                DangerSource = danger.DangerSource;
+                SetInDanger(true);
+            }
             danger.DangerEnd.AddListener(OnDangerEnd);
-            SetInDanger(true);
             SetDangerAround(true);
             dangerCount++;
         }

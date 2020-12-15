@@ -11,8 +11,6 @@ public class CircleShootAction : ShootAction {
     [SerializeField]
     private float distance = 5f;
     [SerializeField]
-    private LayerMask obstacleLayerMask;
-    [SerializeField]
     private int maxSearchFirePointIteration = 5;
 
     private float switchFirePointInterval = 3f;

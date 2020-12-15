@@ -4,9 +4,9 @@
 public class GoToCoverAction : ShootAction {
 
     private CoverSensor coverSensor;
-    private CoverComponent currBestCover;
-
     private NavigationComponent navComponent;
+    private CoverComponent targetCover;
+    private bool coverReached;
 
 
     public override void Init(GameObject agentGameObj) {
@@ -22,38 +22,36 @@ public class GoToCoverAction : ShootAction {
     }
 
     public override bool Activate() {
-        if(!base.Activate() || coverSensor.BestCover == null) {
+        if(!base.Activate() || coverSensor.InCover || coverSensor.BestCover == null) {
             return false;
         }
-
+        
+        coverReached = false;
+        targetCover = coverSensor.BestCover;
+        targetCover.IsOccupied = true;
         navComponent.PathCompleted.AddListener(OnPathCompleted);
-
-        SetBestCover();
-        coverSensor.BestCoverChanged.AddListener(SetBestCover);
+        navComponent.MoveTo(targetCover.Transform.position);
         return true;
-    }
-
-    private void SetBestCover() {
-        currBestCover = coverSensor.BestCover;
-        if (currBestCover == null) {
-            Terminate(false);
-            return;
-        }
-        navComponent.MoveTo(currBestCover.Transform.position);
-    }
-
-    private void OnPathCompleted(bool success) {
-        if(success)
-            coverSensor.CurrCover = currBestCover;
-        Terminate(success);
     }
 
     public override void Deactivate() {
         base.Deactivate();
-        coverSensor.BestCoverChanged.RemoveListener(SetBestCover);
+        if(!coverReached) {
+            targetCover.IsOccupied = false;
+            navComponent.PathCompleted.RemoveListener(OnPathCompleted);
+        }
         navComponent.Stop();
     }
-    
+
+    private void OnPathCompleted(bool success) {
+        if (success) {
+            coverSensor.GoInCover(targetCover);
+            navComponent.PathCompleted.RemoveListener(OnPathCompleted);
+            coverReached = true;
+        }
+        Terminate(success);
+    }
+
 }
 
 

@@ -12,10 +12,12 @@ public class CoverSensor : MonoBehaviour {
 
     private new Transform transform;
     private Agent agentToUpdate;
+    private NavigationComponent navComponent;
 
     [SerializeField]
     private WorldStateKey coverAvailableKey;
     private WorldState coverAvailableWSTracked;
+
     [SerializeField]
     private WorldStateKey inCoverKey;
     private WorldState inCoverWSTracked;
@@ -24,6 +26,9 @@ public class CoverSensor : MonoBehaviour {
     private LayerMask coverMask;
     private List<CoverComponent> coversAvailable;
     public CoverComponent BestCover { get; private set; }
+    public UnityEvent BestCoverChanged;
+    private CoverComponent currCover;
+    public bool InCover => currCover == BestCover;
 
 
     [SerializeField]
@@ -31,32 +36,24 @@ public class CoverSensor : MonoBehaviour {
     private Coroutine bestCoverCheckCoroutine;
 
 
-    private CoverComponent currCover;
-    public CoverComponent CurrCover {
-        get {
-            return currCover;
-        }
-        set {
-            if (currCover != null)
-                currCover.IsOccupied = false;
-            currCover = value;
-            if(value != null)
-                GoInCover();
-        }
+
+
+    #region public methods
+    public void GoInCover(CoverComponent cover) {
+        currCover = cover;
+        inCoverWSTracked.BoolValue = true;
+        agentToUpdate.UpdatePerception(inCoverWSTracked);
+        navComponent.PathStarted.AddListener(OutOfCover);
+        Debug.LogWarningFormat("Go in cover {0} -> {1}", gameObject.name, cover.name);
     }
-
-    [SerializeField]
-    private float inCoverCheckInterval = 1f;
-    private float inCoverMaxDistance = 4f;
-    private Coroutine inCoverCheckCoroutine;
-
-    public UnityEvent BestCoverChanged;
+    #endregion
 
     #region monobehaviour methods
     protected void Awake() {
 
         agentToUpdate = GetComponent<Agent>();
         transform = GetComponent<Transform>();
+        navComponent = GetComponent<NavigationComponent>();
 
         coversAvailable = new List<CoverComponent>();
         BestCoverChanged = new UnityEvent();
@@ -102,31 +99,35 @@ public class CoverSensor : MonoBehaviour {
             yield return wait;
         }
     }
-
-    private IEnumerator CheckStillInCover() {
-        var wait = new WaitForSeconds(inCoverCheckInterval);
-        float sqrInCoverMaxDistance = inCoverMaxDistance * inCoverMaxDistance;
-        while (transform.SqrDistance(currCover.Transform) < sqrInCoverMaxDistance) {
-            yield return wait;
-        }
-        inCoverCheckCoroutine = null;
-        currCover.IsOccupied = false;
-        currCover = null;
-    } 
     #endregion
 
     #region private methods
-    private void GoInCover() {
-        currCover.IsOccupied = true;
-        inCoverWSTracked.BoolValue = true;
+
+    private void OutOfCover() {
+        currCover.IsOccupied = false;
+        currCover = null;
+        inCoverWSTracked.BoolValue = false;
         agentToUpdate.UpdatePerception(inCoverWSTracked);
-        if (inCoverCheckCoroutine == null) {
-            inCoverCheckCoroutine = StartCoroutine(CheckStillInCover());
-        }
+        navComponent.PathStarted.RemoveListener(OutOfCover);
+        Debug.LogWarningFormat("Out of cover {0}", gameObject.name);
     }
 
     private void UpdateBestCover() {
 
+        CoverComponent newBestCover = GetBestCover();
+
+        if (newBestCover == BestCover)
+            return;
+
+        BestCover = newBestCover;
+        BestCoverChanged.Invoke();
+        coverAvailableWSTracked.BoolValue = BestCover != null;
+        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
+    }
+
+    private CoverComponent GetBestCover() {
+        if (currCover != null && currCover.CanCover)
+            return currCover;
         float minSqrDist = Mathf.Infinity;
         CoverComponent newBestCover = null;
         foreach (CoverComponent cover in coversAvailable) {
@@ -138,20 +139,8 @@ public class CoverSensor : MonoBehaviour {
                 }
             }
         }
-
-        if (newBestCover == BestCover)
-            return;
-
-        BestCover = newBestCover;
-        BestCoverChanged.Invoke();
-        coverAvailableWSTracked.BoolValue = BestCover != null;
-        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
-
-        if (BestCover != null)
-            Debug.LogFormat("Best Cover is: {0} for {1}", BestCover.name, name);
-        else
-            Debug.LogFormat("No cover available for {0}", name);
-    } 
+        return newBestCover;
+    }
     #endregion
 }
 

@@ -89,17 +89,14 @@ namespace GOAP {
             }
             bool found = false;
             PlanNodeRecord curr = null;
-            while (open.Count > 0) {                
-                foreach (var node in open) {
-                    Debug.LogWarning(node.Action.name);
-                    Debug.LogWarning(node.CostSoFar);
-                }
-                curr = open.Min();
-                
+            while (open.Count > 0) {
+
+                curr = open.Min();                
                 if (curr.IsSatisfied) {
                     found = true;
                     break;
                 }
+
                 foreach (var conn in curr.Connections) {
                     PlanNode connectedNode = conn.ToNode;
                     int heuristicCost = HeuristicEstimate(curr.CurrGoalStates, curr.DesiredGoalStates, connectedNode);
