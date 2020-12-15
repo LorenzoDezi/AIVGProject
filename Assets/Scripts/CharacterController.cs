@@ -7,6 +7,8 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
+    private Animator animator;
+    private new Collider2D collider;
     private Vector2 movementDir;
     private Vector2 aimPosition;
 
@@ -21,6 +23,8 @@ public class CharacterController : MonoBehaviour
 
     private void InitFields() {
         rigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponentInChildren<Animator>();
+        collider = GetComponent<Collider2D>();
     }
 
     private void FixedUpdate() {
@@ -49,6 +53,8 @@ public class CharacterController : MonoBehaviour
 
     public void OnDeath() {
         gameObject.layer = 0;
+        animator.SetTrigger("Death");
+        collider.enabled = false;
         //TODO death animation
     }
 }
