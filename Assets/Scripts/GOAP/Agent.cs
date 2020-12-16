@@ -109,8 +109,12 @@ namespace GOAP {
         } 
 
         private void EnableCurrAction() {
-            if(currAction != null && currAction.Activate())
+            if (currAction == null)
+                return;
+            if (currAction.Activate())
                 currAction.EndAction.AddListener(OnEndAction);
+            else
+                currAction = null;
         }
 
         private void DisableCurrAction() {

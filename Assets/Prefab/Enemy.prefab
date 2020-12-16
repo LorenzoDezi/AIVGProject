@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb41b38156e58a4d99e28a473a426d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  movementSpeed: 4
   aimSpeedDegrees: 200
 --- !u!50 &8077473535347200374
 Rigidbody2D:
@@ -340,7 +340,7 @@ MonoBehaviour:
   stressLevelKey: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
   inCoverKey: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
   stressLevelDecreaseForSecond: 0.1
-  stressLevelDecreaseInCover: 1
+  stressLevelDecreaseInCover: 2.5
   stressLevelIncreasePerHealthPoint: 0.2
   maxStressLevel: 10
 --- !u!114 &2089853290383079076
@@ -413,7 +413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d4a735ccc012b549be2456afb66696f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coverAvailableKey: {fileID: 11400000, guid: 3e2bb2c140fe30f4f8c463213fda649c, type: 2}
   inCoverKey: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
   coverMask:
     serializedVersion: 2
@@ -421,7 +420,6 @@ MonoBehaviour:
   BestCoverChanged:
     m_PersistentCalls:
       m_Calls: []
-  bestCoverCheckInterval: 0.2
 --- !u!114 &1595948070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,6 +732,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8077473535347200379}
     m_Modifications:
+    - target: {fileID: 3789864328786370327, guid: 9da5d4cd1be4ef84395165b92745a672,
+        type: 3}
+      propertyPath: shootInterval
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 3789864329941056109, guid: 9da5d4cd1be4ef84395165b92745a672,
         type: 3}
       propertyPath: m_Name

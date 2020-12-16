@@ -15,26 +15,14 @@ public class CoverSensor : MonoBehaviour {
     private NavigationComponent navComponent;
 
     [SerializeField]
-    private WorldStateKey coverAvailableKey;
-    private WorldState coverAvailableWSTracked;
-
-    [SerializeField]
     private WorldStateKey inCoverKey;
     private WorldState inCoverWSTracked;
 
     [SerializeField]
     private LayerMask coverMask;
     private List<CoverComponent> coversAvailable;
-    public CoverComponent BestCover { get; private set; }
     public UnityEvent BestCoverChanged;
     private CoverComponent currCover;
-    public bool InCover => currCover == BestCover;
-
-
-    [SerializeField]
-    private float bestCoverCheckInterval = 1f;
-    private Coroutine bestCoverCheckCoroutine;
-
 
 
 
@@ -58,10 +46,8 @@ public class CoverSensor : MonoBehaviour {
         coversAvailable = new List<CoverComponent>();
         BestCoverChanged = new UnityEvent();
 
-        coverAvailableWSTracked = new WorldState(coverAvailableKey, false);
         inCoverWSTracked = new WorldState(inCoverKey, false);
         agentToUpdate.UpdatePerception(inCoverWSTracked);
-        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -71,9 +57,6 @@ public class CoverSensor : MonoBehaviour {
 
         CoverComponent newCover = collider.GetComponent<CoverComponent>();
         coversAvailable.Add(newCover);
-
-        if (bestCoverCheckCoroutine == null)
-            bestCoverCheckCoroutine = StartCoroutine(BestCoverCheck());
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
@@ -83,22 +66,7 @@ public class CoverSensor : MonoBehaviour {
 
         CoverComponent cover = collider.GetComponent<CoverComponent>();
         coversAvailable.Remove(cover);
-
-        if (bestCoverCheckCoroutine != null && coversAvailable.Count == 0) {
-            StopCoroutine(bestCoverCheckCoroutine);
-            bestCoverCheckCoroutine = null;
-        }
     } 
-    #endregion
-
-    #region coroutines
-    private IEnumerator BestCoverCheck() {
-        var wait = new WaitForSeconds(bestCoverCheckInterval);
-        while (true) {
-            UpdateBestCover();
-            yield return wait;
-        }
-    }
     #endregion
 
     #region private methods
@@ -109,23 +77,9 @@ public class CoverSensor : MonoBehaviour {
         inCoverWSTracked.BoolValue = false;
         agentToUpdate.UpdatePerception(inCoverWSTracked);
         navComponent.PathStarted.RemoveListener(OutOfCover);
-        Debug.LogWarningFormat("Out of cover {0}", gameObject.name);
     }
 
-    private void UpdateBestCover() {
-
-        CoverComponent newBestCover = GetBestCover();
-
-        if (newBestCover == BestCover)
-            return;
-
-        BestCover = newBestCover;
-        BestCoverChanged.Invoke();
-        coverAvailableWSTracked.BoolValue = BestCover != null;
-        agentToUpdate.UpdatePerception(coverAvailableWSTracked);
-    }
-
-    private CoverComponent GetBestCover() {
+    public CoverComponent GetBestCover() {
         if (currCover != null && currCover.CanCover)
             return currCover;
         float minSqrDist = Mathf.Infinity;

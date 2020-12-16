@@ -11,10 +11,6 @@ public class ShootAction : GOAP.Action {
     [SerializeField]
     protected LayerMask obstacleLayerMask;
 
-    [SerializeField]
-    protected float shootInterval = 0.5f;
-    protected float timeSinceLastShoot;
-
     public override void Init(GameObject agentGameObj) {
 
         base.Init(agentGameObj);
@@ -31,7 +27,6 @@ public class ShootAction : GOAP.Action {
             return false;
 
         target = visualSensor.VisibleEnemy.transform;
-        timeSinceLastShoot = shootInterval;
         return true;
     }
 
@@ -40,17 +35,9 @@ public class ShootAction : GOAP.Action {
     }
 
     public override void Update() {
-
         charController.AimAt(target.position);
-
-        if (timeSinceLastShoot >= shootInterval && 
-            !target.HasObstacleInBetween(transform, obstacleLayerMask)) {
-
+        if (!transform.HasObstacleInBetween(target, obstacleLayerMask))
             gunController.TryToShoot();
-            timeSinceLastShoot = 0f;
-
-        } else
-            timeSinceLastShoot += Time.deltaTime;
     }
 }
 

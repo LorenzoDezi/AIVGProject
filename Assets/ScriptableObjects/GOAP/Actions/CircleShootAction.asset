@@ -48,10 +48,10 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-  cost: 2
-  shootInterval: 0.5
-  distance: 5
+  cost: 3
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 1024
+  shootInterval: 0.5
+  distance: 5
   maxSearchFirePointIteration: 5

@@ -89,6 +89,7 @@ namespace GOAP {
             boolValue = newWorldState.boolValue;
             gameObjectValue = newWorldState.gameObjectValue;
             StateChangeEvent.Invoke();
+            //TODO: StateChangeEvent!!! -> also on the other shit
         }
 
         public bool Match(WorldState other) {

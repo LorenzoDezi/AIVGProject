@@ -75383,6 +75383,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8077473535347200377, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: aimSpeedDegrees
+      value: 300
+      objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_Name
@@ -75475,7 +75480,7 @@ PrefabInstance:
     - target: {fileID: 4915967746439465521, guid: 7cf1d29cd9f500943aec8a7e92f91a8e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 2.22
       objectReference: {fileID: 0}
     - target: {fileID: 4915967746439465521, guid: 7cf1d29cd9f500943aec8a7e92f91a8e,
         type: 3}
@@ -75679,6 +75684,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563854298345398787, guid: ebe3b4dcd7f730c4493713604b2ed191,
+        type: 3}
+      propertyPath: movementSpeed
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6563854298506983448, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}

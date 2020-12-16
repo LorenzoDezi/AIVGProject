@@ -17,20 +17,19 @@ public class GoToCoverAction : ShootAction {
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
-    public override bool CheckProceduralConditions() {
-        return coverSensor.BestCover != null;
-    }
-
     public override bool Activate() {
-        if(!base.Activate() || coverSensor.InCover || coverSensor.BestCover == null) {
+        if(!base.Activate()) {
             return false;
         }
         
         coverReached = false;
-        targetCover = coverSensor.BestCover;
+        targetCover = coverSensor.GetBestCover();
+        if (targetCover == null)
+            return false;
         targetCover.IsOccupied = true;
         navComponent.PathCompleted.AddListener(OnPathCompleted);
         navComponent.MoveTo(targetCover.Transform.position);
+        Debug.LogWarningFormat("GoToCover activated! {0}", name);
         return true;
     }
 
@@ -40,6 +39,7 @@ public class GoToCoverAction : ShootAction {
             targetCover.IsOccupied = false;
             navComponent.PathCompleted.RemoveListener(OnPathCompleted);
         }
+        Debug.LogWarningFormat("GoToCover deactivated! {0}", name);
         navComponent.Stop();
     }
 

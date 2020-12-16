@@ -19,13 +19,7 @@ public class ReloadAction : GOAP.Action {
         gunController = agentGameObj.GetComponentInChildren<GunController>();
     }
 
-    private void OnReload() {
-        gunController.Reloaded.RemoveListener(OnReload);
-        Terminate(true);
-    }
-
     public override bool Activate() {
-        gunController.Reloaded.AddListener(OnReload);
         gunController.Reload();
         return true;
     }
@@ -35,7 +29,7 @@ public class ReloadAction : GOAP.Action {
     }
 
     public override void Update() {
-        
+        Terminate(true);
     }
 }
 

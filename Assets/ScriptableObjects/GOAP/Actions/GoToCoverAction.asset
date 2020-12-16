@@ -22,7 +22,7 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-    - key: {fileID: 11400000, guid: 3e2bb2c140fe30f4f8c463213fda649c, type: 2}
+    - key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
       intValue: 0
       floatValue: 0
       boolValue: 1
@@ -44,4 +44,3 @@ MonoBehaviour:
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 1024
-  shootInterval: 0.5
