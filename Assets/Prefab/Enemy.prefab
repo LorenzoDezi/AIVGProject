@@ -113,6 +113,7 @@ GameObject:
   - component: {fileID: 495220359}
   - component: {fileID: 727441786284930137}
   - component: {fileID: 4238676141369403258}
+  - component: {fileID: 7274028961393068657}
   - component: {fileID: 2089853290383079076}
   - component: {fileID: 744502580}
   - component: {fileID: 2089853290383079077}
@@ -221,32 +222,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 8077473535347200378}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca5e1f21eced9bf4688ba4b7319f4b72, type: 3}
+  m_Script: {fileID: 11500000, guid: 2e1802bccbb4ba648a1f5ca8dca37d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   actionTemplates:
+  - {fileID: 11400000, guid: fc1c80b7ccc55ca4da1ff8594b2234b3, type: 2}
+  - {fileID: 11400000, guid: 96766584bb4c778449fd69037b9e232d, type: 2}
+  - {fileID: 11400000, guid: 2338c23bf877ec3408a1cceb6cc9d29b, type: 2}
+  - {fileID: 11400000, guid: ec67b2852d1638841b47186d86b05c73, type: 2}
+  - {fileID: 11400000, guid: b7ecf513b52b1c04aad77b46812046f4, type: 2}
   - {fileID: 11400000, guid: a1e3f64b21b1e86478d733218ac3b57e, type: 2}
   - {fileID: 11400000, guid: 4b1f7710d3db28c48bdbcb42ced45666, type: 2}
   - {fileID: 11400000, guid: b8f64bfbc93209b4fbdd130f7398e193, type: 2}
   - {fileID: 11400000, guid: c8b322678cdfff843bdc39f5de0a3324, type: 2}
-  - {fileID: 11400000, guid: 96766584bb4c778449fd69037b9e232d, type: 2}
-  - {fileID: 11400000, guid: fc1c80b7ccc55ca4da1ff8594b2234b3, type: 2}
-  - {fileID: 11400000, guid: 2338c23bf877ec3408a1cceb6cc9d29b, type: 2}
-  - {fileID: 11400000, guid: b7ecf513b52b1c04aad77b46812046f4, type: 2}
   goalTemplates:
-  - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
+  - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
+  - {fileID: 11400000, guid: 7f109ac643a456c4980b2630939a9537, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
-  - {fileID: 11400000, guid: 7f109ac643a456c4980b2630939a9537, type: 2}
   replanInterval: 0.5
   worldPerception:
     states: []
-  patrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!114 &495220359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,7 +289,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 495220353}
-        m_MethodName: OnDeath
+        m_MethodName: Clear
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -343,6 +340,19 @@ MonoBehaviour:
   stressLevelDecreaseInCover: 2.5
   stressLevelIncreasePerHealthPoint: 0.2
   maxStressLevel: 10
+--- !u!114 &7274028961393068657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3646a433e6c3334a8ca3c3db16298a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolPoints: []
 --- !u!114 &2089853290383079076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -427,7 +437,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8077473535347200378}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4433dc191db7f8e45834551460d7ffda, type: 3}
   m_Name: 

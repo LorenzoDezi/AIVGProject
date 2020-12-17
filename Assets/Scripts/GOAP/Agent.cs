@@ -146,7 +146,7 @@ namespace GOAP {
             goals.Sort(Goal.Comparer);
         }
 
-        protected void Clear() {
+        public void Clear() {
             if(currAction != null) {
                 currAction.Deactivate();
                 currAction = null;
