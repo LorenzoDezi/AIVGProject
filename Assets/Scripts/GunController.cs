@@ -20,6 +20,9 @@ public class GunController : MonoBehaviour
     private Coroutine reloadCoroutine;
 
     [SerializeField]
+    private SpriteRenderer gunSprite;
+
+    [SerializeField]
     private Transform bulletSpawn;
     private BulletSpawner spawner;
 
@@ -32,6 +35,10 @@ public class GunController : MonoBehaviour
         lastShotTime = shootInterval;
         currentShotsInClip = maxShotsPerClip;
         reloadSprite.enabled = false;
+    }
+
+    public void UseWeapon(bool value) {
+        gunSprite.enabled = value;
     }
 
     public void TryToShoot() {

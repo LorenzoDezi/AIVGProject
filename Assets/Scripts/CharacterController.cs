@@ -16,6 +16,10 @@ public class CharacterController : MonoBehaviour
     private float movementSpeed = 50f;
     [SerializeField]
     private float aimSpeedDegrees = 200f;
+    public float AimSpeedDegrees {
+        get => aimSpeedDegrees;
+        set => aimSpeedDegrees = value;
+    }
 
     private void Awake() {
         InitFields();
@@ -55,6 +59,5 @@ public class CharacterController : MonoBehaviour
         gameObject.layer = 0;
         animator.SetTrigger("Death");
         collider.enabled = false;
-        //TODO death animation
     }
 }

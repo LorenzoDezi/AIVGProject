@@ -71854,7 +71854,7 @@ PrefabInstance:
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200379, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -76074,7 +76074,7 @@ PrefabInstance:
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200379, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -77383,7 +77383,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.size
-      value: 9
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -77404,8 +77404,7 @@ PrefabInstance:
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.data[6]
       value: 
-      objectReference: {fileID: 11400000, guid: 2338c23bf877ec3408a1cceb6cc9d29b,
-        type: 2}
+      objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: replanInterval
       value: 0.5
@@ -77413,8 +77412,41 @@ PrefabInstance:
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.data[8]
       value: 
-      objectReference: {fileID: 11400000, guid: ec67b2852d1638841b47186d86b05c73,
+      objectReference: {fileID: 11400000, guid: b8f64bfbc93209b4fbdd130f7398e193,
         type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 96766584bb4c778449fd69037b9e232d,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: b7ecf513b52b1c04aad77b46812046f4,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: a1e3f64b21b1e86478d733218ac3b57e,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: bf23a892ca9badd438da655c87b0482a,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: b8f64bfbc93209b4fbdd130f7398e193,
+        type: 2}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[5]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: actionTemplates.Array.data[7]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 495220359, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: tagPenalties.Array.data[1]
       value: 10
@@ -77443,6 +77475,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739258641301987907, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: enemyLayerMask.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739258641301987907, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: hitLayerMask.m_Bits
+      value: 2048
       objectReference: {fileID: 0}
     - target: {fileID: 7274028961393068657, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
