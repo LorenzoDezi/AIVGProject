@@ -9,19 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3f3e36111a797d489a8de6803aa8895, type: 3}
-  m_Name: PatrolAction
+  m_Script: {fileID: 11500000, guid: 29ffcf8fdf9e2e04f9df3d5a1f57c3e6, type: 3}
+  m_Name: IdleAction
   m_EditorClassIdentifier: 
   preconditions:
-    states:
-    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    states: []
   effects:
     states:
     - key: {fileID: 11400000, guid: f2cb7c2423e1de8448e889c81f80bd3e, type: 2}
@@ -33,4 +25,9 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   cost: 0
-  IdleKey: {fileID: 11400000, guid: f2cb7c2423e1de8448e889c81f80bd3e, type: 2}
+  timeToSwitchLook: 5
+  lookDirections:
+  - {x: 1, y: 0}
+  - {x: 0.5, y: 0.5}
+  - {x: -1, y: 0}
+  - {x: 0, y: 1}

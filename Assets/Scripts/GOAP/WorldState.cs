@@ -87,6 +87,7 @@ namespace GOAP {
             key = newWorldState.key;
             intValue = newWorldState.intValue;
             boolValue = newWorldState.boolValue;
+            floatValue = newWorldState.floatValue;
             gameObjectValue = newWorldState.gameObjectValue;
             StateChangeEvent.Invoke();
             //TODO: StateChangeEvent!!! -> also on the other shit

@@ -12,19 +12,19 @@ public class PatrolAction : GOAP.Action {
     private PatrollerComponent patroller;
 
     [SerializeField]
-    private WorldStateKey patrollingKey;
-    private WorldState currPatrollingState;
+    private WorldStateKey IdleKey;
+    private WorldState currIdleKey;
 
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
         patroller = agentGameObj.GetComponent<PatrollerComponent>();
-        currPatrollingState = new WorldState(patrollingKey, false);
-        agent.UpdatePerception(currPatrollingState);
+        currIdleKey = new WorldState(IdleKey, false);
+        agent.UpdatePerception(currIdleKey);
     }
 
     public override bool Activate() {
         patroller.StartPatrol();
-        SetPatrollingWorldState(true);
+        UpdateIdleWorldState(true);
         return true;
     }
 
@@ -35,12 +35,12 @@ public class PatrolAction : GOAP.Action {
 
     public override void Deactivate() {
         patroller.StopPatrol();
-        SetPatrollingWorldState(false);
+        UpdateIdleWorldState(false);
     }
 
-    private void SetPatrollingWorldState(bool value) {
-        currPatrollingState.BoolValue = value;
-        agent.UpdatePerception(currPatrollingState);
+    private void UpdateIdleWorldState(bool value) {
+        currIdleKey.BoolValue = value;
+        agent.UpdatePerception(currIdleKey);
     }
     
 }
