@@ -54,12 +54,17 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.KnifeAttack.canceled += OnStopKnifeAttack;
         playerActions.GrenadeLaunch.started += LaunchGrenade;
         playerActions.Reload.started += OnReload;
+        playerActions.Dash.started += OnDash;
         inputAction.Enable();
     }
 
     void OnMovement(InputAction.CallbackContext context) {
         Vector2 value = context.ReadValue<Vector2>();
         characterController.Move(value);
+    }
+
+    void OnDash(InputAction.CallbackContext context) {
+        characterController.Dash();
     }
 
     void OnStartShooting(InputAction.CallbackContext context) {

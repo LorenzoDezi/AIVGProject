@@ -15,6 +15,15 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private float movementSpeed = 50f;
     [SerializeField]
+    private float dashSpeed = 10f;
+    [SerializeField]
+    private float dashLength = 1f;
+    [SerializeField]
+    private float dashReloadTime = 0.1f;
+    private float currDashReloadTime;
+    private bool isDashing;
+
+    [SerializeField]
     private float aimSpeedDegrees = 200f;
     public float AimSpeedDegrees {
         get => aimSpeedDegrees;
@@ -23,6 +32,7 @@ public class CharacterController : MonoBehaviour
 
     private void Awake() {
         InitFields();
+        currDashReloadTime = dashReloadTime;
     }
 
     private void InitFields() {
@@ -32,7 +42,7 @@ public class CharacterController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        rigidBody.velocity = movementDir * movementSpeed;
+        rigidBody.velocity = movementDir * (isDashing ? dashSpeed : movementSpeed);
         RotateTowardsAimPosition();
     }
 
@@ -49,6 +59,25 @@ public class CharacterController : MonoBehaviour
 
     public void Move(Vector2 movementDir) {
         this.movementDir = movementDir;
+    }
+
+    public void Dash() {
+
+        if (isDashing || currDashReloadTime < dashReloadTime)
+            return;
+        isDashing = true;
+        StartCoroutine(DashCountdown());
+    }
+
+    private IEnumerator DashCountdown() {
+        currDashReloadTime = 0f;
+        yield return new WaitForSeconds(dashLength);
+        isDashing = false;
+        var wait = new WaitForEndOfFrame();
+        while(currDashReloadTime < dashReloadTime) {
+            currDashReloadTime += Time.deltaTime;
+            yield return wait;
+        }
     }
 
     public void AimAt(Vector3 worldPosition) {

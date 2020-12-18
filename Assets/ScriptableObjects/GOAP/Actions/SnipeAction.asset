@@ -41,3 +41,4 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   cost: 0
+  sniperAimSpeedDegrees: 55
