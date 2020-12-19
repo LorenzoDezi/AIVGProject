@@ -41,4 +41,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   cost: 0
-  sniperAimSpeedDegrees: 55
+  sniperTrackSpeedDegrees: 150
+  sniperAimSpeedDegrees: 60
+  trackToAimAngleTreshold: 30

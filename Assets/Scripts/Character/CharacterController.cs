@@ -30,6 +30,9 @@ public class CharacterController : MonoBehaviour
         set => aimSpeedDegrees = value;
     }
 
+    private float angleToTarget;
+    public float AngleToTarget => angleToTarget;
+
     private void Awake() {
         InitFields();
         currDashReloadTime = dashReloadTime;
@@ -47,14 +50,17 @@ public class CharacterController : MonoBehaviour
     }
 
     private void RotateTowardsAimPosition() {
+
         Vector2 lookDir = (aimPosition - rigidBody.position).normalized;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg;
+
         Quaternion rotation = Quaternion.RotateTowards(
             transform.rotation,
             Quaternion.AngleAxis(angle, Vector3.forward),
             aimSpeedDegrees * Time.fixedDeltaTime
-            );
-        rigidBody.MoveRotation(rotation.eulerAngles.z);
+        );
+        angleToTarget = rotation.eulerAngles.z;
+        rigidBody.MoveRotation(angleToTarget);
     }
 
     public void Move(Vector2 movementDir) {

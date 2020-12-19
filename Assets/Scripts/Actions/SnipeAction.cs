@@ -9,9 +9,14 @@ public class SnipeAction : GOAP.Action {
     private EnemyVisualSensor enemyVisualSensor;
     private SniperController sniperController;
     private Transform targetTransf;
+    private Transform transform;
 
+    [SerializeField, Tooltip("Sniper track speed (slower)")]
+    private float sniperTrackSpeedDegrees = 50f;
     [SerializeField, Tooltip("Sniper aim speed (slower)")]
     private float sniperAimSpeedDegrees = 50f;
+    [SerializeField, Tooltip("Angle treshold where there will be the change from track to aim speed")]
+    private float trackToAimAngleTreshold = 10f;
     private float originalAimSpeed;
 
     public override void Init(GameObject agentGameObj) {
@@ -20,6 +25,7 @@ public class SnipeAction : GOAP.Action {
         sniperController = agentGameObj.GetComponentInChildren<SniperController>();
         charController = agentGameObj.GetComponent<CharacterController>();
         enemyVisualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        transform = agentGameObj.GetComponent<Transform>();
     }
 
     public override bool Activate() {
@@ -29,17 +35,26 @@ public class SnipeAction : GOAP.Action {
 
         targetTransf = enemyVisualSensor.VisibleEnemy.transform;
         originalAimSpeed = charController.AimSpeedDegrees;
-        charController.AimSpeedDegrees = sniperAimSpeedDegrees;
-        sniperController.IsShooting = true;
+        sniperController.SetUsing(true);
         return true;
     }
 
     public override void Deactivate() {
         charController.AimSpeedDegrees = originalAimSpeed;
-        sniperController.IsShooting = false;
+        sniperController.SetUsing(false);
     }
 
     public override void Update() {
+
+        float angleTowardTarget = Mathf.Abs(Vector3.Angle(
+            transform.right, (targetTransf.position - transform.position).normalized
+        ));
+        bool canShoot = angleTowardTarget <= trackToAimAngleTreshold;
+
+        charController.AimSpeedDegrees =  canShoot ? 
+            sniperAimSpeedDegrees : sniperTrackSpeedDegrees;
+        sniperController.IsShooting = canShoot;
+
         charController.AimAt(targetTransf.position);
     }
 }

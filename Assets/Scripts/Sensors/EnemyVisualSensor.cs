@@ -110,6 +110,8 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     private void OnEnemyAttack(float currHealth) {
         if(!enemySpotted && currHealth < healthComp.MaxHealth) {
+            //TODO: A little weak... maybe find some other way if there is time
+            EnemySpottedEvent.Invoke(GameManager.Player);
             SpotEnemy(GameManager.Player);
         }
     }

@@ -82,7 +82,7 @@ namespace GOAP {
                     PlanCompleted.Invoke(actionQueue.ToList());
 #endif
                     if (actionQueue.Count > 0) {
-                        newAction = actionQueue.Dequeue();                                              
+                        newAction = actionQueue.Dequeue();
                         break;
                     }
                     yield return new WaitForEndOfFrame();
@@ -93,7 +93,6 @@ namespace GOAP {
                     currAction = newAction;
                     EnableCurrAction();
                 }
-
                 yield return replanWaitFor;
             }
         } 

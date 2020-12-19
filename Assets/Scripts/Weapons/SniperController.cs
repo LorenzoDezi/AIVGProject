@@ -33,16 +33,16 @@ public class SniperController : MonoBehaviour {
 
     private Vector3[] linePositions;
 
-    private bool isShooting;
-    public bool IsShooting {
-        get => isShooting;
-        set {
-            isShooting = value;
-            sniperRenderer.enabled = value;
-            if(value)
-                SetLaserPositions();
-            sniperLaserRenderer.enabled = value;
-        }
+    private bool isUsing;
+    public bool IsShooting { get; set; }
+
+    public void SetUsing(bool isUsing) {
+        this.isUsing = isUsing;
+        sniperRenderer.enabled = isUsing;
+        this.enabled = isUsing;
+        if (isUsing)
+            SetLaserPositions();
+        sniperLaserRenderer.enabled = isUsing;
     }
 
     private void Awake() {
@@ -51,7 +51,7 @@ public class SniperController : MonoBehaviour {
         linePositions = new Vector3[2];
         sniperLaserRenderer.positionCount = 2;
         SetLaserPositions();
-
+        SetUsing(false);
         sniperLaserMat = sniperLaserRenderer.material;
         currTimeToReload = timeToReload;
     }
@@ -59,9 +59,7 @@ public class SniperController : MonoBehaviour {
     private void InitFields() {
         transform = GetComponent<Transform>();
         sniperLaserRenderer = GetComponentInChildren<LineRenderer>();
-        sniperRenderer = GetComponentInChildren<SpriteRenderer>();
-        sniperLaserRenderer.enabled = false;
-        sniperRenderer.enabled = false;        
+        sniperRenderer = GetComponentInChildren<SpriteRenderer>();        
     }
 
     private void SetLaserPositions() {
@@ -74,16 +72,14 @@ public class SniperController : MonoBehaviour {
     }
 
     private void Update() {
-        if(isShooting) {
-            SetLaserPositions();
-            UpdateShootingState();
-        }
+        SetLaserPositions();
+        UpdateShootingState();
     }
 
     private void UpdateShootingState() {
         if(isReloading)
             UpdateReload();
-        else
+        else if (IsShooting)
             LoadSniperShot();
     }
 
@@ -96,7 +92,6 @@ public class SniperController : MonoBehaviour {
             currTimeToShoot = 0f;
             currTimeToReload = 0f;
             color.a = 0f;
-            sniperLaserRenderer.enabled = false;
             isReloading = true;
             Shoot();
         }

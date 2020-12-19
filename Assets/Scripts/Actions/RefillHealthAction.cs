@@ -11,6 +11,8 @@ public class RefillHealthAction : GOAP.Action {
 
     private NavigationComponent navigationComponent;
     private HealthComponent healthComponent;
+
+    private bool hasNearHealthStation;
     private Transform nearestHealthStation;
 
     [SerializeField]
@@ -25,19 +27,26 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     public override bool CheckProceduralConditions() {
+
         if (healthComponent.CurrHealth == healthComponent.MaxHealth)
             return false;
-        nearestHealthStation = Physics2D.OverlapCircle(
-            navigationComponent.transform.position, checkForHealthStationsRadius, healthStationLayer
-        )?.transform;
-        Debug.LogFormat("CheckProceduralConditions on RefHAction {0}", 
-            nearestHealthStation != null);
-        return nearestHealthStation != null;
+
+        var collider = Physics2D.OverlapCircle(
+            navigationComponent.transform.position, 
+            checkForHealthStationsRadius, 
+            healthStationLayer
+        );
+
+        hasNearHealthStation = collider != null;
+        if(hasNearHealthStation)
+            nearestHealthStation = collider.transform;
+
+        return hasNearHealthStation;
     }
 
     public override bool Activate() {
 
-        if (nearestHealthStation == null)
+        if (!hasNearHealthStation)
             return false;
 
         navigationComponent.MoveTo(nearestHealthStation.position);
