@@ -12,8 +12,6 @@ public class RefillHealthAction : GOAP.Action {
     private NavigationComponent navigationComponent;
     private HealthComponent healthComponent;
     private Transform nearestHealthStation;
-    [SerializeField]
-    private WorldStateKey healthRefilledKey;
 
     [SerializeField]
     private float checkForHealthStationsRadius = 5f;

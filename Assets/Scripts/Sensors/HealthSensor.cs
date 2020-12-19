@@ -8,8 +8,8 @@ public class HealthSensor : MonoBehaviour {
 
     [Header("World State Keys")]
     [SerializeField]
-    private WorldStateKey healthFullKey;
-    private WorldState healthFullWSTracked;
+    private WorldStateKey damageStateKey;
+    private WorldState damageStateWSTracked;
 
     [SerializeField]
     private WorldStateKey stressLevelKey;
@@ -36,13 +36,13 @@ public class HealthSensor : MonoBehaviour {
     private void Awake() {
 
         agentToUpdate = GetComponent<Agent>();
+        healthComp = GetComponent<HealthComponent>();
 
-        healthFullWSTracked = new WorldState(healthFullKey, true);
-        agentToUpdate.UpdatePerception(healthFullWSTracked);
+        damageStateWSTracked = new WorldState(damageStateKey, 0f);
+        agentToUpdate.UpdatePerception(damageStateWSTracked);
         stressLevelWSTracked = new WorldState(stressLevelKey, 0);
         agentToUpdate.UpdatePerception(stressLevelWSTracked);
 
-        healthComp = GetComponent<HealthComponent>();
         lastHealthRegistered = healthComp.MaxHealth;
         healthComp?.HealthChange.AddListener(UpdatePerception);    
     }
@@ -55,12 +55,15 @@ public class HealthSensor : MonoBehaviour {
 
         if (stressLevelWSTracked.FloatValue <= 0f)
             return;
+
         float decreaseForSecond = stressLevelDecreaseForSecond;
         if (needCoverCheck && agentToUpdate.WorldPerception[inCoverKey].BoolValue)
             decreaseForSecond = stressLevelDecreaseInCover;
+
         stressLevelWSTracked.FloatValue -= decreaseForSecond * Time.deltaTime;
         if (stressLevelWSTracked.FloatValue <= 0f)
             stressLevelWSTracked.FloatValue = 0f;
+
         agentToUpdate.UpdatePerception(stressLevelWSTracked);
     }
 
@@ -68,6 +71,7 @@ public class HealthSensor : MonoBehaviour {
 
         float healthDecrease = lastHealthRegistered - currHealth;
         lastHealthRegistered = currHealth;
+
         if (healthDecrease > 0 && stressLevelWSTracked.FloatValue < maxStressLevel)
             stressLevelWSTracked.FloatValue += healthDecrease * stressLevelIncreasePerHealthPoint;
         else if (healthDecrease < 0) {
@@ -75,8 +79,8 @@ public class HealthSensor : MonoBehaviour {
         }
         agentToUpdate.UpdatePerception(stressLevelWSTracked);
 
-        healthFullWSTracked.BoolValue = healthComp.MaxHealth == currHealth;
-        agentToUpdate.UpdatePerception(healthFullWSTracked);
+        damageStateWSTracked.FloatValue = healthComp.MaxHealth - currHealth;
+        agentToUpdate.UpdatePerception(damageStateWSTracked);
     }
 }
 

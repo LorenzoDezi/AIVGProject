@@ -360,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d6634efb36c42d4b96f6d1cfa763ed0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthFullKey: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
+  damageStateKey: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
   stressLevelKey: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
   inCoverKey: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
   stressLevelDecreaseForSecond: 0.1

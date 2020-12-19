@@ -22,9 +22,4 @@ public class SquadManager : MonoBehaviour
     }
 
 
-
-    //How to change the goal based on what? Ideas:
-        // When a team member goes to restore his health, it can be covered by another guy with more health
-        // When the team counts only one member, it can send the remaining member to another squad
-        // Assign one enemy to flank the player
 }

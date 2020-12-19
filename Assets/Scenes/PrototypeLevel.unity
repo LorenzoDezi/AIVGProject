@@ -76123,6 +76123,12 @@ PrefabInstance:
       propertyPath: maxHealth
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 4238676141369403258, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: damageStateKey
+      value: 
+      objectReference: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12,
+        type: 2}
     - target: {fileID: 7274028961393068657, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: patrolPoints.Array.size
