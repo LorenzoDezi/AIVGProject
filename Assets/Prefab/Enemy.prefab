@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 2089853290383079079}
   - component: {fileID: 1595948070}
   - component: {fileID: 1595948071}
+  - component: {fileID: 8501142079211152896}
   m_Layer: 12
   m_Name: Enemy
   m_TagString: Enemy
@@ -182,6 +183,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 4
+  dashSpeed: 10
+  dashLength: 1
+  dashReloadTime: 0.1
   aimSpeedDegrees: 200
 --- !u!50 &8077473535347200374
 Rigidbody2D:
@@ -487,6 +491,18 @@ MonoBehaviour:
   bezierTangentLength: 0.4
   offset: 0.2
   factor: 0.1
+--- !u!114 &8501142079211152896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6107e7b435d35cd4dbf7d2f13211fbbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8077473535487675237
 GameObject:
   m_ObjectHideFlags: 0

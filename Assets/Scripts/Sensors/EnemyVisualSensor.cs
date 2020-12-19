@@ -6,6 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
+
+public class EnemySpottedEvent : UnityEvent<GameObject> { }
 
 public class EnemyVisualSensor : MonoBehaviour {
 
@@ -53,6 +56,8 @@ public class EnemyVisualSensor : MonoBehaviour {
     private Transform visibleEnemyTransform;
     public GameObject VisibleEnemy { get; private set; }
 
+    public EnemySpottedEvent EnemySpottedEvent { get; } = new EnemySpottedEvent();
+
     protected void Awake() {
         agentToUpdate = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
@@ -88,6 +93,7 @@ public class EnemyVisualSensor : MonoBehaviour {
             } else {
                 GameObject visibleEnemy = GetVisibleEnemy();
                 if(visibleEnemy != null) {
+                    EnemySpottedEvent.Invoke(visibleEnemy);
                     SpotEnemy(visibleEnemy);
                 }
             }
@@ -108,7 +114,7 @@ public class EnemyVisualSensor : MonoBehaviour {
         }
     }
 
-    private void SpotEnemy(GameObject visibleEnemy) {
+    public void SpotEnemy(GameObject visibleEnemy) {
         VisibleEnemy = visibleEnemy;
         UpdateEnemySeenWS(true);
         visibleEnemyTransform = VisibleEnemy.transform;
