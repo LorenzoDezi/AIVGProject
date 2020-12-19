@@ -10,6 +10,8 @@ public class KnifeController : MonoBehaviour {
     private float knifeLenght = 1f;
 
     [SerializeField]
+    private LayerMask hitLayerMask;
+    [SerializeField]
     private LayerMask enemyLayerMask;
 
     [SerializeField]
@@ -32,11 +34,15 @@ public class KnifeController : MonoBehaviour {
     }
 
     public void Attack() {
-        var hit = Physics2D.CircleCast(transform.position, knifeLenght, 
-            transform.right, knifeLenght, enemyLayerMask);
+        var hit = Physics2D.Linecast(transform.position, transform.position + transform.right * knifeLenght, hitLayerMask);
         if(hit) {
-            HealthComponent enemyHealth = hit.collider.GetComponent<HealthComponent>();
-            enemyHealth.Damage(damage);
+            var hitGameObj = hit.collider.gameObject;
+            if(enemyLayerMask.ContainsLayer(hitGameObj.layer)) {
+                if(Vector3.Dot(transform.right, (Vector3) hit.point - transform.position) >= 0) {
+                    HealthComponent enemyHealth = hitGameObj.GetComponent<HealthComponent>();
+                    enemyHealth.Damage(damage);
+                }                
+            }            
         }        
     }
 }

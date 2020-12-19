@@ -51,7 +51,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9eb41b38156e58a4d99e28a473a426d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 5
+  movementSpeed: 6
+  dashSpeed: 25
+  dashLength: 0.1
+  dashReloadTime: 0.2
   aimSpeedDegrees: 200
 --- !u!114 &6563854298345398786
 MonoBehaviour:
@@ -114,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d593f50a3b5ca70498bc1cf89fa8b146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 1000
+  maxHealth: 200
   Death:
     m_PersistentCalls:
       m_Calls:
@@ -210,7 +213,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: d2b044fee99151a43bd08011e3b26833, type: 3}
   m_Color: {r: 0.020617366, g: 1, b: 0, a: 1}
   m_FlipX: 0
@@ -457,6 +460,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2825642573766469492, guid: 720be8044aaef37458bab654eb15e366,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2825642573766469493, guid: 720be8044aaef37458bab654eb15e366,
+        type: 3}
+      propertyPath: knifeLenght
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2825642573766469493, guid: 720be8044aaef37458bab654eb15e366,
+        type: 3}
+      propertyPath: hitLayerMask.m_Bits
+      value: 37888
       objectReference: {fileID: 0}
     - target: {fileID: 2825642573766469495, guid: 720be8044aaef37458bab654eb15e366,
         type: 3}

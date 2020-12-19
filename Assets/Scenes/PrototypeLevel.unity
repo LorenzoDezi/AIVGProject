@@ -383,7 +383,7 @@ TilemapRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -100
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
   m_MaxChunkCount: 16
@@ -78250,12 +78250,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1946518154, guid: ebe3b4dcd7f730c4493713604b2ed191, type: 3}
       propertyPath: maxHealth
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 5054746708625839531, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
+      value: 200000
       objectReference: {fileID: 0}
     - target: {fileID: 6563854298345398784, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}
@@ -78316,31 +78311,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563854298345398787, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: movementSpeed
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563854298345398787, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: dashSpeed
-      value: 25
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563854298345398787, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: dashLength
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563854298345398787, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: dashReloadTime
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6563854298506983448, guid: ebe3b4dcd7f730c4493713604b2ed191,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebe3b4dcd7f730c4493713604b2ed191, type: 3}
