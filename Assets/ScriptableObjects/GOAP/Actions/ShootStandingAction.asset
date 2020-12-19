@@ -43,5 +43,4 @@ MonoBehaviour:
   cost: 5
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 1024
-  shootInterval: 0.5
+    m_Bits: 33792

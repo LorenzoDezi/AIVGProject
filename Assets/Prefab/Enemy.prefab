@@ -110,7 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 36864
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 4096
@@ -131,8 +131,9 @@ GameObject:
   - component: {fileID: 8077473535347200374}
   - component: {fileID: 3102854622975787686}
   - component: {fileID: 2089853290383079075}
-  - component: {fileID: 495220353}
   - component: {fileID: 495220359}
+  - component: {fileID: 1595948071}
+  - component: {fileID: 495220353}
   - component: {fileID: 727441786284930137}
   - component: {fileID: 4238676141369403258}
   - component: {fileID: 7274028961393068657}
@@ -141,7 +142,6 @@ GameObject:
   - component: {fileID: 2089853290383079077}
   - component: {fileID: 2089853290383079079}
   - component: {fileID: 1595948070}
-  - component: {fileID: 1595948071}
   - component: {fileID: 8501142079211152896}
   m_Layer: 12
   m_Name: Enemy
@@ -240,6 +240,56 @@ MonoBehaviour:
   PathStarted:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &495220359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  drawGizmos: 1
+  detailedGizmos: 0
+  startEndModifier:
+    addPoints: 0
+    exactStartPoint: 3
+    exactEndPoint: 3
+    useRaycasting: 0
+    mask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    useGraphRaycasting: 0
+  traversableTags: -1
+  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  graphMask:
+    value: -1
+--- !u!114 &1595948071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8077473535347200378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 1
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!114 &495220353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,34 +321,6 @@ MonoBehaviour:
   replanInterval: 0.5
   worldPerception:
     states: []
---- !u!114 &495220359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8077473535347200378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 373b52eb9bf8c40f785bb6947a1aee66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  drawGizmos: 1
-  detailedGizmos: 0
-  startEndModifier:
-    addPoints: 0
-    exactStartPoint: 3
-    exactEndPoint: 3
-    useRaycasting: 0
-    mask:
-      serializedVersion: 2
-      m_Bits: 4294967295
-    useGraphRaycasting: 0
-  traversableTags: -1
-  tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  graphMask:
-    value: -1
 --- !u!114 &727441786284930137
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,7 +441,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 33792
   dangerLayerMask:
     serializedVersion: 2
     m_Bits: 16384
@@ -469,28 +491,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4433dc191db7f8e45834551460d7ffda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1595948071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8077473535347200378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  smoothType: 1
-  subdivisions: 2
-  iterations: 2
-  strength: 0.5
-  uniformLength: 1
-  maxSegmentLength: 2
-  bezierTangentLength: 0.4
-  offset: 0.2
-  factor: 0.1
 --- !u!114 &8501142079211152896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -867,6 +867,11 @@ PrefabInstance:
       propertyPath: shootInterval
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3789864328786370327, guid: 9da5d4cd1be4ef84395165b92745a672,
+        type: 3}
+      propertyPath: gunSprite
+      value: 
+      objectReference: {fileID: 508907348529982667}
     - target: {fileID: 3789864329941056109, guid: 9da5d4cd1be4ef84395165b92745a672,
         type: 3}
       propertyPath: m_Name
@@ -937,6 +942,12 @@ PrefabInstance:
 --- !u!4 &8077473534316600852 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3789864329941056110, guid: 9da5d4cd1be4ef84395165b92745a672,
+    type: 3}
+  m_PrefabInstance: {fileID: 4936155083873199226}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &508907348529982667 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4868600571981400241, guid: 9da5d4cd1be4ef84395165b92745a672,
     type: 3}
   m_PrefabInstance: {fileID: 4936155083873199226}
   m_PrefabAsset: {fileID: 0}

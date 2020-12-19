@@ -100,7 +100,7 @@ MonoBehaviour:
   hitDistance: 0.5
   hitLayers:
     serializedVersion: 2
-    m_Bits: 5120
+    m_Bits: 37888
   damageHitLayer:
     serializedVersion: 2
     m_Bits: 4096
