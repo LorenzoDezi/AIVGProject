@@ -14,8 +14,8 @@ namespace GOAP {
         }
     }
 
-
-    public abstract class Goal : ScriptableObject {
+    [CreateAssetMenu(fileName = "NewGoal", menuName = "GOAP/Goals/Goal")]
+    public class Goal : ScriptableObject {
 
         public static GoalComparer Comparer { get; } = new GoalComparer();
 
@@ -26,14 +26,20 @@ namespace GOAP {
         protected float priority;
         public float Priority => priority;
 
+        [SerializeField]
+        protected GoalPriorityUpdater priorityUpdater;
+
         [NonSerialized]
         public UnityEvent PriorityChanged = new UnityEvent(); 
 
         public virtual void Init(GameObject agentObj) {
             desiredStates = new WorldStates(desiredStates);
+            priorityUpdater.Init(agentObj.GetComponent<Agent>());
+            priorityUpdater.CurrReferenceWS.StateChangeEvent.AddListener(UpdatePriority);
         }
 
         protected virtual void UpdatePriority() {
+            priority = priorityUpdater.GetPriority();
             PriorityChanged.Invoke();
         }
     }

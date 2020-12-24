@@ -49,6 +49,19 @@ namespace GOAP {
             worldPerception.Update(states);
         }
 
+        public void Add(Goal goal) {
+            goals.Add(goal);
+            goal.Init(gameObject);
+            goal.PriorityChanged.AddListener(UpdateGoals);
+            UpdateGoals();
+        }
+
+        public void Remove(Goal goal) {
+            goals.Remove(goal);
+            goal.PriorityChanged.RemoveListener(UpdateGoals);
+            UpdateGoals();
+        }
+
         #region monobehaviour calls
         protected virtual void Awake() {
             InitActions();

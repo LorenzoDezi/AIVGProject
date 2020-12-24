@@ -315,7 +315,7 @@ MonoBehaviour:
   goalTemplates:
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
   - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
-  - {fileID: 11400000, guid: 7f109ac643a456c4980b2630939a9537, type: 2}
+  - {fileID: 11400000, guid: 81a38778b81deee4db31e127eb8604c5, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
   replanInterval: 0.5

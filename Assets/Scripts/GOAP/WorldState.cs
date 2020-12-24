@@ -18,7 +18,7 @@ namespace GOAP {
         [SerializeField]
         private int intValue;
         public int IntValue {
-            get => intValue;
+            get => valueDict[key.Type]();
             set {
                 intValue = value;
             }
