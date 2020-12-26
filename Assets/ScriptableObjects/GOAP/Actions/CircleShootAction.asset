@@ -48,6 +48,14 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
+    - key: {fileID: 11400000, guid: d5959e043a9cc77468c2cec6f6209ee0, type: 2}
+      intValue: 0
+      floatValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+      StateChangeEvent:
+        m_PersistentCalls:
+          m_Calls: []
   cost: 3
   obstacleLayerMask:
     serializedVersion: 2

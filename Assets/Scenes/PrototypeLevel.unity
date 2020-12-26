@@ -283,7 +283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &199099428
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +299,9 @@ MonoBehaviour:
   squadMembers:
   - {fileID: 2089853290383079074}
   - {fileID: 744502580}
+  squadGoals:
+  - {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c, type: 2}
+  - {fileID: 11400000, guid: e4efdc2f497f7e84390f18f9d44d3215, type: 2}
 --- !u!4 &199099429
 Transform:
   m_ObjectHideFlags: 0
@@ -76043,7 +76046,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.size
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: patrolPoints.Array.data[0]
@@ -76069,7 +76072,7 @@ PrefabInstance:
     - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: actionTemplates.Array.data[9]
       value: 
-      objectReference: {fileID: 11400000, guid: ec67b2852d1638841b47186d86b05c73,
+      objectReference: {fileID: 11400000, guid: bf23a892ca9badd438da655c87b0482a,
         type: 2}
     - target: {fileID: 744502580, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: obstacleMask.m_Bits
@@ -76091,6 +76094,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12,
         type: 2}
+    - target: {fileID: 6739258641301987907, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: enemyLayerMask.m_Bits
+      value: 2048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6739258641301987907, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: hitLayerMask.m_Bits
+      value: 34816
+      objectReference: {fileID: 0}
     - target: {fileID: 7274028961393068657, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: patrolPoints.Array.size
@@ -76124,7 +76137,7 @@ PrefabInstance:
     - target: {fileID: 8077473535347200378, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8077473535347200379, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}

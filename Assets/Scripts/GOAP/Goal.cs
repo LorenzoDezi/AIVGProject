@@ -35,6 +35,7 @@ namespace GOAP {
         public virtual void Init(GameObject agentObj) {
             desiredStates = new WorldStates(desiredStates);
             priorityUpdater.Init(agentObj.GetComponent<Agent>());
+            UpdatePriority();
             priorityUpdater.CurrReferenceWS.StateChangeEvent.AddListener(UpdatePriority);
         }
 

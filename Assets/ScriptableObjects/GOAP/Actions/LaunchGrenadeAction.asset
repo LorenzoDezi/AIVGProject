@@ -40,4 +40,12 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
+    - key: {fileID: 11400000, guid: 324ea6bf5579e2343b9398dd76670b7d, type: 2}
+      intValue: 0
+      floatValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+      StateChangeEvent:
+        m_PersistentCalls:
+          m_Calls: []
   cost: 2

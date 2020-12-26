@@ -10,6 +10,7 @@ public class SquadGoalComparer : IComparer<SquadGoal> {
     }
 }
 
+[CreateAssetMenu(fileName = "SquadGoal", menuName = "GOAP/Goals/SquadGoal")]
 public class SquadGoal : Goal {
 
     [SerializeField]
