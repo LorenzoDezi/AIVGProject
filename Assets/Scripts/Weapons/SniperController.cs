@@ -84,17 +84,27 @@ public class SniperController : MonoBehaviour {
     }
 
     private void LoadSniperShot() {
+
         var color = sniperLaserMat.color;
-        if (currTimeToShoot <= timeToShoot) {
+
+        if (isShotObstructed()) {
+            currTimeToShoot = 0f;
+            currTimeToReload = 0f;
+            color.a = 0f;
+
+        } else if (currTimeToShoot <= timeToShoot) {
             color.a = currTimeToShoot / timeToShoot;
             currTimeToShoot += Time.deltaTime;
+
         } else {
             currTimeToShoot = 0f;
             currTimeToReload = 0f;
             color.a = 0f;
             isReloading = true;
             Shoot();
+
         }
+
         sniperLaserMat.color = color;
     }
 
@@ -105,6 +115,15 @@ public class SniperController : MonoBehaviour {
             isReloading = false;
             sniperLaserRenderer.enabled = true;
         }
+    }
+
+    private bool isShotObstructed() {
+        var hit = Physics2D.Raycast(transform.position, transform.right, maxHitDistance, hitLayerMask);
+        if (hit) {
+            var hitGameObject = hit.collider.gameObject;
+            return !enemyLayerMask.ContainsLayer(hitGameObject.layer);
+        }
+        return false;
     }
 
     private void Shoot() {

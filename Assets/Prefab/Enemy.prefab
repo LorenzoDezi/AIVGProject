@@ -110,11 +110,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitLayerMask:
     serializedVersion: 2
-    m_Bits: 36864
+    m_Bits: 34816
   enemyLayerMask:
     serializedVersion: 2
-    m_Bits: 4096
-  maxHitDistance: 10
+    m_Bits: 2048
+  maxHitDistance: 30
   damage: 50
   timeToShoot: 2
   timeToReload: 2
@@ -312,6 +312,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b1f7710d3db28c48bdbcb42ced45666, type: 2}
   - {fileID: 11400000, guid: b8f64bfbc93209b4fbdd130f7398e193, type: 2}
   - {fileID: 11400000, guid: c8b322678cdfff843bdc39f5de0a3324, type: 2}
+  - {fileID: 11400000, guid: bf23a892ca9badd438da655c87b0482a, type: 2}
+  - {fileID: 11400000, guid: b274a79a739434549985848b418e84c2, type: 2}
   goalTemplates:
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
   - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
@@ -425,7 +427,7 @@ MonoBehaviour:
   visionAngle: 120
   visionLenght: 8
   checkTargetDelay: 0.2
-  sqrMinLoseSightDistance: 200
+  sqrMinLoseSightDistance: 1000
   enemyNearTresholdDistance: 9
 --- !u!114 &744502580
 MonoBehaviour:

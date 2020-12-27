@@ -57,6 +57,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     public GameObject VisibleEnemy { get; private set; }
 
     public EnemySpottedEvent EnemySpottedEvent { get; } = new EnemySpottedEvent();
+    public UnityEvent EnemyNearEvent { get; } = new UnityEvent();
 
     protected void Awake() {
         agentToUpdate = GetComponent<Agent>();

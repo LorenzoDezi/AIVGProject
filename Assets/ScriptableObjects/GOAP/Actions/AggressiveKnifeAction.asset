@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8dfc73d6c3cece4a9c2405b129f5f3a, type: 3}
-  m_Name: SnipeAction
+  m_Script: {fileID: 11500000, guid: da36812949c2f244ab257aee2a6d85da, type: 3}
+  m_Name: AggressiveKnifeAction
   m_EditorClassIdentifier: 
   preconditions:
     states:
-    - key: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
+    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
       intValue: 0
       floatValue: 0
       boolValue: 1
@@ -22,10 +22,10 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+    - key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
       intValue: 0
       floatValue: 0
-      boolValue: 1
+      boolValue: 0
       gameObjectValue: {fileID: 0}
       StateChangeEvent:
         m_PersistentCalls:
@@ -40,7 +40,7 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-    - key: {fileID: 11400000, guid: 8578e70323aca95419fb7debedae5f07, type: 2}
+    - key: {fileID: 11400000, guid: 22ac570308f1de148aea905f95ae66da, type: 2}
       intValue: 0
       floatValue: 0
       boolValue: 1
@@ -48,7 +48,4 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-  cost: 0
-  sniperTrackSpeedDegrees: 200
-  sniperAimSpeedDegrees: 45
-  trackToAimAngleTreshold: 30
+  cost: 2
