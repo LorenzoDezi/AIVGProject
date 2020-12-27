@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4010967640863654797}
   - component: {fileID: 4010967640863654798}
   - component: {fileID: 4010967640863654799}
+  - component: {fileID: 7138088295002142971}
   m_Layer: 13
   m_Name: HealthStation
   m_TagString: Untagged
@@ -99,3 +100,16 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
+--- !u!114 &7138088295002142971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4010967640863654792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b4857c2ec9eb749b05c8b29eeb867c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRefills: 2

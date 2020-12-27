@@ -14,9 +14,9 @@ public class RefillHealthAction : GOAP.Action {
     private Transform transform;
 
     private bool hasNearHealthStation;
-    private Transform nearestHealthStation;
+    private HealthStation nearestHealthStation;
 
-    [Header("Health Station Check parameters")]
+    [Header("HealthStation check parameters")]
     [SerializeField]
     private float checkForHealthStationsRadius = 5f;
     [SerializeField]
@@ -44,30 +44,36 @@ public class RefillHealthAction : GOAP.Action {
         if (healthComponent.CurrHealth == healthComponent.MaxHealth)
             return false;
 
-        var hsCollider = GetBestHSCollider();
+        var hsCollider = GetBestHealthStation();
         hasNearHealthStation = hsCollider != null;
 
         if(hasNearHealthStation)
-            nearestHealthStation = hsCollider.transform;
+            nearestHealthStation = hsCollider.GetComponent<HealthStation>();
 
         return hasNearHealthStation;
     }
 
-    private Collider2D GetBestHSCollider() {
+    private HealthStation GetBestHealthStation() {
 
         int resultCount = Physics2D.OverlapCircle(
             transform.position, checkForHealthStationsRadius,
             healthLayerContactFilter, checkHealthStationResults
         );
-        Debug.LogWarningFormat("Result Count HS {0}", resultCount);
+
         float sqrMinDistance = float.PositiveInfinity;
-        Collider2D result = null;
+        HealthStation result = null;
         for(int i = 0; i < resultCount && i < checkHSMaxQueryResults; i++) {
+
+            HealthStation current = checkHealthStationResults[i].GetComponent<HealthStation>();
+
+            if (!current.CanRefill)
+                break;
+
             float currSqrDist = Vector3.SqrMagnitude(
                 checkHealthStationResults[i].transform.position - transform.position
             );
             if(currSqrDist < sqrMinDistance) {
-                result = checkHealthStationResults[i];
+                result = current;
                 sqrMinDistance = currSqrDist;
             }            
         }
@@ -80,22 +86,38 @@ public class RefillHealthAction : GOAP.Action {
         if (!hasNearHealthStation)
             return false;
 
-        navigationComponent.MoveTo(nearestHealthStation.position);
-        navigationComponent.PathCompleted.AddListener(Refill);
+        navigationComponent.MoveTo(nearestHealthStation.Transform.position);
+        AddListeners();
         return true;
     }
 
     private void Refill(bool success) {
 
-        navigationComponent.PathCompleted.RemoveListener(Refill);
-        if (success) {
+        RemoveListeners();
+
+        if (success && nearestHealthStation.UseRefill()) {
             healthComponent.Restore(healthComponent.MaxHealth);
         }      
         Terminate(success);
     }
 
+    private void OnEndRefill() {
+        RemoveListeners();
+        Terminate(false);
+    }
+
     public override void Deactivate() {
+        RemoveListeners();
+    }
+
+    private void AddListeners() {
+        nearestHealthStation.RefillEndEvent.AddListener(OnEndRefill);
+        navigationComponent.PathCompleted.AddListener(Refill);
+    }
+
+    private void RemoveListeners() {
         navigationComponent.PathCompleted.RemoveListener(Refill);
+        nearestHealthStation.RefillEndEvent.RemoveListener(OnEndRefill);
     }
 
     public override void Update() { }
