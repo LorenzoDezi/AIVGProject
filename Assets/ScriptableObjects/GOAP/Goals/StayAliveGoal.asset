@@ -32,5 +32,5 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-    priorityMultiplier: 0.1
+    priorityMultiplier: 0.15
     inversePriority: 0

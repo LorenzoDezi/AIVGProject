@@ -11,19 +11,32 @@ public class RefillHealthAction : GOAP.Action {
 
     private NavigationComponent navigationComponent;
     private HealthComponent healthComponent;
+    private Transform transform;
 
     private bool hasNearHealthStation;
     private Transform nearestHealthStation;
 
+    [Header("Health Station Check parameters")]
     [SerializeField]
     private float checkForHealthStationsRadius = 5f;
     [SerializeField]
-    private LayerMask healthStationLayer;
+    private int checkHSMaxQueryResults = 5;  
+    [SerializeField]
+    private LayerMask HSLayer;
+    private ContactFilter2D healthLayerContactFilter;
+    private Collider2D[] checkHealthStationResults;
 
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
+
         navigationComponent = agentGameObj.GetComponent<NavigationComponent>();
+        transform = agentGameObj.GetComponent<Transform>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
+
+        healthLayerContactFilter = new ContactFilter2D();
+        healthLayerContactFilter.SetLayerMask(HSLayer);
+        healthLayerContactFilter.useTriggers = true;
+        checkHealthStationResults = new Collider2D[checkHSMaxQueryResults];
     }
 
     public override bool CheckProceduralConditions() {
@@ -31,17 +44,35 @@ public class RefillHealthAction : GOAP.Action {
         if (healthComponent.CurrHealth == healthComponent.MaxHealth)
             return false;
 
-        var collider = Physics2D.OverlapCircle(
-            navigationComponent.transform.position, 
-            checkForHealthStationsRadius, 
-            healthStationLayer
-        );
+        var hsCollider = GetBestHSCollider();
+        hasNearHealthStation = hsCollider != null;
 
-        hasNearHealthStation = collider != null;
         if(hasNearHealthStation)
-            nearestHealthStation = collider.transform;
+            nearestHealthStation = hsCollider.transform;
 
         return hasNearHealthStation;
+    }
+
+    private Collider2D GetBestHSCollider() {
+
+        int resultCount = Physics2D.OverlapCircle(
+            transform.position, checkForHealthStationsRadius,
+            healthLayerContactFilter, checkHealthStationResults
+        );
+        Debug.LogWarningFormat("Result Count HS {0}", resultCount);
+        float sqrMinDistance = float.PositiveInfinity;
+        Collider2D result = null;
+        for(int i = 0; i < resultCount && i < checkHSMaxQueryResults; i++) {
+            float currSqrDist = Vector3.SqrMagnitude(
+                checkHealthStationResults[i].transform.position - transform.position
+            );
+            if(currSqrDist < sqrMinDistance) {
+                result = checkHealthStationResults[i];
+                sqrMinDistance = currSqrDist;
+            }            
+        }
+
+        return result;
     }
 
     public override bool Activate() {

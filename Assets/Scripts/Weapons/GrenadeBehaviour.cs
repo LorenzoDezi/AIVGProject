@@ -24,6 +24,8 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
     [SerializeField]
     private LayerMask obstacleLayerMask;
     [SerializeField]
+    private LayerMask wallLayerMask;
+    [SerializeField]
     private float damage = 100f;
 
     [Header("Parameters")]
@@ -78,7 +80,8 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
 
         if(hasTarget) {
 
-            if(Vector3.Distance(transform.position, targetPosition) <= 1f) {
+            if(Vector3.Distance(transform.position, targetPosition) <= 1f || 
+                Physics2D.Raycast(transform.position, dirTowardTarget, 0.2f, wallLayerMask)) {
 
                 hasTarget = false;
                 collider.enabled = true;

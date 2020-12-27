@@ -216,6 +216,9 @@ MonoBehaviour:
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 1024
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 32768
   damage: 100
   linearSpeed: 5
   rotationSpeed: 500
