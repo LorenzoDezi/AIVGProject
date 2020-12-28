@@ -23,8 +23,7 @@ public class RefillHealthAction : GOAP.Action {
     private int checkHSMaxQueryResults = 5;  
     [SerializeField]
     private LayerMask HSLayer;
-    private ContactFilter2D healthLayerContactFilter;
-    private Collider2D[] checkHealthStationResults;
+    private Collider2D[] cachedCheckHSResults;
 
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
@@ -33,10 +32,7 @@ public class RefillHealthAction : GOAP.Action {
         transform = agentGameObj.GetComponent<Transform>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
 
-        healthLayerContactFilter = new ContactFilter2D();
-        healthLayerContactFilter.SetLayerMask(HSLayer);
-        healthLayerContactFilter.useTriggers = true;
-        checkHealthStationResults = new Collider2D[checkHSMaxQueryResults];
+        cachedCheckHSResults = new Collider2D[checkHSMaxQueryResults];
     }
 
     public override bool CheckProceduralConditions() {
@@ -55,22 +51,22 @@ public class RefillHealthAction : GOAP.Action {
 
     private HealthStation GetBestHealthStation() {
 
-        int resultCount = Physics2D.OverlapCircle(
+        int resultCount = Physics2D.OverlapCircleNonAlloc(
             transform.position, checkForHealthStationsRadius,
-            healthLayerContactFilter, checkHealthStationResults
+            cachedCheckHSResults, HSLayer
         );
 
         float sqrMinDistance = float.PositiveInfinity;
         HealthStation result = null;
         for(int i = 0; i < resultCount && i < checkHSMaxQueryResults; i++) {
 
-            HealthStation current = checkHealthStationResults[i].GetComponent<HealthStation>();
+            HealthStation current = cachedCheckHSResults[i].GetComponent<HealthStation>();
 
             if (!current.CanRefill)
                 break;
 
             float currSqrDist = Vector3.SqrMagnitude(
-                checkHealthStationResults[i].transform.position - transform.position
+                cachedCheckHSResults[i].transform.position - transform.position
             );
             if(currSqrDist < sqrMinDistance) {
                 result = current;

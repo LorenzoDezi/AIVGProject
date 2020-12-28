@@ -14,7 +14,7 @@ public class CoverComponent : MonoBehaviour
     private LayerMask toCoverFromMask;
     [SerializeField]
     private LayerMask obstacleMask;
-    Transform transfToCoverFrom;
+    Transform enemyTransf;
     bool hasTransformInSight;
 
     private float checkCoverInterval = 1f;
@@ -34,9 +34,7 @@ public class CoverComponent : MonoBehaviour
 
         var wait = new WaitForSeconds(checkCoverInterval);
         while(hasTransformInSight) {
-            canCover = transform.HasObstacleInBetween(transfToCoverFrom, obstacleMask);
-            //if (CanCover)
-            //    Debug.LogFormat("{0} can cover from player", gameObject.name);
+            canCover = transform.HasObstacleInBetween(enemyTransf, obstacleMask);
             yield return wait;
         }
     }
@@ -66,8 +64,10 @@ public class CoverComponent : MonoBehaviour
         if (!toCoverFromMask.ContainsLayer(obj.layer))
             return;
 
-        transfToCoverFrom = obj.transform;
         hasTransformInSight = inSight;
+        if(inSight) {
+            enemyTransf = obj.transform;
+        }      
     }
 
 }

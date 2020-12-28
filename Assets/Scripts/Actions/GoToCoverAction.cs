@@ -29,7 +29,6 @@ public class GoToCoverAction : ShootAction {
         targetCover.IsOccupied = true;
         navComponent.PathCompleted.AddListener(OnPathCompleted);
         navComponent.MoveTo(targetCover.Transform.position);
-        Debug.LogWarningFormat("GoToCover activated! {0}", name);
         return true;
     }
 
@@ -39,7 +38,6 @@ public class GoToCoverAction : ShootAction {
             targetCover.IsOccupied = false;
             navComponent.PathCompleted.RemoveListener(OnPathCompleted);
         }
-        Debug.LogWarningFormat("GoToCover deactivated! {0}", name);
         navComponent.Stop();
     }
 

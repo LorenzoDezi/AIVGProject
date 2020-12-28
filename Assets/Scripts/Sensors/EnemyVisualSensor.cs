@@ -12,9 +12,7 @@ public class EnemySpottedEvent : UnityEvent<GameObject> { }
 
 public class EnemyVisualSensor : MonoBehaviour {
 
-    private Agent agentToUpdate;
-    private HealthComponent healthComp;
-
+    #region WorldStates
     [SerializeField]
     private WorldStateKey enemySeenKey;
     private WorldState enemySeenWSTracked;
@@ -22,15 +20,19 @@ public class EnemyVisualSensor : MonoBehaviour {
     [SerializeField]
     private WorldStateKey enemyNearKey;
     private WorldState enemyNearWSTracked;
+    #endregion
 
+    #region LayerMasks
     [Header("Visible and obstacle layers")]
     [SerializeField]
     private LayerMask enemyLayerMask;
     [SerializeField]
     private LayerMask obstacleLayerMask;
-
-
     public LayerMask ObstacleLayerMask => obstacleLayerMask;
+    #endregion
+
+    #region vision cone
+    [Header("Vision cone parameters")]
     [SerializeField]
     private float visionAngle = 90f;
     public float VisionAngle => visionAngle;
@@ -38,36 +40,47 @@ public class EnemyVisualSensor : MonoBehaviour {
     private float visionLenght = 8f;
     public float VisionLenght => visionLenght;
     [SerializeField]
-    private float checkTargetDelay = 0.2f;
+    private float checkTargetDelay = 0.2f; 
+    #endregion
+
+    #region enemy distance
+    [Header("Sight and enemy distance parameters")]
     [SerializeField]
     private float sqrMinLoseSightDistance = 10f;
     [SerializeField]
     private float enemyNearTresholdDistance = 0.1f;
     private float currEnemyDistance;
-    public Vector3 LastSeenPosition { get; private set; }
-    public Vector3 LastSeenDirection { get; private set; }
+    #endregion
 
-    private ContactFilter2D contactFilter = new ContactFilter2D();
-    private new Transform transform;
-    private Collider2D[] results = new Collider2D[1];
-
+    #region enemy visibility
     private bool enemySpotted;
     public bool EnemySpotted => enemySpotted;
     private Transform visibleEnemyTransform;
     public GameObject VisibleEnemy { get; private set; }
 
+    public Vector3 LastSeenPosition { get; private set; }
+    public Vector3 LastSeenDirection { get; private set; }
     public EnemySpottedEvent EnemySpottedEvent { get; } = new EnemySpottedEvent();
-    public UnityEvent EnemyNearEvent { get; } = new UnityEvent();
+    #endregion
+
+    #region cached fields
+    private new Transform transform;
+    private Agent agentToUpdate;
+    private HealthComponent healthComp;
+    private Collider2D[] cachedCheckResults = new Collider2D[1];
+    #endregion
 
     protected void Awake() {
+
         agentToUpdate = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
         healthComp.HealthChange.AddListener(OnEnemyAttack);
         transform = GetComponent<Transform>();
+
         enemySeenWSTracked = new WorldState(enemySeenKey, false);
         enemyNearWSTracked = new WorldState(enemyNearKey, false);
-        contactFilter.SetLayerMask(enemyLayerMask);
-        contactFilter.useTriggers = true;
+        agentToUpdate.UpdatePerception(enemySeenWSTracked);
+        agentToUpdate.UpdatePerception(enemyNearWSTracked);
     }
 
     private void Start() {
@@ -94,8 +107,8 @@ public class EnemyVisualSensor : MonoBehaviour {
             } else {
                 GameObject visibleEnemy = GetVisibleEnemy();
                 if(visibleEnemy != null) {
-                    EnemySpottedEvent.Invoke(visibleEnemy);
                     SpotEnemy(visibleEnemy);
+                    EnemySpottedEvent.Invoke(visibleEnemy);
                 }
             }
 
@@ -128,10 +141,10 @@ public class EnemyVisualSensor : MonoBehaviour {
 
         GameObject enemy = null;
 
-        if (Physics2D.OverlapCircle(transform.position, visionLenght,
-            contactFilter, results) == 1) {
+        if (Physics2D.OverlapCircleNonAlloc(transform.position, visionLenght,
+            cachedCheckResults, enemyLayerMask) == 1) {
 
-            var enemyCollider = results[0];
+            var enemyCollider = cachedCheckResults[0];
             Transform enemyTransform = enemyCollider.transform;
             Vector2 dirToPlayer = (enemyTransform.position - transform.position).normalized;
 
@@ -150,6 +163,7 @@ public class EnemyVisualSensor : MonoBehaviour {
         return enemy;      
     }
 
+    #region update WorldStates methods
     private void UpdateEnemySeenWS(bool value) {
         enemySeenWSTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(enemySeenWSTracked);
@@ -159,5 +173,6 @@ public class EnemyVisualSensor : MonoBehaviour {
         enemyNearWSTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(enemyNearWSTracked);
     }
+    #endregion
 }
 
