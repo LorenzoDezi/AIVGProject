@@ -34,6 +34,39 @@ public class CoverSensor : MonoBehaviour {
         navComponent.PathStarted.AddListener(OutOfCover);
         Debug.LogWarningFormat("Go in cover {0} -> {1}", gameObject.name, cover.name);
     }
+
+    public CoverComponent GetBestCover() {
+        if (currCover != null && currCover.CanCover)
+            return currCover;
+        float minSqrDist = Mathf.Infinity;
+        CoverComponent newBestCover = null;
+        foreach (CoverComponent cover in coversAvailable) {
+            if (cover.IsAvailable) {
+                float sqrDist = cover.transform.SqrDistance(transform);
+                if (sqrDist < minSqrDist) {
+                    minSqrDist = sqrDist;
+                    newBestCover = cover;
+                }
+            }
+        }
+        return newBestCover;
+    }
+
+    public CoverComponent GetBestCoverInRange(float range, Transform target) {
+        float minSqrDist = Mathf.Infinity;
+        float rangeSqr = range * range;
+        CoverComponent newBestCover = null;
+        foreach (CoverComponent cover in coversAvailable) {
+            if (cover.IsAvailable && cover.Transform.SqrDistance(target) <= rangeSqr) {
+                float sqrDist = cover.transform.SqrDistance(transform);
+                if (sqrDist < minSqrDist) {
+                    minSqrDist = sqrDist;
+                    newBestCover = cover;
+                }
+            }
+        }
+        return newBestCover;
+    }
     #endregion
 
     #region monobehaviour methods
@@ -79,22 +112,6 @@ public class CoverSensor : MonoBehaviour {
         navComponent.PathStarted.RemoveListener(OutOfCover);
     }
 
-    public CoverComponent GetBestCover() {
-        if (currCover != null && currCover.CanCover)
-            return currCover;
-        float minSqrDist = Mathf.Infinity;
-        CoverComponent newBestCover = null;
-        foreach (CoverComponent cover in coversAvailable) {
-            if (cover.IsAvailable) {
-                float sqrDist = cover.transform.SqrDistance(transform);
-                if (sqrDist < minSqrDist) {
-                    minSqrDist = sqrDist;
-                    newBestCover = cover;
-                }
-            }
-        }
-        return newBestCover;
-    }
     #endregion
 }
 

@@ -9,12 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 840cd0d0e7ba2ee488e1197d9680bd80, type: 3}
-  m_Name: GoToCoverAction
+  m_Script: {fileID: 11500000, guid: 5759018394dc8fd44afec9bb313ad825, type: 3}
+  m_Name: GoToCoverInRangeAction
   m_EditorClassIdentifier: 
   preconditions:
     states:
     - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+      intValue: 0
+      floatValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+      StateChangeEvent:
+        m_PersistentCalls:
+          m_Calls: []
+    - key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
       intValue: 0
       floatValue: 0
       boolValue: 1
@@ -40,15 +48,7 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
-    - key: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-  cost: 5
+  cost: 2
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 33792

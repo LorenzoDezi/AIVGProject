@@ -34,7 +34,9 @@ public class SniperController : MonoBehaviour {
     private Vector3[] linePositions;
 
     private bool isUsing;
+
     public bool IsShooting { get; set; }
+    public float WeaponRange => maxHitDistance;
 
     public void SetUsing(bool isUsing) {
         this.isUsing = isUsing;

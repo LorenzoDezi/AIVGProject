@@ -26,11 +26,12 @@ public class LaunchGrenadeAction : GOAP.Action {
         if (!enemyVisualSensor.EnemySpotted)
             return false;
         target = enemyVisualSensor.VisibleEnemy.transform;
+        enemyVisualSensor.CurrWeaponRange = grenadeController.WeaponRange;
         return true;
     }
 
     public override void Deactivate() {
-        
+
     }
 
     public override void Update() {

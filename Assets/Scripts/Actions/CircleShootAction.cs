@@ -22,6 +22,7 @@ public class CircleShootAction : ShootAction {
 
         base.Init(agentGameObj);
 
+        visualSensor.CurrWeaponRange = Mathf.Infinity;
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 

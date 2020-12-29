@@ -20,6 +20,10 @@ public class EnemyVisualSensor : MonoBehaviour {
     [SerializeField]
     private WorldStateKey enemyNearKey;
     private WorldState enemyNearWSTracked;
+
+    [SerializeField]
+    private WorldStateKey enemyInWeaponRangeKey;
+    private WorldState enemyInWeaponRangeWSTracked;
     #endregion
 
     #region LayerMasks
@@ -50,6 +54,16 @@ public class EnemyVisualSensor : MonoBehaviour {
     [SerializeField]
     private float enemyNearTresholdDistance = 0.1f;
     private float currEnemyDistance;
+
+    private float currWeaponRangeSqr;
+    private float currWeaponRange;
+    public float CurrWeaponRange {
+        get => currWeaponRange;
+        set {
+            currWeaponRange = value;
+            currWeaponRangeSqr = currWeaponRange * currWeaponRange;
+        }
+    }
     #endregion
 
     #region enemy visibility
@@ -79,8 +93,12 @@ public class EnemyVisualSensor : MonoBehaviour {
 
         enemySeenWSTracked = new WorldState(enemySeenKey, false);
         enemyNearWSTracked = new WorldState(enemyNearKey, false);
+        enemyInWeaponRangeWSTracked = new WorldState(enemyInWeaponRangeKey, true);
         agentToUpdate.UpdatePerception(enemySeenWSTracked);
         agentToUpdate.UpdatePerception(enemyNearWSTracked);
+        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
+
+        CurrWeaponRange = Mathf.Infinity;
     }
 
     private void Start() {
@@ -119,7 +137,8 @@ public class EnemyVisualSensor : MonoBehaviour {
     private void UpdateEnemyDistance() {
 
         currEnemyDistance = transform.SqrDistance(visibleEnemyTransform);
-        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);    
+        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);
+        UpdateEnemyInWeaponRangeWS(currEnemyDistance <= currWeaponRangeSqr);
     }
 
     private void OnEnemyAttack(float currHealth) {
@@ -172,6 +191,11 @@ public class EnemyVisualSensor : MonoBehaviour {
     private void UpdateEnemyNearWS(bool value) {
         enemyNearWSTracked.BoolValue = value;
         agentToUpdate.UpdatePerception(enemyNearWSTracked);
+    }
+
+    private void UpdateEnemyInWeaponRangeWS(bool value) {
+        enemyInWeaponRangeWSTracked.BoolValue = value;
+        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
     }
     #endregion
 }

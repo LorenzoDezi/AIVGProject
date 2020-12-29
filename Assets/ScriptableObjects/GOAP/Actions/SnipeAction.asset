@@ -30,6 +30,14 @@ MonoBehaviour:
       StateChangeEvent:
         m_PersistentCalls:
           m_Calls: []
+    - key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
+      intValue: 0
+      floatValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+      StateChangeEvent:
+        m_PersistentCalls:
+          m_Calls: []
   effects:
     states:
     - key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}

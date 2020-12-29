@@ -3,10 +3,10 @@
 [CreateAssetMenu(fileName = "GoToCoverAction", menuName = "GOAP/Actions/GoToCoverAction")]
 public class GoToCoverAction : ShootAction {
 
-    private CoverSensor coverSensor;
-    private NavigationComponent navComponent;
-    private CoverComponent targetCover;
-    private bool coverReached;
+    protected CoverSensor coverSensor;
+    protected NavigationComponent navComponent;
+    protected CoverComponent targetCover;
+    protected bool coverReached;
 
 
     public override void Init(GameObject agentGameObj) {
@@ -17,13 +17,17 @@ public class GoToCoverAction : ShootAction {
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
+    protected virtual CoverComponent GetTargetCover() {
+        return coverSensor.GetBestCover();
+    }
+
     public override bool Activate() {
         if(!base.Activate()) {
             return false;
         }
         
-        coverReached = false;
-        targetCover = coverSensor.GetBestCover();
+        coverReached = false;      
+        targetCover = GetTargetCover();
         if (targetCover == null)
             return false;
         targetCover.IsOccupied = true;
@@ -41,7 +45,7 @@ public class GoToCoverAction : ShootAction {
         navComponent.Stop();
     }
 
-    private void OnPathCompleted(bool success) {
+    protected void OnPathCompleted(bool success) {
         if (success) {
             coverSensor.GoInCover(targetCover);
             navComponent.PathCompleted.RemoveListener(OnPathCompleted);

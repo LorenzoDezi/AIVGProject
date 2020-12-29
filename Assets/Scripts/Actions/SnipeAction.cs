@@ -34,6 +34,7 @@ public class SnipeAction : GOAP.Action {
             return false;
 
         targetTransf = enemyVisualSensor.VisibleEnemy.transform;
+        enemyVisualSensor.CurrWeaponRange = sniperController.WeaponRange;
         originalAimSpeed = charController.AimSpeedDegrees;
         sniperController.SetUsing(true);
         return true;

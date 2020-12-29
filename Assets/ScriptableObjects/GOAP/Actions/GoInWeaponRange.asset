@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57852d195c6f55e4f92639576d8f18c0, type: 3}
+  m_Name: GoInWeaponRange
+  m_EditorClassIdentifier: 
+  preconditions:
+    states: []
+  effects:
+    states:
+    - key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
+      intValue: 0
+      floatValue: 0
+      boolValue: 1
+      gameObjectValue: {fileID: 0}
+      StateChangeEvent:
+        m_PersistentCalls:
+          m_Calls: []
+  cost: 0

@@ -99,6 +99,8 @@ namespace GOAP {
 
                 foreach (var conn in curr.Connections) {
                     PlanNode connectedNode = conn.ToNode;
+                    if (!connectedNode.Action.CheckProceduralConditions())
+                        continue;
                     int heuristicCost = HeuristicEstimate(curr.CurrGoalStates, curr.DesiredGoalStates, connectedNode);
                     float newCostSoFar = curr.CostSoFar + conn.Cost;
                     float newTotalCost = newCostSoFar + heuristicCost;
