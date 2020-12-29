@@ -25,3 +25,6 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
   cost: 0
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 33792
