@@ -26,7 +26,7 @@ public class ShootAction : GOAP.Action {
         if(!visualSensor.EnemySpotted)
             return false;
 
-        target = visualSensor.VisibleEnemy.transform;
+        target = visualSensor.VisibleEnemy;
         return true;
     }
 

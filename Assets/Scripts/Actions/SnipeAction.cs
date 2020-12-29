@@ -33,7 +33,7 @@ public class SnipeAction : GOAP.Action {
         if (!enemyVisualSensor.EnemySpotted)
             return false;
 
-        targetTransf = enemyVisualSensor.VisibleEnemy.transform;
+        targetTransf = enemyVisualSensor.VisibleEnemy;
         enemyVisualSensor.CurrWeaponRange = sniperController.WeaponRange;
         originalAimSpeed = charController.AimSpeedDegrees;
         sniperController.SetUsing(true);

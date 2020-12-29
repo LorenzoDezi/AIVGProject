@@ -32,7 +32,7 @@ public class SquadComponent : MonoBehaviour
         Death.Invoke(SquadIndex);
     }
 
-    public void Spotted(GameObject enemySpotted) {
+    public void Spotted(Transform enemySpotted) {
         enemySensor.SpotEnemy(enemySpotted);
     }
 

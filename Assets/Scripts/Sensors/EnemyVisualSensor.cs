@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class EnemySpottedEvent : UnityEvent<GameObject> { }
+public class EnemySpottedEvent : UnityEvent<Transform> { }
 
 public class EnemyVisualSensor : MonoBehaviour {
 
@@ -68,9 +68,9 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     #region enemy visibility
     private bool enemySpotted;
-    public bool EnemySpotted => enemySpotted;
-    private Transform visibleEnemyTransform;
-    public GameObject VisibleEnemy { get; private set; }
+    public bool EnemySpotted => enemySpotted;    
+    private Transform visibleEnemy;
+    public Transform VisibleEnemy => visibleEnemy;
 
     public Vector3 LastSeenPosition { get; private set; }
     public Vector3 LastSeenDirection { get; private set; }
@@ -84,6 +84,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     private Collider2D[] cachedCheckResults = new Collider2D[1];
     #endregion
 
+    #region monobehaviour methods
     protected void Awake() {
 
         agentToUpdate = GetComponent<Agent>();
@@ -104,27 +105,29 @@ public class EnemyVisualSensor : MonoBehaviour {
     private void Start() {
         StartCoroutine(CheckTargetWithDelay(checkTargetDelay));
     }
+    #endregion
 
-    IEnumerator CheckTargetWithDelay(float delay) {
+    #region private methods
+    private IEnumerator CheckTargetWithDelay(float delay) {
 
         var wait = new WaitForSeconds(delay);
-        visibleEnemyTransform = null;
+        visibleEnemy = null;
 
-        while (true) { 
+        while (true) {
 
-            if(enemySpotted) {
+            if (enemySpotted) {
 
                 UpdateEnemyDistance();
 
                 if (currEnemyDistance > sqrMinLoseSightDistance) {
-                    VisibleEnemy = null;
+                    visibleEnemy = null;
                     UpdateEnemySeenWS(false);
                     enemySpotted = false;
                 }
 
             } else {
-                GameObject visibleEnemy = GetVisibleEnemy();
-                if(visibleEnemy != null) {
+                Transform visibleEnemy = GetVisibleEnemy();
+                if (visibleEnemy != null) {
                     SpotEnemy(visibleEnemy);
                     EnemySpottedEvent.Invoke(visibleEnemy);
                 }
@@ -136,51 +139,54 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     private void UpdateEnemyDistance() {
 
-        currEnemyDistance = transform.SqrDistance(visibleEnemyTransform);
+        currEnemyDistance = transform.SqrDistance(visibleEnemy);
         UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);
         UpdateEnemyInWeaponRangeWS(currEnemyDistance <= currWeaponRangeSqr);
     }
 
     private void OnEnemyAttack(float currHealth) {
-        if(!enemySpotted && currHealth < healthComp.MaxHealth) {
+        if (!enemySpotted && currHealth < healthComp.MaxHealth) {
             //TODO: A little weak... maybe find some other way if there is time
-            EnemySpottedEvent.Invoke(GameManager.Player);
-            SpotEnemy(GameManager.Player);
+            Transform enemy = GameManager.Player.transform;
+            EnemySpottedEvent.Invoke(enemy);
+            SpotEnemy(enemy);
         }
     }
 
-    public void SpotEnemy(GameObject visibleEnemy) {
-        VisibleEnemy = visibleEnemy;
-        UpdateEnemySeenWS(true);
-        visibleEnemyTransform = VisibleEnemy.transform;
-        enemySpotted = true;
-    }
+    private Transform GetVisibleEnemy() {
 
-    GameObject GetVisibleEnemy() {
-
-        GameObject enemy = null;
+        Transform visibleEnemyTransform = null;
 
         if (Physics2D.OverlapCircleNonAlloc(transform.position, visionLenght,
             cachedCheckResults, enemyLayerMask) == 1) {
 
             var enemyCollider = cachedCheckResults[0];
-            Transform enemyTransform = enemyCollider.transform;
-            Vector2 dirToPlayer = (enemyTransform.position - transform.position).normalized;
+            Transform currEnemyTransform = enemyCollider.transform;
+            Vector2 dirToPlayer = (currEnemyTransform.position - transform.position).normalized;
 
             if (Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
-                !transform.HasObstacleInBetween(enemyTransform, obstacleLayerMask)) {
+                !transform.HasObstacleInBetween(currEnemyTransform, obstacleLayerMask)) {
 
-                enemy = enemyCollider.gameObject;
+                visibleEnemyTransform = currEnemyTransform;
 
-                if (enemy != null) {
-                    LastSeenPosition = enemyTransform.position;
-                    LastSeenDirection = enemyTransform.right;
+                if (visibleEnemyTransform != null) {
+                    LastSeenPosition = currEnemyTransform.position;
+                    LastSeenDirection = currEnemyTransform.right;
                 }
             }
         }
 
-        return enemy;      
+        return visibleEnemyTransform;
     }
+    #endregion
+
+    #region public methods
+    public void SpotEnemy(Transform visibleEnemy) {
+        this.visibleEnemy = visibleEnemy;
+        UpdateEnemySeenWS(true);
+        enemySpotted = true;
+    } 
+    #endregion
 
     #region update WorldStates methods
     private void UpdateEnemySeenWS(bool value) {

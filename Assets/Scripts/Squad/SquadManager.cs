@@ -8,7 +8,7 @@ public class SquadManager : MonoBehaviour
     private List<SquadComponent> squadMembers;
     [SerializeField]
     private List<SquadGoal> squadGoals;
-    private GameObject enemy;
+    private Transform enemy;
 
     private void Start() {
 
@@ -26,7 +26,7 @@ public class SquadManager : MonoBehaviour
         }
     }
 
-    public void OnEnemySpottedEvent(GameObject enemy) {
+    public void OnEnemySpottedEvent(Transform enemy) {
         this.enemy = enemy;
         foreach(var squadMember in squadMembers) {
             squadMember.Spotted(enemy);

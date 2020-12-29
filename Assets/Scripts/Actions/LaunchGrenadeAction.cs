@@ -25,7 +25,7 @@ public class LaunchGrenadeAction : GOAP.Action {
     public override bool Activate() {
         if (!enemyVisualSensor.EnemySpotted)
             return false;
-        target = enemyVisualSensor.VisibleEnemy.transform;
+        target = enemyVisualSensor.VisibleEnemy;
         enemyVisualSensor.CurrWeaponRange = grenadeController.WeaponRange;
         return true;
     }

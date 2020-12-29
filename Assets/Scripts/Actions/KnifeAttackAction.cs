@@ -22,7 +22,7 @@ public class KnifeAttackAction : GOAP.Action {
 
         if (!visualSensor.EnemySpotted)
             return false;
-        navComponent.Target = visualSensor.VisibleEnemy.transform;
+        navComponent.Target = visualSensor.VisibleEnemy;
         knifeController.IsAttacking = true;
         return true;
     }
