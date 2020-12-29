@@ -73,6 +73,14 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interaction"",
+                    ""type"": ""Button"",
+                    ""id"": ""d940957c-20ad-42f1-8d5c-0fa06f1486ed"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -196,6 +204,17 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                     ""action"": ""Dash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""330314a9-62c2-4661-b75b-4599b9c1cba5"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interaction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -211,6 +230,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         m_Player_KnifeAttack = m_Player.FindAction("KnifeAttack", throwIfNotFound: true);
         m_Player_GrenadeLaunch = m_Player.FindAction("GrenadeLaunch", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -267,6 +287,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_KnifeAttack;
     private readonly InputAction m_Player_GrenadeLaunch;
     private readonly InputAction m_Player_Dash;
+    private readonly InputAction m_Player_Interaction;
     public struct PlayerActions
     {
         private @PlayerInputAction m_Wrapper;
@@ -278,6 +299,7 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         public InputAction @KnifeAttack => m_Wrapper.m_Player_KnifeAttack;
         public InputAction @GrenadeLaunch => m_Wrapper.m_Player_GrenadeLaunch;
         public InputAction @Dash => m_Wrapper.m_Player_Dash;
+        public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -308,6 +330,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                @Interaction.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
+                @Interaction.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteraction;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -333,6 +358,9 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @Interaction.started += instance.OnInteraction;
+                @Interaction.performed += instance.OnInteraction;
+                @Interaction.canceled += instance.OnInteraction;
             }
         }
     }
@@ -346,5 +374,6 @@ public class @PlayerInputAction : IInputActionCollection, IDisposable
         void OnKnifeAttack(InputAction.CallbackContext context);
         void OnGrenadeLaunch(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnInteraction(InputAction.CallbackContext context);
     }
 }

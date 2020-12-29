@@ -12,7 +12,11 @@ public class CharacterPlayerInput : MonoBehaviour
     private CrosshairController crosshairController;
     private GunController gunController;
     private KnifeController knifeController;
+    private HealthComponent healthComponent;
     private Camera mainCamera;
+
+    [SerializeField]
+    private LayerMask healthStationLayerMask;
 
     private bool isShooting;
 
@@ -36,6 +40,7 @@ public class CharacterPlayerInput : MonoBehaviour
     private void InitFields() {
         inputAction = new PlayerInputAction();
         characterController = GetComponent<CharacterController>();
+        healthComponent = GetComponent<HealthComponent>();
         grenadeLauncher = GetComponentInChildren<GrenadeController>();
         gunController = GetComponentInChildren<GunController>();
         knifeController = GetComponentInChildren<KnifeController>();
@@ -55,12 +60,20 @@ public class CharacterPlayerInput : MonoBehaviour
         playerActions.GrenadeLaunch.started += LaunchGrenade;
         playerActions.Reload.started += OnReload;
         playerActions.Dash.started += OnDash;
+        playerActions.Interaction.started += OnInteraction;
         inputAction.Enable();
     }
 
     void OnMovement(InputAction.CallbackContext context) {
         Vector2 value = context.ReadValue<Vector2>();
         characterController.Move(value);
+    }
+
+    public void OnInteraction(InputAction.CallbackContext context) {
+        var hsCollider = Physics2D.OverlapCircle(transform.position, 2f, healthStationLayerMask);
+        if (hsCollider != null && hsCollider.GetComponent<HealthStation>().UseRefill()) {
+            healthComponent.Restore(healthComponent.MaxHealth);
+        }
     }
 
     void OnDash(InputAction.CallbackContext context) {
