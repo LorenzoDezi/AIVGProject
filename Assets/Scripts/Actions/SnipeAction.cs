@@ -30,7 +30,7 @@ public class SnipeAction : GOAP.Action {
 
     public override bool Activate() {
 
-        if (!enemyVisualSensor.EnemySpotted)
+        if (!enemyVisualSensor.IsEnemySpotted)
             return false;
 
         targetTransf = enemyVisualSensor.VisibleEnemy;

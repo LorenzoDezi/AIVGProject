@@ -7,10 +7,6 @@ using UnityEngine.Events;
 
 namespace GOAP {
 
-#if UNITY_EDITOR
-    public class PlanCompletedEvent : UnityEvent<List<Action>> { }
-#endif
-
     public class Agent : MonoBehaviour {
 
         #region Goals and actions attributes
@@ -37,8 +33,8 @@ namespace GOAP {
         protected Coroutine checkPlanCoroutine;
 
 #if UNITY_EDITOR
-        [NonSerialized]
-        public PlanCompletedEvent PlanCompleted = new PlanCompletedEvent();
+        public delegate void PlanCompletedHandler(List<Action> actions);
+        public event PlanCompletedHandler PlanCompleted;
 #endif
 
         public void UpdatePerception(WorldState state) {
@@ -52,13 +48,13 @@ namespace GOAP {
         public void Add(Goal goal) {
             goals.Add(goal);
             goal.Init(gameObject);
-            goal.PriorityChanged.AddListener(UpdateGoals);
+            goal.PriorityChanged += UpdateGoals;
             UpdateGoals();
         }
 
         public void Remove(Goal goal) {
             goals.Remove(goal);
-            goal.PriorityChanged.RemoveListener(UpdateGoals);
+            goal.PriorityChanged -= UpdateGoals;
             UpdateGoals();
         }
 
@@ -92,7 +88,7 @@ namespace GOAP {
                 foreach(Goal goal in goals.ToList()) {
                     actionQueue = planner.Plan(goal, worldPerception);
 #if UNITY_EDITOR
-                    PlanCompleted.Invoke(actionQueue.ToList());
+                    PlanCompleted?.Invoke(actionQueue.ToList());
 #endif
                     if (actionQueue.Count > 0) {
                         newAction = actionQueue.Dequeue();
@@ -124,7 +120,7 @@ namespace GOAP {
             if (currAction == null)
                 return;
             if (currAction.Activate())
-                currAction.EndAction.AddListener(OnEndAction);
+                currAction.EndAction += OnEndAction;
             else
                 currAction = null;
         }
@@ -132,7 +128,7 @@ namespace GOAP {
         private void DisableCurrAction() {
             if (currAction != null) {
                 currAction.Deactivate();
-                currAction.EndAction.RemoveListener(OnEndAction);
+                currAction.EndAction -= OnEndAction;
                 currAction = null;
             }
         }
@@ -150,7 +146,7 @@ namespace GOAP {
             for (int i = 0; i < goalTemplates.Count; i++) {
                 goals.Add(Instantiate(goalTemplates[i]));
                 goals[i].Init(gameObject);
-                goals[i].PriorityChanged.AddListener(UpdateGoals);
+                goals[i].PriorityChanged += UpdateGoals;
             }
         }
 

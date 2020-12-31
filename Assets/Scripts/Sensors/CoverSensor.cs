@@ -21,7 +21,6 @@ public class CoverSensor : MonoBehaviour {
     [SerializeField]
     private LayerMask coverMask;
     private List<CoverComponent> coversAvailable;
-    public UnityEvent BestCoverChanged;
     private CoverComponent currCover;
 
 
@@ -31,7 +30,7 @@ public class CoverSensor : MonoBehaviour {
         currCover = cover;
         inCoverWSTracked.BoolValue = true;
         agentToUpdate.UpdatePerception(inCoverWSTracked);
-        navComponent.PathStarted.AddListener(OutOfCover);
+        navComponent.PathStarted += OutOfCover;
         Debug.LogWarningFormat("Go in cover {0} -> {1}", gameObject.name, cover.name);
     }
 
@@ -77,7 +76,6 @@ public class CoverSensor : MonoBehaviour {
         navComponent = GetComponent<NavigationComponent>();
 
         coversAvailable = new List<CoverComponent>();
-        BestCoverChanged = new UnityEvent();
 
         inCoverWSTracked = new WorldState(inCoverKey, false);
         agentToUpdate.UpdatePerception(inCoverWSTracked);
@@ -109,7 +107,7 @@ public class CoverSensor : MonoBehaviour {
         currCover = null;
         inCoverWSTracked.BoolValue = false;
         agentToUpdate.UpdatePerception(inCoverWSTracked);
-        navComponent.PathStarted.RemoveListener(OutOfCover);
+        navComponent.PathStarted -= OutOfCover;
     }
 
     #endregion

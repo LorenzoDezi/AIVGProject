@@ -26,9 +26,10 @@ public class GunController : MonoBehaviour
     private Transform bulletSpawn;
     private BulletSpawner spawner;
 
-    public UnityEvent Reloaded = new UnityEvent();
-    public UnityEvent EmptyClip = new UnityEvent();
     public bool HasShotsInClip => currentShotsInClip > 0;
+
+    public delegate void GunLoadHandler(bool isLoaded);
+    public event GunLoadHandler GunLoadStatusChanged;
 
     private void Start() {
         spawner = GameManager.BulletSpawner;
@@ -47,7 +48,7 @@ public class GunController : MonoBehaviour
             Shoot();
             currentShotsInClip--;
             if (currentShotsInClip == 0)
-                EmptyClip.Invoke();
+                GunLoadStatusChanged?.Invoke(false);
         }
     }
 
@@ -61,7 +62,7 @@ public class GunController : MonoBehaviour
         yield return new WaitForSeconds(timeToReload);
         currentShotsInClip = maxShotsPerClip;
         reloadSprite.enabled = false;
-        Reloaded.Invoke();
+        GunLoadStatusChanged?.Invoke(true);
         reloadCoroutine = null;
     }
 

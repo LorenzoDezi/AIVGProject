@@ -22,6 +22,8 @@ public class CoverComponent : MonoBehaviour
 
     private bool canCover;
     public bool CanCover => canCover;
+    public delegate void CanCoverChangedHandler(bool canCover);
+    public event CanCoverChangedHandler CanCoverChangedEvent;
     public bool IsOccupied { get; set; }
     public bool IsAvailable => canCover && !IsOccupied;
 
@@ -35,6 +37,7 @@ public class CoverComponent : MonoBehaviour
         var wait = new WaitForSeconds(checkCoverInterval);
         while(hasTransformInSight) {
             canCover = transform.HasObstacleInBetween(enemyTransf, obstacleMask);
+            CanCoverChangedEvent?.Invoke(canCover);
             yield return wait;
         }
     }

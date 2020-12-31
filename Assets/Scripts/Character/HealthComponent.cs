@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class HealthChangeEvent : UnityEvent<float> { }
-
 public class HealthComponent : MonoBehaviour
 {
     [SerializeField]
@@ -12,7 +10,9 @@ public class HealthComponent : MonoBehaviour
     public float MaxHealth => maxHealth;
 
     public float CurrHealth { get; private set; }
-    public HealthChangeEvent HealthChange = new HealthChangeEvent();
+    public delegate void HealthChangedHandler(float currHealth);
+    public event HealthChangedHandler HealthChanged;
+
     public UnityEvent Death = new UnityEvent();
 
     private void Start() {
@@ -25,12 +25,12 @@ public class HealthComponent : MonoBehaviour
         } else if (CurrHealth > 0) {
             Die();
         }
-        HealthChange.Invoke(CurrHealth);
+        HealthChanged?.Invoke(CurrHealth);
     }
 
     public void Restore(float amount) {
         CurrHealth = Mathf.Clamp(CurrHealth + amount, 0f, maxHealth);
-        HealthChange.Invoke(CurrHealth);
+        HealthChanged?.Invoke(CurrHealth);
     }
 
     public void Die() {

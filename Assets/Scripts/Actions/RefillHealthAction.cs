@@ -97,7 +97,7 @@ public class RefillHealthAction : GOAP.Action {
         Terminate(success);
     }
 
-    private void OnEndRefill() {
+    private void OnRefillsEmpty() {
         RemoveListeners();
         Terminate(false);
     }
@@ -107,13 +107,13 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     private void AddListeners() {
-        nearestHealthStation.RefillEndEvent.AddListener(OnEndRefill);
-        navigationComponent.PathCompleted.AddListener(Refill);
+        nearestHealthStation.RefillsEmpty += OnRefillsEmpty;
+        navigationComponent.PathCompleted += Refill;
     }
 
     private void RemoveListeners() {
-        navigationComponent.PathCompleted.RemoveListener(Refill);
-        nearestHealthStation.RefillEndEvent.RemoveListener(OnEndRefill);
+        navigationComponent.PathCompleted -= Refill;
+        nearestHealthStation.RefillsEmpty -= OnRefillsEmpty;
     }
 
     public override void Update() { }

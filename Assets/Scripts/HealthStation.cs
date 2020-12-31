@@ -19,7 +19,8 @@ public class HealthStation : MonoBehaviour {
     public bool CanRefill => currRefills > 0;
     public Transform Transform { get; private set; }
 
-    public UnityEvent RefillEndEvent { get; } = new UnityEvent();
+    public delegate void RefillsEmptyHandler();
+    public event RefillsEmptyHandler RefillsEmpty;
 
     private void Awake() {
 
@@ -41,7 +42,7 @@ public class HealthStation : MonoBehaviour {
     }
 
     private void RefillEnded() {
-        RefillEndEvent.Invoke();
+        RefillsEmpty?.Invoke();
         var color = sprite.color;
         color.a = color.a/3f;
         sprite.color = color;

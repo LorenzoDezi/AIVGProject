@@ -18,13 +18,13 @@ public class PatrollerComponent : MonoBehaviour {
     }
 
     public void StartPatrol() {
-        navigationComp.PathCompleted.AddListener(OnPathCompleted);
+        navigationComp.PathCompleted += OnPathCompleted;
         SetPatrolToCloserPatrolPoint();
     }
 
     public void StopPatrol() {
         navigationComp.Stop();
-        navigationComp.PathCompleted.RemoveListener(OnPathCompleted);
+        navigationComp.PathCompleted -= OnPathCompleted;
     }
 
     private void OnPathCompleted(bool success) {

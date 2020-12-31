@@ -42,7 +42,7 @@ public class DangerSensor : MonoBehaviour {
                 DangerSource = danger.DangerSource;
                 SetInDanger(true);
             }
-            danger.DangerEnd.AddListener(OnDangerEnd);
+            danger.DangerEnd += OnDangerEnd;
             SetDangerAround(true);
             dangerCount++;
         }
@@ -50,7 +50,7 @@ public class DangerSensor : MonoBehaviour {
 
     private void OnDangerEnd(IDangerous danger) {
         dangerCount--;
-        danger.DangerEnd.RemoveListener(OnDangerEnd);
+        danger.DangerEnd -= OnDangerEnd;
         if(dangerCount == 0) {
             DangerRadius = 0f;
             DangerSource = Vector3.zero;

@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-
-public class SquadComponentDeath : UnityEvent<int> { }
 
 public class SquadComponent : MonoBehaviour
 {
@@ -15,21 +12,29 @@ public class SquadComponent : MonoBehaviour
     private SquadGoal currentSquadGoal;
     public int SquadIndex { get; set; }
 
-    public EnemySpottedEvent EnemySpottedEvent => enemySensor.EnemySpottedEvent;
-    public SquadComponentDeath Death { get; } = new SquadComponentDeath();
+    public event EnemySpottedHandler EnemySpotted {
+        add {
+            enemySensor.EnemySpotted += value;
+        }
+        remove {
+            enemySensor.EnemySpotted -= value;
+        }
+    }
+
+    public delegate void SquadCompDeathHandler(int squadIndex);
+    public event SquadCompDeathHandler SquadCompDeath;
 
     private void Awake() {
 
         agent = GetComponent<Agent>();
         enemySensor = GetComponent<EnemyVisualSensor>();
-
         healthComp = GetComponent<HealthComponent>();
         healthComp.Death.AddListener(OnDeath);
     }
 
     private void OnDeath() {
         ResetGoal();
-        Death.Invoke(SquadIndex);
+        SquadCompDeath?.Invoke(SquadIndex);
     }
 
     public void Spotted(Transform enemySpotted) {

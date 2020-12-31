@@ -20,7 +20,7 @@ public class HealthBar : MonoBehaviour {
     }
 
     private void Start() {
-        healthComponent.HealthChange.AddListener(OnHealthChange);
+        healthComponent.HealthChanged += OnHealthChange;
         healthComponent.Death.AddListener(OnDeath);
         currentSize.y = 1f;
     }

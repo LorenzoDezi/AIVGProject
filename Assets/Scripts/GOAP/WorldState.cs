@@ -51,7 +51,8 @@ namespace GOAP {
             }
         }
 
-        public UnityEvent StateChangeEvent = new UnityEvent();
+        public delegate void StateChangedHandler();
+        public StateChangedHandler StateChanged;
 
         private Dictionary<WorldStateType, Func<int>> valueDict;
 
@@ -94,8 +95,8 @@ namespace GOAP {
             boolValue = newWorldState.boolValue;
             floatValue = newWorldState.floatValue;
             gameObjectValue = newWorldState.gameObjectValue;
-            StateChangeEvent.Invoke();
-            //TODO: StateChangeEvent!!!
+            StateChanged?.Invoke();
+            //TODO: StateChanged invoked only on update... how to model this properly?
         }
 
         public bool Match(WorldState other) {

@@ -29,19 +29,19 @@ namespace GOAP {
         [SerializeField]
         protected GoalPriorityUpdater priorityUpdater;
 
-        [NonSerialized]
-        public UnityEvent PriorityChanged = new UnityEvent(); 
+        public delegate void PriorityChangedHandler();
+        public event PriorityChangedHandler PriorityChanged; 
 
         public virtual void Init(GameObject agentObj) {
             desiredStates = new WorldStates(desiredStates);
             priorityUpdater.Init(agentObj.GetComponent<Agent>());
             UpdatePriority();
-            priorityUpdater.CurrReferenceWS.StateChangeEvent.AddListener(UpdatePriority);
+            priorityUpdater.CurrReferenceWS.StateChanged += UpdatePriority;
         }
 
         protected virtual void UpdatePriority() {
             priority = priorityUpdater.GetPriority();
-            PriorityChanged.Invoke();
+            PriorityChanged?.Invoke();
         }
     }
 

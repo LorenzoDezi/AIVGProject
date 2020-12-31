@@ -44,7 +44,7 @@ public class HealthSensor : MonoBehaviour {
         agentToUpdate.UpdatePerception(stressLevelWSTracked);
 
         lastHealthRegistered = healthComp.MaxHealth;
-        healthComp?.HealthChange.AddListener(UpdatePerception);    
+        healthComp.HealthChanged += UpdatePerception;    
     }
 
     private void Start() {

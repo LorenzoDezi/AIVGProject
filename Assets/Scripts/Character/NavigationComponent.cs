@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class PathCompletedEvent : UnityEvent<bool> { }
-
 public class NavigationComponent : MonoBehaviour {
 
     private Seeker seeker;
@@ -37,8 +35,11 @@ public class NavigationComponent : MonoBehaviour {
         }
     }
 
-    public PathCompletedEvent PathCompleted = new PathCompletedEvent();
-    public UnityEvent PathStarted = new UnityEvent();
+    public delegate void PathCompletedHandler(bool isSuccessful);
+    public event PathCompletedHandler PathCompleted;
+
+    public delegate void PathStartedHandler();
+    public event PathStartedHandler PathStarted;
 
     public void MoveTo(Vector3 position) {
         seeker.StartPath(transform.position, position);
@@ -73,7 +74,7 @@ public class NavigationComponent : MonoBehaviour {
                 currentWaypoint++;
                 sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
             } else {
-                PathCompleted.Invoke(true);
+                PathCompleted?.Invoke(true);
                 Stop();
                 return;
             }
@@ -95,10 +96,10 @@ public class NavigationComponent : MonoBehaviour {
     private void OnPathCalculated(Path p) {
         if (p.error) {
             Debug.LogErrorFormat("Error calculating path {0}", p.errorLog);
-            PathCompleted.Invoke(false);
+            PathCompleted?.Invoke(false);
             return;
         }
-        PathStarted.Invoke();
+        PathStarted?.Invoke();
         path = p;
         currentWaypoint = 0;
     }

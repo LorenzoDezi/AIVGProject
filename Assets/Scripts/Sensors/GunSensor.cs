@@ -21,8 +21,7 @@ public class GunSensor : MonoBehaviour {
         agentToUpdate.UpdatePerception(weaponLoadedWSTracked);
 
         var gunController = GetComponentInChildren<GunController>();
-        gunController?.EmptyClip.AddListener(() => UpdatePerception(false));
-        gunController?.Reloaded.AddListener(() => UpdatePerception(true));
+        gunController.GunLoadStatusChanged += (isLoaded) => UpdatePerception(isLoaded);
     }
 
     private void UpdatePerception(bool value) {

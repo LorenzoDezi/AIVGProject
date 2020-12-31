@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
 
-public class EnemySpottedEvent : UnityEvent<Transform> { }
+public delegate void EnemySpottedHandler(Transform enemySpotted);
 
 public class EnemyVisualSensor : MonoBehaviour {
 
@@ -67,14 +66,14 @@ public class EnemyVisualSensor : MonoBehaviour {
     #endregion
 
     #region enemy visibility
-    private bool enemySpotted;
-    public bool EnemySpotted => enemySpotted;    
+    private bool isEnemySpotted;
+    public bool IsEnemySpotted => isEnemySpotted;    
     private Transform visibleEnemy;
     public Transform VisibleEnemy => visibleEnemy;
 
     public Vector3 LastSeenPosition { get; private set; }
     public Vector3 LastSeenDirection { get; private set; }
-    public EnemySpottedEvent EnemySpottedEvent { get; } = new EnemySpottedEvent();
+    public event EnemySpottedHandler EnemySpotted;
     #endregion
 
     #region cached fields
@@ -89,7 +88,7 @@ public class EnemyVisualSensor : MonoBehaviour {
 
         agentToUpdate = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
-        healthComp.HealthChange.AddListener(OnEnemyAttack);
+        healthComp.HealthChanged += OnEnemyAttack;
         transform = GetComponent<Transform>();
 
         enemySeenWSTracked = new WorldState(enemySeenKey, false);
@@ -115,21 +114,21 @@ public class EnemyVisualSensor : MonoBehaviour {
 
         while (true) {
 
-            if (enemySpotted) {
+            if (isEnemySpotted) {
 
                 UpdateEnemyDistance();
 
                 if (currEnemyDistance > sqrMinLoseSightDistance) {
                     visibleEnemy = null;
                     UpdateEnemySeenWS(false);
-                    enemySpotted = false;
+                    isEnemySpotted = false;
                 }
 
             } else {
                 Transform visibleEnemy = GetVisibleEnemy();
                 if (visibleEnemy != null) {
                     SpotEnemy(visibleEnemy);
-                    EnemySpottedEvent.Invoke(visibleEnemy);
+                    EnemySpotted?.Invoke(visibleEnemy);
                 }
             }
 
@@ -145,10 +144,10 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
 
     private void OnEnemyAttack(float currHealth) {
-        if (!enemySpotted && currHealth < healthComp.MaxHealth) {
+        if (!isEnemySpotted && currHealth < healthComp.MaxHealth) {
             //TODO: A little weak... maybe find some other way if there is time
             Transform enemy = GameManager.Player.transform;
-            EnemySpottedEvent.Invoke(enemy);
+            EnemySpotted?.Invoke(enemy);
             SpotEnemy(enemy);
         }
     }
@@ -184,7 +183,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     public void SpotEnemy(Transform visibleEnemy) {
         this.visibleEnemy = visibleEnemy;
         UpdateEnemySeenWS(true);
-        enemySpotted = true;
+        isEnemySpotted = true;
     } 
     #endregion
 

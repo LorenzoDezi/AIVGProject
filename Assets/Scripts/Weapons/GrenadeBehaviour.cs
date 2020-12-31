@@ -41,7 +41,7 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
 
     public float DangerRadius => explosionRadius;
     public Vector3 DangerSource => transform.position;
-    public DangerEndEvent DangerEnd { get; } = new DangerEndEvent();
+    public event DangerEndHandler DangerEnd;
 
     private Vector3 targetPosition;
     private bool hasTarget;

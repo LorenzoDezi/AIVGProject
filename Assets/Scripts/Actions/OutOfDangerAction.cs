@@ -25,7 +25,7 @@ public class OutOfDangerAction : GOAP.Action {
         if(destination.HasValue) {
             charController.AimAt(destination.Value);
             navComp.MoveTo(destination.Value);
-            navComp.PathCompleted.AddListener(OnPathCompleted);
+            navComp.PathCompleted += OnPathCompleted;
             return true;
         }
         return false;
@@ -64,7 +64,7 @@ public class OutOfDangerAction : GOAP.Action {
     }
 
     public override void Deactivate() {
-        navComp.PathCompleted.RemoveListener(OnPathCompleted);
+        navComp.PathCompleted -= OnPathCompleted;
     }
 
     public override void Update() {

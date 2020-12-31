@@ -23,7 +23,7 @@ public class EnemyDebug : MonoBehaviour
     void Awake()
     {
         agent = GetComponent<Agent>();
-        agent.PlanCompleted.AddListener((plan) => currentPlan = plan);
+        agent.PlanCompleted += (plan) => currentPlan = plan;
         visualSensor = GetComponent<EnemyVisualSensor>();
         coverSensor = GetComponent<CoverSensor>();
         healthComponent = GetComponent<HealthComponent>();

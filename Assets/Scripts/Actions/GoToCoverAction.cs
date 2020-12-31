@@ -31,7 +31,7 @@ public class GoToCoverAction : ShootAction {
         if (targetCover == null)
             return false;
         targetCover.IsOccupied = true;
-        navComponent.PathCompleted.AddListener(OnPathCompleted);
+        navComponent.PathCompleted += OnPathCompleted;
         navComponent.MoveTo(targetCover.Transform.position);
         return true;
     }
@@ -40,7 +40,7 @@ public class GoToCoverAction : ShootAction {
         base.Deactivate();
         if(!coverReached) {
             targetCover.IsOccupied = false;
-            navComponent.PathCompleted.RemoveListener(OnPathCompleted);
+            navComponent.PathCompleted -= OnPathCompleted;
         }
         navComponent.Stop();
     }
@@ -48,7 +48,7 @@ public class GoToCoverAction : ShootAction {
     protected void OnPathCompleted(bool success) {
         if (success) {
             coverSensor.GoInCover(targetCover);
-            navComponent.PathCompleted.RemoveListener(OnPathCompleted);
+            navComponent.PathCompleted -= OnPathCompleted;
             coverReached = true;
         }
         Terminate(success);

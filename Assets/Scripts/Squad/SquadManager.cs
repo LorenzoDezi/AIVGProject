@@ -17,9 +17,9 @@ public class SquadManager : MonoBehaviour
         for(int i = 0; i < squadMembers.Count; i++) {
 
             var squadMember = squadMembers[i];
-            squadMember.EnemySpottedEvent.AddListener(OnEnemySpottedEvent);
+            squadMember.EnemySpotted += OnEnemySpottedEvent;
             squadMember.SquadIndex = i;
-            squadMember.Death.AddListener(OnSquadComponentDeath);
+            squadMember.SquadCompDeath += OnSquadComponentDeath;
 
             if (i < squadGoals.Count)
                 squadMember.AddGoalWith(squadGoals[i]);

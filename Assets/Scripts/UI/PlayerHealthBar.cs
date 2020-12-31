@@ -15,7 +15,7 @@ public class PlayerHealthBar : MonoBehaviour {
         healthComponent = GameManager.Player.GetComponent<HealthComponent>();
         slider.maxValue = healthComponent.MaxHealth;
         slider.value = slider.maxValue;
-        healthComponent.HealthChange.AddListener(OnHealthChange);
+        healthComponent.HealthChanged += OnHealthChange;
     }
 
     private void OnHealthChange(float currHealth) {
