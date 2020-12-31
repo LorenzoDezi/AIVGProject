@@ -22,18 +22,26 @@ public class GoToCoverAction : ShootAction {
     }
 
     public override bool Activate() {
-        if(!base.Activate()) {
+
+        if (!base.Activate()) {
             return false;
         }
-        
-        coverReached = false;      
+
         targetCover = GetTargetCover();
         if (targetCover == null)
             return false;
+
+        MoveToCover();
+        return true;
+    }
+
+    private void MoveToCover() {
+        //Occupy the cover also if the agent is not there yet,
+        //to avoid others to reach the same cover in the same time
         targetCover.IsOccupied = true;
         navComponent.PathCompleted += OnPathCompleted;
+        coverReached = false;
         navComponent.MoveTo(targetCover.Transform.position);
-        return true;
     }
 
     public override void Deactivate() {
@@ -47,7 +55,7 @@ public class GoToCoverAction : ShootAction {
 
     protected void OnPathCompleted(bool success) {
         if (success) {
-            coverSensor.GoInCover(targetCover);
+            coverSensor.EnterCover(targetCover);
             navComponent.PathCompleted -= OnPathCompleted;
             coverReached = true;
         }

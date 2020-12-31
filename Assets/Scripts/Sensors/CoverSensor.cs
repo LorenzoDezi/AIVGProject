@@ -26,10 +26,10 @@ public class CoverSensor : MonoBehaviour {
 
 
     #region public methods
-    public void GoInCover(CoverComponent cover) {
+    public void EnterCover(CoverComponent cover) {
         currCover = cover;
-        inCoverWSTracked.BoolValue = true;
-        agentToUpdate.UpdatePerception(inCoverWSTracked);
+        currCover.CanCoverChangedEvent += OnCurrCanCoverChanged;
+        UpdateInCoverWS(true);
         navComponent.PathStarted += OutOfCover;
         Debug.LogWarningFormat("Go in cover {0} -> {1}", gameObject.name, cover.name);
     }
@@ -104,12 +104,22 @@ public class CoverSensor : MonoBehaviour {
 
     private void OutOfCover() {
         currCover.IsOccupied = false;
+        currCover.CanCoverChangedEvent -= OnCurrCanCoverChanged;
         currCover = null;
-        inCoverWSTracked.BoolValue = false;
-        agentToUpdate.UpdatePerception(inCoverWSTracked);
+        UpdateInCoverWS(false);
         navComponent.PathStarted -= OutOfCover;
     }
 
+    private void UpdateInCoverWS(bool value) {
+        inCoverWSTracked.BoolValue = value;
+        agentToUpdate.UpdatePerception(inCoverWSTracked);
+    }
+
+    private void OnCurrCanCoverChanged(bool canCover) {
+        if(!canCover) {
+            OutOfCover();
+        }
+    }
     #endregion
 }
 

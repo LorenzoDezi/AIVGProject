@@ -11,7 +11,7 @@ public class SnipeAction : GOAP.Action {
     private Transform targetTransf;
     private Transform transform;
 
-    [SerializeField, Tooltip("Sniper track speed (slower)")]
+    [SerializeField, Tooltip("Sniper track speed (faster)")]
     private float sniperTrackSpeedDegrees = 50f;
     [SerializeField, Tooltip("Sniper aim speed (slower)")]
     private float sniperAimSpeedDegrees = 50f;

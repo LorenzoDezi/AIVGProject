@@ -99,7 +99,7 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
 
     private IEnumerator ExplodeCoroutine() {
         yield return new WaitForSeconds(timeToExplode);
-        DangerEnd.Invoke(this);
+        DangerEnd?.Invoke(this);
         radiusRenderer.enabled = false;
         collider.enabled = false;
         ApplyDamage();
