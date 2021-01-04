@@ -9,24 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e57cfc9f23d867546a4fbef8dbcc9c99, type: 3}
-  m_Name: RefillHealthAction
+  m_Script: {fileID: 11500000, guid: ba86028304bc3f24a8da9e383c62ac61, type: 3}
+  m_Name: CoverAllyAction
   m_EditorClassIdentifier: 
   preconditions:
     states: []
   effects:
     states:
-    - key: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
-      intValue: 100
+    - key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+      intValue: 0
       floatValue: 0
-      boolValue: 1
+      boolValue: 0
       gameObjectValue: {fileID: 0}
-  cost: 5
-  checkForHealthStationsRadius: 20
-  checkHSMaxQueryResults: 5
-  HSLayer:
+  cost: 4
+  obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 8192
-  someoneNeedCoverKey: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119,
-    type: 2}
+    m_Bits: 33792
+  distance: 4
+  maxSearchFirePointIteration: 5
   needCoverKey: {fileID: 11400000, guid: edaf99e35015b464d8791b9b900aaa9e, type: 2}
+  maxDistanceFromAlly: 10

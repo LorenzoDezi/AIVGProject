@@ -6,6 +6,8 @@ namespace GOAP {
     [Serializable]
     public class GoalPriorityUpdater {
         [SerializeField]
+        private bool isWorldWS;
+        [SerializeField]
         WorldState referenceWS;
         WorldState currReferenceWS;
         public WorldState CurrReferenceWS => currReferenceWS;
@@ -16,11 +18,11 @@ namespace GOAP {
         private bool inversePriority;
 
         public void Init(Agent agent) {
-            var agentWorldStates = agent.WorldPerception;
-            currReferenceWS = agentWorldStates[referenceWS.Key];
+            var worldStates = isWorldWS ? World.WorldStates : agent.WorldPerception;
+            currReferenceWS = worldStates[referenceWS.Key];
             if (currReferenceWS == null) {
                 currReferenceWS = new WorldState(referenceWS);
-                agentWorldStates.Add(currReferenceWS);
+                worldStates.Add(currReferenceWS);
             }
         }
 

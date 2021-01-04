@@ -16,7 +16,12 @@ public class CircleShootAction : ShootAction {
     private float switchFirePointInterval = 3f;
     private float timeSinceLastSwitchFirePoint;
 
-    private NavigationComponent navComponent;
+    protected NavigationComponent navComponent;
+    protected Vector3 movementTargetPos;
+
+    protected virtual void SetMovementTargetPosition() {
+        movementTargetPos = target.position;
+    }
 
     public override void Init(GameObject agentGameObj) {
 
@@ -30,13 +35,8 @@ public class CircleShootAction : ShootAction {
 
         if (!base.Activate())
             return false;
-        timeSinceLastSwitchFirePoint = 0f;
-        Vector3? possibleFirePoint = GetFirePoint();
-        if (possibleFirePoint.HasValue) {
-            navComponent.MoveTo(possibleFirePoint.Value);
-            return true;
-        } else
-            return false;
+        timeSinceLastSwitchFirePoint = switchFirePointInterval;
+        return true;
     }
 
     public override void Update() {
@@ -44,6 +44,7 @@ public class CircleShootAction : ShootAction {
         base.Update();
 
         if(timeSinceLastSwitchFirePoint >= switchFirePointInterval) {
+            SetMovementTargetPosition();
             Vector3? possibleFirePoint = GetFirePoint();
             if (possibleFirePoint.HasValue) {
                 navComponent.MoveTo(possibleFirePoint.Value);
@@ -51,30 +52,29 @@ public class CircleShootAction : ShootAction {
             } else {
                 Terminate(false);
                 return;
-            }               
+            }
         }
 
         timeSinceLastSwitchFirePoint += Time.deltaTime;
     }
 
+    
+
     private Vector3? GetFirePoint() {
 
         int iteration = 0;
-
-        while(iteration < maxSearchFirePointIteration) {
-
-            Vector3 point = target.position;
+        while (iteration < maxSearchFirePointIteration) {
+            Vector3 point = movementTargetPos;
             Vector2 displacement = UnityEngine.Random.insideUnitCircle * distance;
             point.x += displacement.x;
             point.y += displacement.y;
-
             if (!Physics2D.Linecast(point, target.position, obstacleLayerMask)) {
                 var node = AstarPath.active.GetNearest(point).node;
                 if (node.Walkable)
                     return (Vector3) node.position;
             }
+            iteration++;
         }
-
         return null;        
     }
 

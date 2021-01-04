@@ -25,12 +25,23 @@ public class RefillHealthAction : GOAP.Action {
     private LayerMask HSLayer;
     private Collider2D[] cachedCheckHSResults;
 
+    [Header("WorldState fields")]
+    [SerializeField]
+    private WorldStateKey someoneNeedCoverKey;
+    private WorldState someoneNeedCoverWS;
+    [SerializeField]
+    private WorldStateKey needCoverKey;
+    private WorldState needCoverWS;
+
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
 
         navigationComponent = agentGameObj.GetComponent<NavigationComponent>();
         transform = agentGameObj.GetComponent<Transform>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
+
+        someoneNeedCoverWS = new WorldState(someoneNeedCoverKey, false);
+        needCoverWS = new WorldState(needCoverKey, null);
 
         cachedCheckHSResults = new Collider2D[checkHSMaxQueryResults];
     }
@@ -82,15 +93,14 @@ public class RefillHealthAction : GOAP.Action {
         if (!hasNearHealthStation)
             return false;
 
+        UpdateNeedCoverWS(true);
         navigationComponent.MoveTo(nearestHealthStation.Transform.position);
         AddListeners();
         return true;
     }
 
     private void Refill(bool success) {
-
         RemoveListeners();
-
         if (success && nearestHealthStation.UseRefill()) {
             healthComponent.Restore(healthComponent.MaxHealth);
         }      
@@ -103,6 +113,7 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     public override void Deactivate() {
+        UpdateNeedCoverWS(false);
         RemoveListeners();
     }
 
@@ -114,6 +125,15 @@ public class RefillHealthAction : GOAP.Action {
     private void RemoveListeners() {
         navigationComponent.PathCompleted -= Refill;
         nearestHealthStation.RefillsEmpty -= OnRefillsEmpty;
+    }
+
+    private void UpdateNeedCoverWS(bool value) {
+        someoneNeedCoverWS.BoolValue = value;
+        World.Update(someoneNeedCoverWS);
+        if (value) {
+            needCoverWS.GameObjectValue = transform.gameObject;
+            World.Update(needCoverWS);
+        }
     }
 
     public override void Update() { }

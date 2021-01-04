@@ -67,22 +67,23 @@ namespace GOAP {
         }
 
         //TODO: Refactor and heuristic cache in some way
-        public int HeuristicEstimate(WorldStates worldPerception, WorldStates desiredStates, 
+        public int HeuristicEstimate(WorldStates agentPerception, WorldStates desiredStates, 
             PlanNode node) {
-            WorldStates updatedPerception = worldPerception.Updated(node.Effects);
+            WorldStates updatedPerception = agentPerception.Updated(node.Effects);
             return updatedPerception.Count - updatedPerception.SatisfactionCount(
                 desiredStates.Updated(node.Preconditions));
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
-            List<PlanNodeRecord> open = new List<PlanNodeRecord>();            
+            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
+            WorldStates world = World.WorldStates.Updated(worldPerception);
             foreach (PlanNode node in graph.Nodes) {
                 if (node.Satisfy(goal.DesiredStates) 
                     && node.Action.CheckProceduralConditions()) {
                     PlanNodeRecord nodeRecord = node.Record;
-                    nodeRecord.CurrGoalStates = worldPerception.Updated(node.Effects);
+                    nodeRecord.CurrGoalStates = world.Updated(node.Effects);
                     nodeRecord.DesiredGoalStates = goal.DesiredStates.Updated(node.Preconditions);
-                    nodeRecord.HeuristicCost = HeuristicEstimate(worldPerception, goal.DesiredStates, node);
+                    nodeRecord.HeuristicCost = HeuristicEstimate(world, goal.DesiredStates, node);
                     nodeRecord.Open = true;
                     open.Add(nodeRecord);
                 }

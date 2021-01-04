@@ -59,13 +59,12 @@ namespace GOAP {
         }
 
         #region monobehaviour calls
-        protected virtual void Awake() {
+        protected virtual void Start() {
+
             InitActions();
             InitGoals();
             planner = new Planner(actions);
-        }
 
-        protected virtual void Start() {           
             UpdateGoals();
             checkPlanCoroutine = StartCoroutine(CheckPlan());
         }

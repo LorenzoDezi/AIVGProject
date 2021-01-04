@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "ChaseEnemyAction", menuName = "GOAP/Actions/ChaseEnemyAction")]
 public class ChaseEnemyAction : ShootAction {
@@ -14,7 +9,6 @@ public class ChaseEnemyAction : ShootAction {
 
         base.Init(agentGameObj);
 
-        visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
