@@ -40,12 +40,6 @@ namespace GOAP {
             }
         }
 
-        public WorldStates Updated(WorldStates update) {
-            WorldStates copy = new WorldStates(this);
-            copy.Update(update);
-            return copy;
-        }
-
         public void Update(WorldState state) {
             if (stateDict.ContainsKey(state.Key))
                 stateDict[state.Key].Update(state);
@@ -60,15 +54,15 @@ namespace GOAP {
         }
 
         public bool Contains(WorldStates desiredStates) {
-            return desiredStates.All(states.Contains);
+            return desiredStates.All(Contains);
         }
 
         public bool Contains(WorldState state) {
-            return states.Contains(state);
+            return stateDict.ContainsKey(state.Key) && stateDict[state.Key].Value.Equals(state.Value);
         }
 
         public bool LinkedWith(WorldStates others) {
-            return others.Count != 0 && others.Any(states.Contains);
+            return others.Count != 0 && others.Any(Contains);
         }
 
         public void Clear() {
@@ -78,7 +72,7 @@ namespace GOAP {
         public int SatisfactionCount(WorldStates toBeSatisfied) {
             int count = 0;
             foreach(WorldState state in toBeSatisfied) {
-                if (states.Contains(state))
+                if (Contains(state))
                     count += 1;
             }
             return count;
@@ -91,7 +85,7 @@ namespace GOAP {
         public override bool Equals(object obj) {
             if(obj is WorldStates) {
                 WorldStates otherWorldStates = (WorldStates) obj;
-                return Contains(otherWorldStates) && otherWorldStates.Count == Count;
+                return otherWorldStates.Count == Count && Contains(otherWorldStates);
             }
             return base.Equals(obj);
         }

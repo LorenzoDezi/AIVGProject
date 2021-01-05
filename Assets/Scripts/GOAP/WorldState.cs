@@ -76,6 +76,7 @@ namespace GOAP {
         public delegate void StateChangedHandler();
         public StateChangedHandler StateChanged;
 
+        #region constructors
         public WorldState(WorldStateKey key) {
             this.value.key = key;
         }
@@ -85,7 +86,7 @@ namespace GOAP {
         }
 
         public WorldState(WorldStateKey key, int value) : this(key) {
-            this.value.intValue = value;           
+            this.value.intValue = value;
         }
 
         public WorldState(WorldStateKey key, float value) : this(key) {
@@ -94,7 +95,8 @@ namespace GOAP {
 
         public WorldState(WorldStateKey key, bool value) : this(key) {
             this.value.boolValue = value;
-        }
+        } 
+        #endregion
 
         public WorldState(WorldState state) {
             Update(state);
