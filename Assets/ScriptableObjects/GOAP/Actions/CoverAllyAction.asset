@@ -13,14 +13,33 @@ MonoBehaviour:
   m_Name: CoverAllyAction
   m_EditorClassIdentifier: 
   preconditions:
-    states: []
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   effects:
     states:
-    - key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   cost: 4
   obstacleLayerMask:
     serializedVersion: 2

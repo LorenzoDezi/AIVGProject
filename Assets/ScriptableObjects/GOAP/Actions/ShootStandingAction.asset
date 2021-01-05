@@ -14,32 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preconditions:
     states:
-    - key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   effects:
     states:
-    - key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   cost: 5
   obstacleLayerMask:
     serializedVersion: 2

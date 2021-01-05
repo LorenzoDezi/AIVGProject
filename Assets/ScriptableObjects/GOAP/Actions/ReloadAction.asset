@@ -16,12 +16,10 @@ MonoBehaviour:
     states: []
   effects:
     states:
-    - key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   cost: 2

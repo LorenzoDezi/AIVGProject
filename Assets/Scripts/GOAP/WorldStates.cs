@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GOAP {
+
     [Serializable]
     public class WorldStates : IEnumerable<WorldState> {
 
@@ -15,6 +16,9 @@ namespace GOAP {
         private Dictionary<WorldStateKey, WorldState> stateDict;
 
         public int Count => states.Count;
+
+        public Dictionary<WorldStateKey, WorldStateValue> WorldStateValues => 
+            stateDict.ToDictionary(pair => pair.Key, pair => pair.Value.Value);
 
         public WorldStates() {
             states = new List<WorldState>();
@@ -59,12 +63,16 @@ namespace GOAP {
             return desiredStates.All(states.Contains);
         }
 
+        public bool Contains(WorldState state) {
+            return states.Contains(state);
+        }
+
         public bool LinkedWith(WorldStates others) {
             return others.Count != 0 && others.Any(states.Contains);
         }
 
-        public bool Contains(WorldState state) {
-            return states.Contains(state);
+        public void Clear() {
+            states.Clear();
         }
 
         public int SatisfactionCount(WorldStates toBeSatisfied) {

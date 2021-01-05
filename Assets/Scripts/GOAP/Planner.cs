@@ -13,8 +13,8 @@ namespace GOAP {
         public bool Closed { get; set; }
         public bool Open { get; set; }
 
-        public WorldStates CurrGoalStates { get; set; }
-        public WorldStates DesiredGoalStates { get; set; }
+        public Dictionary<WorldStateKey, WorldStateValue> CurrGoalStates { get; set; }
+        public Dictionary<WorldStateKey, WorldStateValue> DesiredGoalStates { get; set; }
 
         public List<PlanConnection> Connections => node.PlanConnections;
 
@@ -28,7 +28,10 @@ namespace GOAP {
         }
 
         public float TotalCost => CostSoFar + HeuristicCost;
-        public bool IsSatisfied => CurrGoalStates.Contains(DesiredGoalStates);
+        public bool IsSatisfied => DesiredGoalStates.All(
+            (keyValuePair) => CurrGoalStates.ContainsKey(keyValuePair.Key) 
+                && CurrGoalStates[keyValuePair.Key].Equals(keyValuePair.Value)
+        );
 
         public PlanNodeRecord(PlanNode node) {
             this.node = node;
@@ -67,23 +70,24 @@ namespace GOAP {
         }
 
         //TODO: Refactor and heuristic cache in some way
-        public int HeuristicEstimate(WorldStates agentPerception, WorldStates desiredStates, 
-            PlanNode node) {
-            WorldStates updatedPerception = agentPerception.Updated(node.Effects);
-            return updatedPerception.Count - updatedPerception.SatisfactionCount(
-                desiredStates.Updated(node.Preconditions));
-        }
+        //public int HeuristicEstimate(WorldStates agentPerception, WorldStates desiredStates, 
+        //    PlanNode node) {            
+        //    WorldStates updatedPerception = agentPerception.Updated(node.Effects);
+        //    return updatedPerception.Count - updatedPerception.SatisfactionCount(
+        //        desiredStates.Updated(node.Preconditions));
+        //}
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
             List<PlanNodeRecord> open = new List<PlanNodeRecord>();
-            WorldStates world = World.WorldStates.Updated(worldPerception);
+            var world = World.WorldStates.WorldStateValues;
+            world.UpdateWith(worldPerception.WorldStateValues);
             foreach (PlanNode node in graph.Nodes) {
                 if (node.Satisfy(goal.DesiredStates) 
                     && node.Action.CheckProceduralConditions()) {
                     PlanNodeRecord nodeRecord = node.Record;
-                    nodeRecord.CurrGoalStates = world.Updated(node.Effects);
-                    nodeRecord.DesiredGoalStates = goal.DesiredStates.Updated(node.Preconditions);
-                    nodeRecord.HeuristicCost = HeuristicEstimate(world, goal.DesiredStates, node);
+                    nodeRecord.CurrGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(world).UpdateWith(node.Effects);
+                    nodeRecord.DesiredGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(goal.DesiredStates.WorldStateValues).UpdateWith(node.Preconditions);
+                    //nodeRecord.HeuristicCost = HeuristicEstimate(world, goal.DesiredStates, node);
                     nodeRecord.Open = true;
                     open.Add(nodeRecord);
                 }
@@ -102,7 +106,7 @@ namespace GOAP {
                     PlanNode connectedNode = conn.ToNode;
                     if (!connectedNode.Action.CheckProceduralConditions())
                         continue;
-                    int heuristicCost = HeuristicEstimate(curr.CurrGoalStates, curr.DesiredGoalStates, connectedNode);
+                    int heuristicCost = 0; //HeuristicEstimate(curr.CurrGoalStates, curr.DesiredGoalStates, connectedNode);
                     float newCostSoFar = curr.CostSoFar + conn.Cost;
                     float newTotalCost = newCostSoFar + heuristicCost;
                     PlanNodeRecord nodeRecord = connectedNode.Record;
@@ -117,8 +121,8 @@ namespace GOAP {
                             continue;
                         //Unvisited
                     } else {
-                        nodeRecord.CurrGoalStates = curr.CurrGoalStates.Updated(connectedNode.Effects);
-                        nodeRecord.DesiredGoalStates = curr.DesiredGoalStates.Updated(connectedNode.Preconditions);
+                        nodeRecord.CurrGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(curr.CurrGoalStates).UpdateWith(connectedNode.Effects);
+                        nodeRecord.DesiredGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(curr.DesiredGoalStates).UpdateWith(connectedNode.Preconditions);
                         nodeRecord.HeuristicCost = heuristicCost;
                         nodeRecord.NextNode = curr;
                         nodeRecord.CostSoFar = newCostSoFar;

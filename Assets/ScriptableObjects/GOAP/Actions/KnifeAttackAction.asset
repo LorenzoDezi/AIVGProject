@@ -14,46 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preconditions:
     states:
-    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   effects:
     states:
-    - key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 22ac570308f1de148aea905f95ae66da, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 22ac570308f1de148aea905f95ae66da, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   cost: 2

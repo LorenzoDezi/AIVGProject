@@ -14,23 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desiredStates:
     states:
-    - key: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   priorityUpdater:
+    isWorldWS: 0
     referenceWS:
-      key: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+      value:
+        key: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
     priorityMultiplier: 20
     inversePriority: 0

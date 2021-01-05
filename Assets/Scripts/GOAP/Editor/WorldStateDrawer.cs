@@ -19,7 +19,7 @@ namespace GOAP.Editor {
             RenderLabels(position);
             EditorGUI.indentLevel--;           
             valuePosition.position += verticalSpacing;
-            EditorGUI.PropertyField(valuePosition, property.FindPropertyRelative("key"), GUIContent.none);
+            EditorGUI.PropertyField(valuePosition, property.FindPropertyRelative("value.key"), GUIContent.none);
             valuePosition.position += verticalSpacing;
             RenderPropertyValue(valuePosition, property);
             EditorGUI.EndProperty();
@@ -33,21 +33,21 @@ namespace GOAP.Editor {
         }
 
         private void RenderPropertyValue(Rect position, SerializedProperty property) {
-            WorldStateKey key = (WorldStateKey) property.FindPropertyRelative("key").objectReferenceValue;
+            WorldStateKey key = (WorldStateKey) property.FindPropertyRelative("value.key").objectReferenceValue;
             if(key != null) {
                 WorldStateType type = key.Type;
                 switch (type) {
                     case WorldStateType.boolType:
-                        EditorGUI.PropertyField(position, property.FindPropertyRelative("boolValue"), GUIContent.none);
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("value.boolValue"), GUIContent.none);
                         break;
                     case WorldStateType.intType:
-                        EditorGUI.PropertyField(position, property.FindPropertyRelative("intValue"), GUIContent.none);
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("value.intValue"), GUIContent.none);
                         break;
                     case WorldStateType.floatType:
-                        EditorGUI.PropertyField(position, property.FindPropertyRelative("floatValue"), GUIContent.none);
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("value.floatValue"), GUIContent.none);
                         break;
                     case WorldStateType.gameObjectType:
-                        EditorGUI.PropertyField(position, property.FindPropertyRelative("gameObjectValue"), GUIContent.none);
+                        EditorGUI.PropertyField(position, property.FindPropertyRelative("value.gameObjectValue"), GUIContent.none);
                         break;
                 }
             }           

@@ -9,8 +9,11 @@ namespace GOAP {
     public class PlanNode {
 
         public Action Action { get; }
-        public WorldStates Preconditions => Action.Preconditions;
-        public WorldStates Effects => Action.Effects;
+        private Dictionary<WorldStateKey, WorldStateValue> preconditions;
+        public Dictionary<WorldStateKey, WorldStateValue> Preconditions => preconditions;
+
+        private Dictionary<WorldStateKey, WorldStateValue> effects;
+        public Dictionary<WorldStateKey, WorldStateValue> Effects => effects;
         public List<PlanConnection> PlanConnections { get; }
 
         private PlanNodeRecord record;
@@ -22,6 +25,8 @@ namespace GOAP {
 
         public PlanNode(Action nodeAction) {
             Action = nodeAction;
+            effects = Action.Effects.WorldStateValues;
+            preconditions = Action.Preconditions.WorldStateValues;
             PlanConnections = new List<PlanConnection>();
         }
 

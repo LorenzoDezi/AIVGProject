@@ -8,100 +8,123 @@ using UnityEngine.Events;
 
 namespace GOAP {
 
+    [Serializable]
+    public struct WorldStateValue {
+        public WorldStateKey key;
+        public int intValue;
+        public float floatValue;
+        public bool boolValue;
+        public GameObject gameObjectValue;
+
+        public override bool Equals(object obj) {
+            if (!(obj is WorldStateValue)) {
+                return base.Equals(obj);
+            } else {
+                WorldStateValue other = (WorldStateValue) obj;
+                return other.key == key && 
+                    WorldState.GetUniformValue(other) == WorldState.GetUniformValue(this);
+            }
+        }
+
+        public override int GetHashCode() {
+            var hashCode = -1095949941;
+            hashCode = hashCode * -1521134295 + EqualityComparer<WorldStateKey>.Default.GetHashCode(key);
+            hashCode = hashCode * -1521134295 + WorldState.GetUniformValue(this);
+            return hashCode;
+        }
+    }
 
     [Serializable]
     public class WorldState {
-        [SerializeField]
-        private WorldStateKey key = default;
-        public WorldStateKey Key => key;
 
         [SerializeField]
-        private int intValue;
+        private WorldStateValue value;
+
+        public WorldStateKey Key => value.key;
+        public WorldStateValue Value => value;
+
         public int IntValue {
-            get => valueDict[key.Type]();
+            get => value.intValue;
             set {
-                intValue = value;
+                this.value.intValue = value;
             }
         }
 
-        [SerializeField]
-        private float floatValue;
         public float FloatValue {
-            get => floatValue;
+            get => value.floatValue;
             set {
-                floatValue = value;
+                this.value.floatValue = value;
+                this.value.intValue = Convert.ToInt32(value);
             }
         }
 
-        [SerializeField]
-        private bool boolValue;
         public bool BoolValue {
-            get => boolValue;
+            get => value.boolValue;
             set {
-                boolValue = value;
+                this.value.boolValue = value;
+                this.value.intValue = Convert.ToInt32(value);
             }
         }
 
-        [SerializeField]
-        private GameObject gameObjectValue = default;
         public GameObject GameObjectValue {
-            get => gameObjectValue;
+            get => value.gameObjectValue;
             set {
-                gameObjectValue = value;
+                this.value.gameObjectValue = value;
             }
         }
 
         public delegate void StateChangedHandler();
         public StateChangedHandler StateChanged;
 
-        private Dictionary<WorldStateType, Func<int>> valueDict;
-
-        public WorldState() {
-            valueDict = new Dictionary<WorldStateType, Func<int>>();
-            valueDict.Add(WorldStateType.intType, () => intValue);
-            valueDict.Add(WorldStateType.floatType, () => Convert.ToInt32(floatValue));
-            valueDict.Add(WorldStateType.boolType, () => Convert.ToInt32(boolValue));
-            valueDict.Add(WorldStateType.gameObjectType, () => gameObjectValue != null ? 
-            gameObjectValue.GetInstanceID() : int.MaxValue);
-        }
-
-        public WorldState(WorldStateKey key) : this() {
-            this.key = key;
+        public WorldState(WorldStateKey key) {
+            this.value.key = key;
         }
 
         public WorldState(WorldStateKey key, GameObject value) : this(key) {
-            this.gameObjectValue = value;
+            this.value.gameObjectValue = value;
         }
 
         public WorldState(WorldStateKey key, int value) : this(key) {
-            intValue = value;           
+            this.value.intValue = value;           
         }
 
         public WorldState(WorldStateKey key, float value) : this(key) {
-            floatValue = value;
+            this.value.floatValue = value;
         }
 
         public WorldState(WorldStateKey key, bool value) : this(key) {
-            boolValue = value;
+            this.value.boolValue = value;
         }
 
-        public WorldState(WorldState state) : this() {
+        public WorldState(WorldState state) {
             Update(state);
         }
 
+        public static int GetUniformValue(WorldStateValue value) {
+            switch (value.key.Type) {
+                case WorldStateType.boolType:
+                    return Convert.ToInt32(value.boolValue);
+                case WorldStateType.intType:
+                    return value.intValue;
+                case WorldStateType.floatType:
+                    return Convert.ToInt32(value.floatValue);
+                case WorldStateType.gameObjectType:
+                    return value.gameObjectValue != null ?
+                        value.gameObjectValue.GetInstanceID() : int.MaxValue;
+                default:
+                    return -1;
+            }
+        }
+
         public void Update(WorldState newWorldState) {
-            key = newWorldState.key;
-            intValue = newWorldState.intValue;
-            boolValue = newWorldState.boolValue;
-            floatValue = newWorldState.floatValue;
-            gameObjectValue = newWorldState.gameObjectValue;
+            value = newWorldState.value;
             StateChanged?.Invoke();
             //TODO: StateChanged invoked only on update... how to model this properly?
         }
 
         public bool Match(WorldState other) {
             return other.Key == Key && 
-                other.valueDict[other.Key.Type]() == valueDict[Key.Type]();
+                GetUniformValue(value) == GetUniformValue(other.value);
         }
 
         public override bool Equals(object obj) {
@@ -113,10 +136,7 @@ namespace GOAP {
         }
 
         public override int GetHashCode() {
-            var hashCode = -1095949941;
-            hashCode = hashCode * -1521134295 + EqualityComparer<WorldStateKey>.Default.GetHashCode(key);
-            hashCode = hashCode * -1521134295 + valueDict[Key.Type]();
-            return hashCode;
+            return value.GetHashCode();
         }
     }
 }

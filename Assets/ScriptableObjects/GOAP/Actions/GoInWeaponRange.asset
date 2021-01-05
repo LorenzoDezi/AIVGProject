@@ -13,17 +13,21 @@ MonoBehaviour:
   m_Name: GoInWeaponRange
   m_EditorClassIdentifier: 
   preconditions:
-    states: []
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   effects:
     states:
-    - key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   cost: 0
   obstacleLayerMask:
     serializedVersion: 2

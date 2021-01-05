@@ -16,11 +16,12 @@ MonoBehaviour:
     states: []
   effects:
     states:
-    - key: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
-      intValue: 100
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   cost: 5
   checkForHealthStationsRadius: 20
   checkHSMaxQueryResults: 5

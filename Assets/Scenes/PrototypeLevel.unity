@@ -78864,6 +78864,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4238676141369403258, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: stressLevelDecreaseInCover
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6739258641301987907, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyLayerMask.m_Bits

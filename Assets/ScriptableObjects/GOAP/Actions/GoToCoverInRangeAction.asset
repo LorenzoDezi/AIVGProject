@@ -14,40 +14,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   preconditions:
     states:
-    - key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   effects:
     states:
-    - key: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   cost: 2
   obstacleLayerMask:
     serializedVersion: 2

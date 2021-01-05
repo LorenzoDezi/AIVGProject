@@ -14,31 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   desiredStates:
     states:
-    - key: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
-    - key: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 1
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+    - value:
+        key: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
   priorityUpdater:
+    isWorldWS: 0
     referenceWS:
-      key: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
-      intValue: 0
-      floatValue: 0
-      boolValue: 0
-      gameObjectValue: {fileID: 0}
-      StateChangeEvent:
-        m_PersistentCalls:
-          m_Calls: []
+      value:
+        key: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
     priorityMultiplier: 1
     inversePriority: 0
