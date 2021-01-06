@@ -13,6 +13,7 @@ namespace GOAP {
         [SerializeField]
         private List<Action> actionTemplates = default;
         protected List<Action> actions;
+
         [SerializeField]
         private List<Goal> goalTemplates = default;
         protected List<Goal> goals;
@@ -35,6 +36,7 @@ namespace GOAP {
 #if UNITY_EDITOR
         public delegate void PlanCompletedHandler(List<Action> actions);
         public event PlanCompletedHandler PlanCompleted;
+        public List<Action> ActionTemplates => actionTemplates;
 #endif
 
         public void UpdatePerception(WorldState state) {
