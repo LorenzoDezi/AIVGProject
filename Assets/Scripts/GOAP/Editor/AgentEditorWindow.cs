@@ -12,6 +12,8 @@ namespace GOAP.Editor {
         private Agent selectedAgent;
         private AgentEditorContainer agentContainer;
 
+        private Vector2 scrollPosition;
+
         enum UserAction { AddNode, DeleteNode }
 
         [MenuItem("Window/AgentEditor")]
@@ -30,7 +32,7 @@ namespace GOAP.Editor {
                 lastAgentID = selectedAgent.GetInstanceID();
                 agentContainer = new AgentEditorContainer(selectedAgent);
             }
-
+            agentContainer.UpdateConnections();
             //TODO: Try placing a button to refresh if modifies occurs (see Refresh())
             DrawEditor();
         }
@@ -52,36 +54,17 @@ namespace GOAP.Editor {
         }
 
         private void DrawEditor() {
-
-            
-
+            scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
+            //This label is needed to make the scrollArea work, at least i think
+            GUILayout.Label(GUIContent.none, GUILayout.Height(this.position.height * 3f),
+                GUILayout.Width(this.position.width * 3f));
             BeginWindows();
-
             agentContainer.Draw(this);
-
             EndWindows();
+            EditorGUILayout.EndScrollView();
         }
 
-        //private void DrawLines() {
-        //    if (container != null) {
-        //        for (int i = 0; i < container.nodes.Count; i++) {
-        //            if (container.nodes[i].nextNode != null) {
-        //                ConnectLine(container.nodes[i].nodeRect, container.nodes[i].nextNode.nodeRect);
-        //            }
-        //        }
-        //    }
-        //}
 
-        //private void ConnectLine(Rect start, Rect end) {
-        //    Vector3 startPos = new Vector3(start.x + start.width, start.y + start.height + 0.5f);
-        //    Vector3 endPos = new Vector3(end.x + end.width * 0.5f, end.y + end.height * 0.5f);
-
-        //    //TODO: tan depending on real direction between start and end position
-        //    Vector3 startTan = startPos + (Vector3.right * 50f);
-        //    Vector3 endTan = endPos + (Vector3.left * 50f);
-
-        //    Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, null, 2f);
-        //}
     }
 
 }
