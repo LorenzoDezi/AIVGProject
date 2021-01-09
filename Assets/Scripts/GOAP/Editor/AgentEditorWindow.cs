@@ -19,14 +19,14 @@ namespace GOAP.Editor {
 
         [MenuItem("Window/AgentEditor")]
         static void ShowEditor() {
-            var window = (AgentEditorWindow) GetWindow(typeof(AgentEditorWindow));
+            var window = (AgentEditorWindow)GetWindow(typeof(AgentEditorWindow));
             window.minSize = new Vector2(800, 600);
         }
 
         private void OnGUI() {
-            
+
             selectedAgent = Selection.activeTransform?.GetComponent<Agent>();
-            if(selectedAgent == null) {
+            if (selectedAgent == null) {
                 DrawMessage("Select a gameObject with an Agent component!");
                 return;
             } else if (selectedAgent.GetInstanceID() != lastAgentID) {
@@ -43,9 +43,36 @@ namespace GOAP.Editor {
         private void ProcessInput() {
 
             Event e = Event.current;
-            if(agentContainer != null && e.type == EventType.MouseDown && e.button == 0)
-                agentContainer.SelectedAt(e.mousePosition);
+            mousePosition = e.mousePosition;
+            if (agentContainer != null && e.type == EventType.MouseDown && e.button == 1) {
+                OpenContextMenuUsing(e);
+            }
 
+        }
+
+        private void OpenContextMenuUsing(Event e) {
+            GenericMenu menu = new GenericMenu();
+            GUIContent menuItemContent;
+            GenericMenu.MenuFunction menuItemFunction;
+            if(agentContainer.GetAt(mousePosition + scrollPosition) != null) {
+                menuItemContent = new GUIContent("Highlight plans");
+                menuItemFunction = HighlightPlans;
+            } else {
+                menuItemContent = new GUIContent("Stop showing plans");
+                menuItemFunction = StopShowingPlans;
+            }
+            menu.AddItem(menuItemContent, false, menuItemFunction);
+            menu.ShowAsContext();
+            e.Use();
+        }
+
+        private void HighlightPlans() {           
+            agentContainer.SelectNodeAt(mousePosition + scrollPosition);
+            agentContainer.ShowSelectedNodePlans(true);
+        }
+
+        private void StopShowingPlans() {
+            agentContainer.ShowSelectedNodePlans(false);
         }
         
         private void Refresh() {

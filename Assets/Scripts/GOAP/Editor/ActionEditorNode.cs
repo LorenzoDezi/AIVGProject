@@ -14,9 +14,6 @@ namespace GOAP.Editor {
         private bool expanded;
 
         public int ID { get; private set; }
-        public bool Visited {
-            get => ActionNode.Record.Open || ActionNode.Record.Closed;
-        }
         public PlanNode ActionNode { get; private set; }
         public List<ActionEditorNode> Connections { get; private set; }
 
@@ -27,6 +24,8 @@ namespace GOAP.Editor {
 
         public float Width => nodeRect.width;
         public float Height => nodeRect.height;
+
+        public float Cost => ActionNode.Action.Cost;
 
         public ActionEditorNode(PlanNode actionNode) {
             this.ActionNode = actionNode;
@@ -60,9 +59,8 @@ namespace GOAP.Editor {
 
                 EditorGUILayout.EndScrollView();
             }
-            //TODO: write all sequence possibles and the total cost
-
             GUI.DragWindow();
+
         }
 
         public bool IsAt(Vector2 mousePosition) {
@@ -70,31 +68,34 @@ namespace GOAP.Editor {
         }
 
         public void Draw() {           
-            nodeRect = GUI.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);           
+            nodeRect = GUILayout.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);           
         }
 
-        public void DrawLines(ActionEditorNode selectedNode) {
-            Color color = Color.grey;
-            foreach(var conn in Connections) {
-                if (selectedNode != null && 
-                    (selectedNode.IsAt(nodeRect.position) || selectedNode.IsAt(conn.nodeRect.position))) {
-                    color = Color.red;
-                }
-                ConnectLine(nodeRect, conn.nodeRect, conn.ActionNode.Record.CostSoFar, color);
+        public void DrawLines() {
+            foreach(var conn in Connections) {                
+                ConnectLine(nodeRect, conn.nodeRect, conn.Cost, Color.red);
+                conn.DrawLines();
             }
         }
 
         private void ConnectLine(Rect start, Rect end, float cost, Color color) {
-            Color original = Handles.color;
-            Handles.color = color;
-            Handles.DrawLine(
-                start.position + (Vector2.right * nodeRect.width / 2f), 
-                end.position + (Vector2.up * nodeRect.height / 2f)
+
+            Vector2 direction = (end.position - start.position).normalized;
+
+            Handles.DrawBezier(
+                start.center + new Vector2(direction.x * start.width/2f, direction.y * start.height/2f), 
+                end.center - new Vector2(direction.x * end.width/2f, direction.y * end.height/2f),
+                start.center + direction,
+                end.center + direction,
+                color,
+                null,
+                2f
             );
-            GUILayout.BeginArea(new Rect( start.position + (end.position - start.position)/2f, new Vector2(50f, 50f)));
+            
+            GUILayout.BeginArea(new Rect( start.center + (end.center - start.center)/2f, new Vector2(50f, 50f)));
             EditorGUILayout.LabelField("" + cost);
             GUILayout.EndArea();
-            Handles.color = original;
+
         }
     }
 
