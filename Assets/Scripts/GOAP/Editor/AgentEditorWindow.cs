@@ -91,7 +91,7 @@ namespace GOAP.Editor {
             EndWindows();
         }
 
-        private void DrawEditor() {
+        private void DrawEditor() {            
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             //This label is needed to make the scrollArea work, at least i think
             GUILayout.Label(GUIContent.none, GUILayout.Height(this.position.height * 3f),

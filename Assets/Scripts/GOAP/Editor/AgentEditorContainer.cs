@@ -33,7 +33,7 @@ namespace GOAP.Editor {
                 var actionNode = graph.Nodes[i];
                 var node = new ActionEditorNode(actionNode);
                 node.Position = currPosition;
-                if (i % nRow == 0)
+                if (i > 0 && i % nRow == 0)
                     currPosition = startPosition + Vector3.up * (i / nRow) * (node.Height + verticalSpacing);
                 else
                     currPosition += Vector3.right * (horizontalSpacing + node.Width);
@@ -72,15 +72,17 @@ namespace GOAP.Editor {
 
         public void ShowSelectedNodePlans(bool mustShow) {
             showingPlans = mustShow;
+            nodes.ForEach((n) => n.IsSelected = false);
+            if(showingPlans)
+                selectedNode.Select();
         }
 
         public void Draw(AgentEditorWindow window) {
-
             foreach(var node in nodes) {
                 node.Draw();                
             }
             if (showingPlans)
-                selectedNode?.DrawLines();
+                selectedNode?.DrawPlans();
         }
 
     }

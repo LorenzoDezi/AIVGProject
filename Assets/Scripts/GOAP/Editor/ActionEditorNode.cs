@@ -8,6 +8,9 @@ namespace GOAP.Editor {
 
     public class ActionEditorNode {
 
+        private Color bgColor;
+        private Color selectedBgColor;
+        private Color currentBgColor;
         private Rect nodeRect;
         private GUIStyle buttonStyle;
         private Vector2 scrollPosition = Vector2.zero;
@@ -26,13 +29,35 @@ namespace GOAP.Editor {
         public float Height => nodeRect.height;
 
         public float Cost => ActionNode.Action.Cost;
+        private bool isSelected;
+        public bool IsSelected {
+            get {
+                return isSelected;
+            }
+            set {
+                isSelected = value;
+                currentBgColor = isSelected ? selectedBgColor : bgColor;
+            }
+        }
+
 
         public ActionEditorNode(PlanNode actionNode) {
             this.ActionNode = actionNode;
             this.ID = actionNode.Action.GetInstanceID();
             Connections = new List<ActionEditorNode>();
             SetRect();
+
+            SetupBgColors();
             buttonStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter };
+        }
+
+        private void SetupBgColors() {
+            bgColor = GUI.backgroundColor;
+            float bgColorAlpha = GUI.backgroundColor.a;
+            bgColorAlpha -= 0.75f;
+            bgColor.a = bgColorAlpha;
+            selectedBgColor = GUI.backgroundColor;
+            currentBgColor = bgColor;
         }
 
         private void SetRect() {
@@ -46,7 +71,8 @@ namespace GOAP.Editor {
         }
 
         private void OnDraw(int id) {
-
+            Color original = GUI.backgroundColor;
+            GUI.backgroundColor = currentBgColor;
             if(GUILayout.Button(expanded ? "Hide Inspector" : "Show Inspector", buttonStyle, GUILayout.Width(100f), GUILayout.Height(25f))) {
                 expanded = !expanded;
                 SetRect();
@@ -60,6 +86,7 @@ namespace GOAP.Editor {
                 EditorGUILayout.EndScrollView();
             }
             GUI.DragWindow();
+            GUI.backgroundColor = original;
 
         }
 
@@ -67,14 +94,25 @@ namespace GOAP.Editor {
             return nodeRect.Contains(mousePosition);
         }
 
-        public void Draw() {           
-            nodeRect = GUILayout.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);           
+        public void Draw() {
+            Color original = GUI.backgroundColor;
+            GUI.backgroundColor = currentBgColor;
+            nodeRect = GUILayout.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);
+            GUI.backgroundColor = original;
         }
 
-        public void DrawLines() {
+
+        public void Select() {
+            IsSelected = true;
+            foreach(var conn in Connections) {
+                conn.Select();
+            }
+        }
+
+        public void DrawPlans() {
             foreach(var conn in Connections) {                
                 ConnectLine(nodeRect, conn.nodeRect, conn.Cost, Color.red);
-                conn.DrawLines();
+                conn.DrawPlans();
             }
         }
 
@@ -97,6 +135,7 @@ namespace GOAP.Editor {
             GUILayout.EndArea();
 
         }
+
     }
 
 }
