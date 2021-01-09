@@ -13,6 +13,7 @@ namespace GOAP.Editor {
         private List<ActionEditorNode> nodes;
         private float horizontalSpacing = 25f;
         private float verticalSpacing = 100f;
+        private ActionEditorNode selectedNode;
         private PlanGraph graph;
 
         public AgentEditorContainer(Agent agent) {
@@ -22,10 +23,17 @@ namespace GOAP.Editor {
             foreach (var action in agent.ActionTemplates)
                 action.Init(agent.gameObject);
             graph = new PlanGraph(agent.ActionTemplates);
-            //TODO: Positions 
+            int nRow = 5;
+            Vector3 startPosition = (Vector3.up + Vector3.right) * horizontalSpacing;
+            Vector3 currPosition = startPosition;
             for (int i = 0; i < graph.Nodes.Count; i++) {
                 var actionNode = graph.Nodes[i];
                 var node = new ActionEditorNode(actionNode);
+                node.Position = currPosition;
+                if (i % nRow == 0)
+                    currPosition = startPosition + Vector3.up * (i / nRow) * (node.Height + verticalSpacing);
+                else
+                    currPosition += Vector3.right * (horizontalSpacing + node.Width);
                 nodes.Add(node);                
             }
             UpdateConnections();
@@ -46,11 +54,21 @@ namespace GOAP.Editor {
             
         }
 
+        public void SelectedAt(Vector2 mousePosition) {
+            foreach(var node in nodes) {
+                if (node.IsAt(mousePosition)) {
+                    selectedNode = node;
+                    return;
+                }
+            }
+            selectedNode = null;                   
+        }
+
         public void Draw(AgentEditorWindow window) {
 
             foreach(var node in nodes) {
                 node.Draw();
-                node.DrawLines();
+                node.DrawLines(selectedNode);
             }
         }
 

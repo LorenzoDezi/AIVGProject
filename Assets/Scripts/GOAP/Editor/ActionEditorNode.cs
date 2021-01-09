@@ -65,18 +65,36 @@ namespace GOAP.Editor {
             GUI.DragWindow();
         }
 
+        public bool IsAt(Vector2 mousePosition) {
+            return nodeRect.Contains(mousePosition);
+        }
+
         public void Draw() {           
             nodeRect = GUI.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);           
         }
 
-        public void DrawLines() {
+        public void DrawLines(ActionEditorNode selectedNode) {
+            Color color = Color.grey;
             foreach(var conn in Connections) {
-                ConnectLine(nodeRect, conn.nodeRect);
+                if (selectedNode != null && 
+                    (selectedNode.IsAt(nodeRect.position) || selectedNode.IsAt(conn.nodeRect.position))) {
+                    color = Color.red;
+                }
+                ConnectLine(nodeRect, conn.nodeRect, conn.ActionNode.Record.CostSoFar, color);
             }
         }
 
-        private void ConnectLine(Rect start, Rect end) {
-            Handles.DrawLine(start.position, end.position);
+        private void ConnectLine(Rect start, Rect end, float cost, Color color) {
+            Color original = Handles.color;
+            Handles.color = color;
+            Handles.DrawLine(
+                start.position + (Vector2.right * nodeRect.width / 2f), 
+                end.position + (Vector2.up * nodeRect.height / 2f)
+            );
+            GUILayout.BeginArea(new Rect( start.position + (end.position - start.position)/2f, new Vector2(50f, 50f)));
+            EditorGUILayout.LabelField("" + cost);
+            GUILayout.EndArea();
+            Handles.color = original;
         }
     }
 

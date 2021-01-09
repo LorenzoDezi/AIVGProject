@@ -13,6 +13,7 @@ namespace GOAP.Editor {
         private AgentEditorContainer agentContainer;
 
         private Vector2 scrollPosition;
+        private Vector2 mousePosition;
 
         enum UserAction { AddNode, DeleteNode }
 
@@ -23,7 +24,7 @@ namespace GOAP.Editor {
         }
 
         private void OnGUI() {
-
+            
             selectedAgent = Selection.activeTransform?.GetComponent<Agent>();
             if(selectedAgent == null) {
                 DrawMessage("Select a gameObject with an Agent component!");
@@ -32,11 +33,21 @@ namespace GOAP.Editor {
                 lastAgentID = selectedAgent.GetInstanceID();
                 agentContainer = new AgentEditorContainer(selectedAgent);
             }
+
+            ProcessInput();
             agentContainer.UpdateConnections();
             //TODO: Try placing a button to refresh if modifies occurs (see Refresh())
             DrawEditor();
         }
 
+        private void ProcessInput() {
+
+            Event e = Event.current;
+            if(agentContainer != null && e.type == EventType.MouseDown && e.button == 0)
+                agentContainer.SelectedAt(e.mousePosition);
+
+        }
+        
         private void Refresh() {
 
         }
