@@ -81,7 +81,7 @@ public class ConeOfVisionComponent : MonoBehaviour {
     }
 
     private void SetConeRayInfo(Vector2 direction, float angle) {
-        direction.RotatedBy(angle, ref rotatedDir);
+        rotatedDir = direction.RotatedBy(angle);
         var hit = Physics2D.Raycast(transform.position, rotatedDir, coneOfVisionLenght, obstacleLayer);
         rayInfo.hasHit = hit.collider != null;
         rayInfo.angle = angle;

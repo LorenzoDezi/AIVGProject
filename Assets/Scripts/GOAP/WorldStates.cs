@@ -58,7 +58,8 @@ namespace GOAP {
         }
 
         public bool Contains(WorldState state) {
-            return stateDict.ContainsKey(state.Key) && stateDict[state.Key].Value.Equals(state.Value);
+            return state.Key != null && stateDict.ContainsKey(state.Key) 
+                && stateDict[state.Key].Value.Equals(state.Value);
         }
 
         public bool LinkedWith(WorldStates others) {

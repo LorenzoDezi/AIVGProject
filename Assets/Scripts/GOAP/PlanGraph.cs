@@ -13,13 +13,16 @@ namespace GOAP {
             Nodes = new List<PlanNode>();
         }
 
-        public PlanGraph(List<Action> actions) : this() {
+        public PlanGraph(List<Action> actions, bool forward = true) : this() {
             actions.ForEach((action) => Nodes.Add(new PlanNode(action)));
             Nodes.ForEach((node) => AddConnections(node));
         }
 
-        public void AddConnections(PlanNode node) {
-            List<PlanNode> connectedPlanNodes = GetConnectedNodesFrom(node);
+        
+
+        public void AddConnections(PlanNode node, bool forward = true) {
+            List<PlanNode> connectedPlanNodes = forward ? 
+                GetConnectedNodesFrom(node) : GetConnectedNodesTowards(node);
             foreach(var connectedNode in connectedPlanNodes) {
                 PlanConnection planConnection = new PlanConnection(node, connectedNode);
                 node.AddConnection(planConnection);
@@ -29,6 +32,11 @@ namespace GOAP {
         private List<PlanNode> GetConnectedNodesFrom(PlanNode planNode) {
             WorldStates preconditionsToSatisfy = planNode.Action.Preconditions;
             return Nodes.Where((node) => node != planNode && node.Action.Effects.LinkedWith(preconditionsToSatisfy)).ToList();
+        }
+
+        private List<PlanNode> GetConnectedNodesTowards(PlanNode planNode) {
+            WorldStates effectsToMatch = planNode.Action.Effects;
+            return Nodes.Where((node) => node != planNode && node.Action.Preconditions.LinkedWith(effectsToMatch)).ToList();
         }
 
         public void AddNode(Action action) {
@@ -46,6 +54,13 @@ namespace GOAP {
                 }
             }
             Nodes.Remove(toBeRemoved);
+        }
+
+        public void UpdateConnections() {
+            foreach(var node in Nodes) {
+                node.PlanConnections.Clear();
+                AddConnections(node);
+            }
         }
 
         public void ClearRecords() {

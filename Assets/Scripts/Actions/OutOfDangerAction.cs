@@ -34,12 +34,12 @@ public class OutOfDangerAction : GOAP.Action {
     private Vector3? GetDestination() {
         Vector3? destination = null;
         Vector2 dangerDirection = (transform.position - dangerSensor.DangerSource).normalized;
-        Vector3 rotatedDangerDirection = Vector3.zero;
+        Vector2 rotatedDangerDirection = Vector2.zero;
         for (int i = 0; i < maxSearchOutOfDangerIterations; i++) {
 
-            dangerDirection.RotatedBy(Random.Range(0f, 90f), ref rotatedDangerDirection);
+            rotatedDangerDirection = dangerDirection.RotatedBy(Random.Range(0f, 90f));
             destination = dangerSensor.DangerSource +
-                rotatedDangerDirection * (dangerSensor.DangerRadius + 4f);
+                ((Vector3) rotatedDangerDirection) * (dangerSensor.DangerRadius + 4f);
 
             var node = AstarPath.active.GetNearest(destination.Value).node;
             if (node.Walkable)

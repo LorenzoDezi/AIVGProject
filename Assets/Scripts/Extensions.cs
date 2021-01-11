@@ -10,11 +10,13 @@ public static class LayerMaskExtensions {
 
 public static class Math2D {
 
-    public static void RotatedBy(this Vector2 original, float angle, ref Vector3 result) {
+    public static Vector2 RotatedBy(this Vector2 original, float angle) {
         //result is for caching purpose
+        Vector2 result = new Vector2();
         result.x = original.x * Mathf.Cos(angle * Mathf.Deg2Rad) + original.y * -Mathf.Sin(angle * Mathf.Deg2Rad);
         result.y = original.x * Mathf.Sin(angle * Mathf.Deg2Rad) + original.y * Mathf.Cos(angle * Mathf.Deg2Rad);
-        result.z = 0f;
+        return result;
+
     }
 }
 
