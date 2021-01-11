@@ -74,19 +74,27 @@ namespace GOAP.Editor {
             nodeRect = GUILayout.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);
         }
 
+        public void Draw(Color color) {
+            Color original = GUI.backgroundColor;
+            GUI.backgroundColor = color;
+            Draw();
+            GUI.backgroundColor = original;
+        }
+
         public void DrawPlans() {
             foreach(var conn in Connections) {                
                 conn.Draw();
-                ConnectLine(nodeRect, conn.nodeRect, conn.Cost, Color.red);
+                DrawArrow(nodeRect, conn.nodeRect, conn.Cost, Color.red);
                 conn.DrawPlans();
             }
         }
 
-        private void ConnectLine(Rect start, Rect end, float cost, Color color) {
+        private void DrawArrow(Rect start, Rect end, float cost, Color color) {
 
             Vector2 direction = (end.position - start.position).normalized;
             Vector2 arrowStart = start.center + new Vector2(direction.x * start.width / 2f, direction.y * start.height / 2f);
             Vector2 arrowEnd = end.center - new Vector2(direction.x * end.width / 2f, direction.y * end.height / 2f);
+
             Handles.DrawAAPolyLine(
                 10f,
                 arrowStart,

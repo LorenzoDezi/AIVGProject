@@ -64,9 +64,13 @@ namespace GOAP.Editor {
         }
 
         public void Draw(AgentEditorWindow window, AgentEditorSelectedEffects effectsChosen) {
+
+            if (effectsChosen.Effects.Count == 0)
+                return;
+
             foreach(var node in nodes) {
                 if(node.ActionNode.Satisfy(effectsChosen.Effects)) {
-                    node.Draw();
+                    node.Draw(Color.cyan);
                     node.DrawPlans();
                 }
             }

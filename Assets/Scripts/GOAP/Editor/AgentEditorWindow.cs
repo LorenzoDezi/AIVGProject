@@ -48,12 +48,11 @@ namespace GOAP.Editor {
             }
 
             agentContainer.UpdateConnections();
-            //TODO: Try placing a button to refresh if modifies occurs (see Refresh())
             DrawEditor();
         }
         
         private void Refresh() {
-
+            agentContainer = new AgentEditorContainer(selectedAgent);
         }
 
         private void DrawMessage(string message) {
@@ -76,22 +75,39 @@ namespace GOAP.Editor {
         }
 
         private void DrawHeader() {
+
             headerSize.x = Mathf.Clamp(position.width / 4f, 100f, 275f);
             headerSize.y = position.height;
             headerStyle.normal.background = MakeTex(
-                Convert.ToInt32(headerSize.x), 
-                Convert.ToInt32(headerSize.y), 
+                Convert.ToInt32(headerSize.x),
+                Convert.ToInt32(headerSize.y),
                 new Color(0.6f, 0.6f, 0.6f, 1f)
             );
+
             GUILayout.BeginArea(new Rect(Vector2.zero, headerSize), headerStyle);
+
             selectedEffectsData.Update();
             EditorGUILayout.PropertyField(selectedEffectsData.FindProperty("selectedEffects"), GUILayout.Width(headerSize.x - 20f));
             selectedEffectsData.ApplyModifiedProperties();
+            DrawRefreshButton();
+
+            GUILayout.EndArea();
+        }
+
+        private void DrawRefreshButton() {
+
+            GUILayout.BeginArea(new Rect(headerSize.x / 3f, headerSize.y - 100f, 100f, 50f), headerStyle);
+
+            if (GUILayout.Button("Refresh", GUILayout.Width(100f), GUILayout.Height(50f)))
+                Refresh();
+
             GUILayout.EndArea();
         }
 
         private void DrawAgent() {
+
             GUILayout.BeginArea(new Rect(new Vector2(headerSize.x, 0f), new Vector2(position.width - headerSize.x, position.height)));
+
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             //This label is needed to make the scrollArea work, at least i think
             GUILayout.Label(
@@ -102,6 +118,7 @@ namespace GOAP.Editor {
             agentContainer.Draw(this, selectedEffects);
             EndWindows();
             EditorGUILayout.EndScrollView();
+
             GUILayout.EndArea();
         }
 
