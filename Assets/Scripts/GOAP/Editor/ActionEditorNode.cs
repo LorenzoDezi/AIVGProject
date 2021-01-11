@@ -8,9 +8,6 @@ namespace GOAP.Editor {
 
     public class ActionEditorNode {
 
-        private Color bgColor;
-        private Color selectedBgColor;
-        private Color currentBgColor;
         private Rect nodeRect;
         private GUIStyle buttonStyle;
         private Vector2 scrollPosition = Vector2.zero;
@@ -25,20 +22,12 @@ namespace GOAP.Editor {
             set => nodeRect.position = value;
         }
 
+        public Texture2D ArrowTex { get; set; }
+
         public float Width => nodeRect.width;
         public float Height => nodeRect.height;
 
         public float Cost => ActionNode.Action.Cost;
-        private bool isSelected;
-        public bool IsSelected {
-            get {
-                return isSelected;
-            }
-            set {
-                isSelected = value;
-                currentBgColor = isSelected ? selectedBgColor : bgColor;
-            }
-        }
 
 
         public ActionEditorNode(PlanNode actionNode) {
@@ -46,18 +35,7 @@ namespace GOAP.Editor {
             this.ID = actionNode.Action.GetInstanceID();
             Connections = new List<ActionEditorNode>();
             SetRect();
-
-            SetupBgColors();
             buttonStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter };
-        }
-
-        private void SetupBgColors() {
-            bgColor = GUI.backgroundColor;
-            float bgColorAlpha = GUI.backgroundColor.a;
-            bgColorAlpha -= 0.75f;
-            bgColor.a = bgColorAlpha;
-            selectedBgColor = GUI.backgroundColor;
-            currentBgColor = bgColor;
         }
 
         private void SetRect() {
@@ -71,8 +49,7 @@ namespace GOAP.Editor {
         }
 
         private void OnDraw(int id) {
-            Color original = GUI.backgroundColor;
-            GUI.backgroundColor = currentBgColor;
+
             if(GUILayout.Button(expanded ? "Hide Inspector" : "Show Inspector", buttonStyle, GUILayout.Width(100f), GUILayout.Height(25f))) {
                 expanded = !expanded;
                 SetRect();
@@ -86,7 +63,6 @@ namespace GOAP.Editor {
                 EditorGUILayout.EndScrollView();
             }
             GUI.DragWindow();
-            GUI.backgroundColor = original;
 
         }
 
@@ -95,22 +71,12 @@ namespace GOAP.Editor {
         }
 
         public void Draw() {
-            Color original = GUI.backgroundColor;
-            GUI.backgroundColor = currentBgColor;
             nodeRect = GUILayout.Window(ID, nodeRect, OnDraw, ActionNode.Action.name);
-            GUI.backgroundColor = original;
-        }
-
-
-        public void Select() {
-            IsSelected = true;
-            foreach(var conn in Connections) {
-                conn.Select();
-            }
         }
 
         public void DrawPlans() {
             foreach(var conn in Connections) {                
+                conn.Draw();
                 ConnectLine(nodeRect, conn.nodeRect, conn.Cost, Color.red);
                 conn.DrawPlans();
             }
@@ -119,17 +85,24 @@ namespace GOAP.Editor {
         private void ConnectLine(Rect start, Rect end, float cost, Color color) {
 
             Vector2 direction = (end.position - start.position).normalized;
-
-            Handles.DrawBezier(
-                start.center + new Vector2(direction.x * start.width/2f, direction.y * start.height/2f), 
-                end.center - new Vector2(direction.x * end.width/2f, direction.y * end.height/2f),
-                start.center + direction,
-                end.center + direction,
-                color,
-                null,
-                2f
+            Vector2 arrowStart = start.center + new Vector2(direction.x * start.width / 2f, direction.y * start.height / 2f);
+            Vector2 arrowEnd = end.center - new Vector2(direction.x * end.width / 2f, direction.y * end.height / 2f);
+            Handles.DrawAAPolyLine(
+                10f,
+                arrowStart,
+                arrowEnd
             );
-            
+
+            direction = arrowEnd - arrowStart;
+            float arrowSize = 10f;
+            arrowStart += direction / 2f;
+            direction.Normalize();
+            Handles.DrawAAConvexPolygon(
+                    arrowStart,
+                    arrowStart + (direction + direction.RotatedBy(90f)) * arrowSize,
+                    arrowStart + (direction + direction.RotatedBy(-90f)) * arrowSize
+            );
+
             GUILayout.BeginArea(new Rect( start.center + (end.center - start.center)/2f, new Vector2(50f, 50f)));
             EditorGUILayout.LabelField("" + cost);
             GUILayout.EndArea();

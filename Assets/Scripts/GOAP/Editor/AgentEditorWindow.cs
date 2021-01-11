@@ -8,8 +8,8 @@ namespace GOAP.Editor {
 
     public class AgentEditorSelectedEffects : ScriptableObject {
         [SerializeField]
-        private WorldStates effects;
-        public WorldStates Effects => effects;
+        private WorldStates selectedEffects;
+        public WorldStates Effects => selectedEffects;
 
     }
 
@@ -27,14 +27,12 @@ namespace GOAP.Editor {
         private AgentEditorSelectedEffects selectedEffects;
         private SerializedObject selectedEffectsData;
 
-
         [MenuItem("Window/AgentEditor")]
         static void ShowEditor() {
             var window = (AgentEditorWindow)GetWindow(typeof(AgentEditorWindow));
             window.selectedEffects = new AgentEditorSelectedEffects();
             window.selectedEffectsData = new SerializedObject(window.selectedEffects);
             window.headerStyle = new GUIStyle();
-            
             window.minSize = new Vector2(800, 600);
         }
 
@@ -49,45 +47,9 @@ namespace GOAP.Editor {
                 agentContainer = new AgentEditorContainer(selectedAgent);
             }
 
-            ProcessInput();
             agentContainer.UpdateConnections();
             //TODO: Try placing a button to refresh if modifies occurs (see Refresh())
             DrawEditor();
-        }
-
-        private void ProcessInput() {
-
-            Event e = Event.current;
-            mousePosition = e.mousePosition + scrollPosition - new Vector2(headerSize.x, 0f);
-            if (agentContainer != null && e.type == EventType.MouseDown && e.button == 1) {
-                OpenContextMenuUsing(e);
-            }
-
-        }
-
-        private void OpenContextMenuUsing(Event e) {
-            GenericMenu menu = new GenericMenu();
-            GUIContent menuItemContent;
-            GenericMenu.MenuFunction menuItemFunction;
-            if(agentContainer.GetAt(mousePosition) != null) {
-                menuItemContent = new GUIContent("Highlight plans");
-                menuItemFunction = HighlightPlans;
-            } else {
-                menuItemContent = new GUIContent("Stop showing plans");
-                menuItemFunction = StopShowingPlans;
-            }
-            menu.AddItem(menuItemContent, false, menuItemFunction);
-            menu.ShowAsContext();
-            e.Use();
-        }
-
-        private void HighlightPlans() {           
-            agentContainer.SelectNodeAt(mousePosition);
-            agentContainer.ShowSelectedNodePlans(true);
-        }
-
-        private void StopShowingPlans() {
-            agentContainer.ShowSelectedNodePlans(false);
         }
         
         private void Refresh() {
@@ -110,16 +72,20 @@ namespace GOAP.Editor {
             
             DrawHeader();
             DrawAgent();
+
         }
 
         private void DrawHeader() {
             headerSize.x = Mathf.Clamp(position.width / 4f, 100f, 275f);
             headerSize.y = position.height;
             headerStyle.normal.background = MakeTex(
-                Convert.ToInt32(headerSize.x), Convert.ToInt32(headerSize.y), new Color(0.6f, 0.6f, 0.6f, 1f));
+                Convert.ToInt32(headerSize.x), 
+                Convert.ToInt32(headerSize.y), 
+                new Color(0.6f, 0.6f, 0.6f, 1f)
+            );
             GUILayout.BeginArea(new Rect(Vector2.zero, headerSize), headerStyle);
             selectedEffectsData.Update();
-            EditorGUILayout.PropertyField(selectedEffectsData.FindProperty("effects"), GUILayout.Width(headerSize.x - 20f));
+            EditorGUILayout.PropertyField(selectedEffectsData.FindProperty("selectedEffects"), GUILayout.Width(headerSize.x - 20f));
             selectedEffectsData.ApplyModifiedProperties();
             GUILayout.EndArea();
         }
@@ -128,9 +94,12 @@ namespace GOAP.Editor {
             GUILayout.BeginArea(new Rect(new Vector2(headerSize.x, 0f), new Vector2(position.width - headerSize.x, position.height)));
             scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
             //This label is needed to make the scrollArea work, at least i think
-            GUILayout.Label(GUIContent.none, GUILayout.Width(position.width * 2f));
+            GUILayout.Label(
+                GUIContent.none, 
+                GUILayout.Width(position.width * 2f), 
+                GUILayout.Height(position.height * 1.5f));
             BeginWindows();
-            agentContainer.Draw(this);
+            agentContainer.Draw(this, selectedEffects);
             EndWindows();
             EditorGUILayout.EndScrollView();
             GUILayout.EndArea();

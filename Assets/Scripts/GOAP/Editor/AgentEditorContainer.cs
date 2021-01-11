@@ -13,11 +13,8 @@ namespace GOAP.Editor {
         private List<ActionEditorNode> nodes;
         private float horizontalSpacing = 25f;
         private float verticalSpacing = 100f;
-        private ActionEditorNode selectedNode;
-        private PlanGraph graph;
-        private bool showingPlans;
 
-        public bool HasSelected => selectedNode != null;
+        private PlanGraph graph;
 
         public AgentEditorContainer(Agent agent) {
 
@@ -66,23 +63,13 @@ namespace GOAP.Editor {
             return null;
         }
 
-        public void SelectNodeAt(Vector2 mousePosition) {
-            selectedNode = GetAt(mousePosition);
-        }
-
-        public void ShowSelectedNodePlans(bool mustShow) {
-            showingPlans = mustShow;
-            nodes.ForEach((n) => n.IsSelected = false);
-            if(showingPlans)
-                selectedNode.Select();
-        }
-
-        public void Draw(AgentEditorWindow window) {
+        public void Draw(AgentEditorWindow window, AgentEditorSelectedEffects effectsChosen) {
             foreach(var node in nodes) {
-                node.Draw();                
+                if(node.ActionNode.Satisfy(effectsChosen.Effects)) {
+                    node.Draw();
+                    node.DrawPlans();
+                }
             }
-            if (showingPlans)
-                selectedNode?.DrawPlans();
         }
 
     }
