@@ -72040,7 +72040,7 @@ PrefabInstance:
     - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyNearTresholdDistance
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -75890,7 +75890,7 @@ PrefabInstance:
     - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyNearTresholdDistance
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -76576,7 +76576,7 @@ PrefabInstance:
     - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyNearTresholdDistance
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -77058,7 +77058,7 @@ PrefabInstance:
     - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyNearTresholdDistance
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
@@ -78861,7 +78861,7 @@ PrefabInstance:
     - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: enemyNearTresholdDistance
-      value: 9
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}

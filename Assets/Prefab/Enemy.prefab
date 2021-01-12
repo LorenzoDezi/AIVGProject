@@ -430,7 +430,7 @@ MonoBehaviour:
   visionLenght: 8
   checkTargetDelay: 0.2
   sqrMinLoseSightDistance: 1000
-  enemyNearTresholdDistance: 9
+  enemyNearTresholdDistance: 4
 --- !u!114 &744502580
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using GOAP;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public static class LayerMaskExtensions {
@@ -29,18 +31,4 @@ public static class TransformExtensions {
     public static float SqrDistance(this Transform start, Transform end) {
         return (end.position - start.position).sqrMagnitude;
     }
-}
-
-public static class DictionaryExtensions {
-
-    public static T UpdateWith<T, K, V>(this T original, IDictionary<K, V> update) where T : Dictionary<K, V> {
-        foreach(var pair in update) {
-            if (original.ContainsKey(pair.Key))
-                original[pair.Key] = pair.Value;
-            else
-                original.Add(pair.Key, pair.Value);
-        }
-        return original;
-    }
-
 }

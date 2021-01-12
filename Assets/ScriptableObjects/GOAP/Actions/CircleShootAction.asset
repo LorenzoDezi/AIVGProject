@@ -46,7 +46,7 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-  cost: 3
+  cost: 2
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 33792

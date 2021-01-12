@@ -13,25 +13,18 @@ namespace GOAP {
 
         [SerializeField]
         private List<WorldState> states;
-        private Dictionary<WorldStateKey, WorldState> stateDict;
-
         public int Count => states.Count;
 
-        public Dictionary<WorldStateKey, WorldStateValue> WorldStateValues => 
-            stateDict.ToDictionary(pair => pair.Key, pair => pair.Value.Value);
+        public List<WorldStateValue> WorldStateValues =>
+            states.Select((state) => state.Value).ToList();
 
         public WorldStates() {
             states = new List<WorldState>();
-            stateDict = new Dictionary<WorldStateKey, WorldState>();
         }
 
         public WorldStates(WorldStates worldStates) : this() {
-            foreach(WorldState state in worldStates) {
-                if (!stateDict.ContainsKey(state.Key)) {
-                    var copyState = new WorldState(state);
-                    Add(copyState);
-                }
-            }
+            foreach(WorldState state in worldStates)
+                states.Add(new WorldState(state));
         }
 
         public void Update(WorldStates worldStates) {
@@ -40,17 +33,18 @@ namespace GOAP {
             }
         }
 
-        public void Update(WorldState state) {
-            if (stateDict.ContainsKey(state.Key))
-                stateDict[state.Key].Update(state);
-            else {
-                Add(state);
-            }
+        public void Add(WorldState newState) {
+            states.Add(newState);
         }
 
-        public void Add(WorldState state) {
-            states.Add(state);
-            stateDict.Add(state.Key, state);
+        public void Update(WorldState newState) {
+            foreach(var state in states) {
+                if(state.Key == newState.Key) {
+                    state.Update(newState);
+                    return;
+                }
+            }
+            states.Add(newState);
         }
 
         public bool Contains(WorldStates desiredStates) {
@@ -58,8 +52,7 @@ namespace GOAP {
         }
 
         public bool Contains(WorldState state) {
-            return state.Key != null && stateDict.ContainsKey(state.Key) 
-                && stateDict[state.Key].Value.Equals(state.Value);
+            return state.Key != null && states.Contains(state);
         }
 
         public bool LinkedWith(WorldStates others) {
@@ -80,7 +73,7 @@ namespace GOAP {
         }
 
         public WorldState this[WorldStateKey key] {
-            get => stateDict.ContainsKey(key) ? stateDict[key] : null;
+            get => states.FirstOrDefault((state) => state.Key == key);
         }
 
         public override bool Equals(object obj) {

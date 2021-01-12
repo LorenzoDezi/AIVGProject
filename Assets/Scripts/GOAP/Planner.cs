@@ -13,8 +13,8 @@ namespace GOAP {
         public bool Closed { get; set; }
         public bool Open { get; set; }
 
-        public Dictionary<WorldStateKey, WorldStateValue> CurrGoalStates { get; set; }
-        public Dictionary<WorldStateKey, WorldStateValue> DesiredGoalStates { get; set; }
+        public List<WorldStateValue> CurrGoalStates { get; set; }
+        public List<WorldStateValue> DesiredGoalStates { get; set; }
 
         public List<PlanConnection> Connections => node.PlanConnections;
 
@@ -28,10 +28,7 @@ namespace GOAP {
         }
 
         public float TotalCost => CostSoFar + HeuristicCost;
-        public bool IsSatisfied => DesiredGoalStates.All(
-            (keyValuePair) => CurrGoalStates.ContainsKey(keyValuePair.Key) 
-                && CurrGoalStates[keyValuePair.Key].Equals(keyValuePair.Value)
-        );
+        public bool IsSatisfied => DesiredGoalStates.All(CurrGoalStates.Contains);
 
         public PlanNodeRecord(PlanNode node) {
             this.node = node;
@@ -56,11 +53,11 @@ namespace GOAP {
     public class Planner {
 
         private PlanGraph graph = null;
-        private Dictionary<WorldStateKey, WorldStateValue> heuristicCache;
+        private List<WorldStateValue> heuristicCache;
 
         public Planner(List<Action> actions) {
             graph = new PlanGraph(actions);
-            heuristicCache = new Dictionary<WorldStateKey, WorldStateValue>();
+            heuristicCache = new List<WorldStateValue>();
         }
 
         public void AddAction(Action action) {
@@ -71,97 +68,95 @@ namespace GOAP {
             graph.RemoveNode(action);
         }
 
-        //TODO: Refactor and heuristic cache -> also use a specific class for heuristic (separation and generalization)
-        public int HeuristicEstimate(Dictionary<WorldStateKey, WorldStateValue> perception, 
-            Dictionary<WorldStateKey, WorldStateValue> desiredStates,
-            PlanNode node) {
-
-            heuristicCache.Clear();
-            InitHeuristicCache(perception, node);
+        public int HeuristicEstimate(PlanNodeRecord record) {
 
             int satisfiedCount = 0;
-            foreach(var kvDesiredState in desiredStates) {
-                if (!heuristicCache.ContainsKey(kvDesiredState.Key))
-                    continue;
-                WorldStateValue value;
-                if (!node.Preconditions.TryGetValue(kvDesiredState.Key, out value))
-                    value = kvDesiredState.Value;
-                if (heuristicCache[value.key].Equals(value))
+            foreach(var desiredState in record.DesiredGoalStates) {
+                if (record.CurrGoalStates.Contains(desiredState))
                     satisfiedCount++;
             }
 
-            return heuristicCache.Count - satisfiedCount;
-        }
-
-        private void InitHeuristicCache(Dictionary<WorldStateKey, WorldStateValue> perception, PlanNode node) {
-            foreach (var kvPercState in perception) {
-                WorldStateValue value;
-                if (!node.Effects.TryGetValue(kvPercState.Key, out value))
-                    value = kvPercState.Value;
-                heuristicCache.Add(kvPercState.Key, value);
-            }
+            return record.DesiredGoalStates.Count - satisfiedCount;
         }
 
         public Queue<Action> Plan(Goal goal, WorldStates worldPerception) {
-            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
-            var world = World.WorldStates.WorldStateValues;
-            var desiredWorld = goal.DesiredStates.WorldStateValues;
-            world.UpdateWith(worldPerception.WorldStateValues);
-            foreach (PlanNode node in graph.Nodes) {
-                if (node.Satisfy(goal.DesiredStates) 
-                    && node.Action.CheckProceduralConditions()) {
-                    PlanNodeRecord nodeRecord = node.Record;
-                    nodeRecord.CurrGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(world).UpdateWith(node.Effects);
-                    nodeRecord.DesiredGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(desiredWorld).UpdateWith(node.Preconditions);
-                    nodeRecord.HeuristicCost = HeuristicEstimate(world, desiredWorld, node);
-                    nodeRecord.Open = true;
-                    open.Add(nodeRecord);
-                }
-            }
+
+            List<PlanNodeRecord> open = GetOpenList(goal, worldPerception);
             bool found = false;
             PlanNodeRecord curr = null;
+
             while (open.Count > 0) {
 
-                curr = open.Min();                
+                curr = open.Min();
                 if (curr.IsSatisfied) {
                     found = true;
                     break;
                 }
 
                 foreach (var conn in curr.Connections) {
-                    PlanNode connectedNode = conn.ToNode;
-                    if (!connectedNode.Action.CheckProceduralConditions())
-                        continue;
-                    int heuristicCost = HeuristicEstimate(curr.CurrGoalStates, curr.DesiredGoalStates, connectedNode);
-                    float newCostSoFar = curr.CostSoFar + conn.Cost;
-                    float newTotalCost = newCostSoFar + heuristicCost;
-                    PlanNodeRecord nodeRecord = connectedNode.Record;
-                    //Closed check
-                    if (nodeRecord.Closed) {
-                        if (nodeRecord.TotalCost <= newTotalCost)
-                            continue;
-                        nodeRecord.Closed = false;
-                        //Open check
-                    } else if (nodeRecord.Open) {
-                        if (nodeRecord.TotalCost <= newTotalCost)
-                            continue;
-                        //Unvisited
-                    } else {
-                        nodeRecord.CurrGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(curr.CurrGoalStates).UpdateWith(connectedNode.Effects);
-                        nodeRecord.DesiredGoalStates = new Dictionary<WorldStateKey, WorldStateValue>(curr.DesiredGoalStates).UpdateWith(connectedNode.Preconditions);
-                        nodeRecord.HeuristicCost = heuristicCost;
-                        nodeRecord.NextNode = curr;
-                        nodeRecord.CostSoFar = newCostSoFar;
-                        nodeRecord.Open = true;
-                        open.Add(nodeRecord);
-                    }
+                    var connectedNodeRecord = GetNextNode(curr, conn);
+                    if (connectedNodeRecord != null)
+                        open.Add(connectedNodeRecord);
                 }
+
                 open.Remove(curr);
                 curr.Closed = true;
             }
+
             Queue<Action> actions = ExtractActions(found, curr);
             graph.ClearRecords();
             return actions;
+        }
+
+        private PlanNodeRecord GetNextNode(PlanNodeRecord curr, PlanConnection conn) {
+
+            PlanNode connectedNode = conn.ToNode;
+            if (!connectedNode.Action.CheckProceduralConditions())
+                return null;
+
+            float newCostSoFar = curr.CostSoFar + conn.Cost;
+            PlanNodeRecord nodeRecord = connectedNode.Record;
+            bool convenient = nodeRecord.CostSoFar > newCostSoFar;
+
+            if (nodeRecord.Closed) {
+                if (convenient)
+                    nodeRecord.Closed = false;
+                else
+                    return null;
+            } else if (nodeRecord.Open) {
+                if (!convenient)
+                    return null;
+            } else
+                nodeRecord.Open = true;
+
+            nodeRecord.CurrGoalStates = curr.CurrGoalStates.GetUpdatedWith(connectedNode.Effects);
+            nodeRecord.DesiredGoalStates = curr.DesiredGoalStates.GetUpdatedWith(connectedNode.Preconditions);
+            nodeRecord.HeuristicCost = HeuristicEstimate(nodeRecord);
+            nodeRecord.NextNode = curr;
+            nodeRecord.CostSoFar = newCostSoFar;
+            return nodeRecord;
+        }
+
+        private List<PlanNodeRecord> GetOpenList(Goal goal, WorldStates worldPerception) {
+
+            List<PlanNodeRecord> open = new List<PlanNodeRecord>();
+            var world = World.WorldStates.WorldStateValues;
+            var desiredWorld = goal.DesiredStates.WorldStateValues;
+            world.UpdateWith(worldPerception.WorldStateValues);
+
+            foreach (PlanNode node in graph.Nodes) {
+                if (node.Satisfy(goal.DesiredStates)
+                    && node.Action.CheckProceduralConditions()) {
+                    PlanNodeRecord nodeRecord = node.Record;
+                    nodeRecord.CurrGoalStates = world.GetUpdatedWith(node.Effects);
+                    nodeRecord.DesiredGoalStates = desiredWorld.GetUpdatedWith(node.Preconditions);
+                    nodeRecord.HeuristicCost = HeuristicEstimate(nodeRecord);
+                    nodeRecord.Open = true;
+                    open.Add(nodeRecord);
+                }
+            }
+
+            return open;
         }
 
         private static Queue<Action> ExtractActions(bool planFound, PlanNodeRecord startingNode) {

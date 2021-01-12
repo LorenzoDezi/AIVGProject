@@ -9,11 +9,13 @@ namespace GOAP {
     public class PlanNode {
 
         public Action Action { get; }
-        private Dictionary<WorldStateKey, WorldStateValue> preconditions;
-        public Dictionary<WorldStateKey, WorldStateValue> Preconditions => preconditions;
 
-        private Dictionary<WorldStateKey, WorldStateValue> effects;
-        public Dictionary<WorldStateKey, WorldStateValue> Effects => effects;
+        private List<WorldStateValue> preconditions;
+        public List<WorldStateValue> Preconditions => preconditions;
+
+        private List<WorldStateValue> effects;
+        public List<WorldStateValue> Effects => effects;
+
         public List<PlanConnection> PlanConnections { get; }
 
         private PlanNodeRecord record;
