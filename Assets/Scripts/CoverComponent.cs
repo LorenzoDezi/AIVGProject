@@ -14,6 +14,8 @@ public class CoverComponent : MonoBehaviour
     private LayerMask toCoverFromMask;
     [SerializeField]
     private LayerMask obstacleMask;
+    [SerializeField]
+    private LayerMask wallMask;
     Transform enemyTransf;
     bool hasTransformInSight;
 
@@ -22,6 +24,7 @@ public class CoverComponent : MonoBehaviour
 
     private bool canCover;
     public bool CanCover => canCover;
+
     public delegate void CanCoverChangedHandler(bool canCover);
     public event CanCoverChangedHandler CanCoverChangedEvent;
     public bool IsOccupied { get; set; }
@@ -36,7 +39,8 @@ public class CoverComponent : MonoBehaviour
 
         var wait = new WaitForSeconds(checkCoverInterval);
         while(hasTransformInSight) {
-            canCover = transform.HasObstacleInBetween(enemyTransf, obstacleMask);
+            canCover = transform.HasObstacleInBetween(enemyTransf, obstacleMask) && 
+                !transform.HasObstacleInBetween(enemyTransf, wallMask);
             CanCoverChangedEvent?.Invoke(canCover);
             yield return wait;
         }

@@ -20,12 +20,6 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-    - value:
-        key: {fileID: 11400000, guid: 3e2bb2c140fe30f4f8c463213fda649c, type: 2}
-        intValue: 0
-        floatValue: 0
-        boolValue: 1
-        gameObjectValue: {fileID: 0}
   effects:
     states:
     - value:

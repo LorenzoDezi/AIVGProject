@@ -26,7 +26,7 @@ public class KnifeController : MonoBehaviour {
         }
     }
 
-    private bool isEnemyNear;
+    public float WeaponRange => knifeLenght * 2;
 
     void Awake()
     {

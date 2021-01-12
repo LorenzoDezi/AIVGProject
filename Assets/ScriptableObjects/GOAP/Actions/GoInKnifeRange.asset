@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 57852d195c6f55e4f92639576d8f18c0, type: 3}
-  m_Name: GoInWeaponRange
+  m_Name: GoInKnifeRange
   m_EditorClassIdentifier: 
   preconditions:
     states:
@@ -23,12 +23,12 @@ MonoBehaviour:
   effects:
     states:
     - value:
-        key: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd, type: 2}
+        key: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
         intValue: 0
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-  cost: 0
+  cost: 2
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 33792

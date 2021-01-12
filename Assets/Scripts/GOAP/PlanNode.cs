@@ -17,11 +17,13 @@ namespace GOAP {
         public List<PlanConnection> PlanConnections { get; }
 
         private PlanNodeRecord record;
-        public PlanNodeRecord Record { get {
+        public PlanNodeRecord Record {
+            get {
                 if (record == null)
                     record = new PlanNodeRecord(this);
                 return record;
-            } }
+            }
+        }
 
         public PlanNode(Action nodeAction) {
             Action = nodeAction;

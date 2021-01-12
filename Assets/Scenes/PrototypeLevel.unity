@@ -416,8 +416,8 @@ MonoBehaviour:
   - {fileID: 2089853290383079074}
   - {fileID: 744502580}
   squadGoals:
-  - {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c, type: 2}
   - {fileID: 11400000, guid: e4efdc2f497f7e84390f18f9d44d3215, type: 2}
+  - {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c, type: 2}
 --- !u!4 &199099429
 Transform:
   m_ObjectHideFlags: 0
@@ -77764,7 +77764,7 @@ MonoBehaviour:
   squadGoals:
   - {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c, type: 2}
   - {fileID: 11400000, guid: 89bd674ba14e3db42bca1c22e8a18c78, type: 2}
-  - {fileID: 11400000, guid: 7dd8d9f9feff01e40ab2c20ce92cdfad, type: 2}
+  - {fileID: 11400000, guid: e4efdc2f497f7e84390f18f9d44d3215, type: 2}
   - {fileID: 11400000, guid: 7dd8d9f9feff01e40ab2c20ce92cdfad, type: 2}
 --- !u!4 &1308882680
 Transform:
@@ -79062,7 +79062,7 @@ PrefabInstance:
     - target: {fileID: 7138088295002142971, guid: 14fe00b1532f8a5429a53e291b6dc5d3,
         type: 3}
       propertyPath: maxRefills
-      value: 2147483647
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14fe00b1532f8a5429a53e291b6dc5d3, type: 3}
