@@ -21,6 +21,15 @@ public class SquadComponent : MonoBehaviour
         }
     }
 
+    public event EnemyLostHandler EnemyLost {
+        add {
+            enemySensor.EnemyLost += value;
+        }
+        remove {
+            enemySensor.EnemyLost -= value;
+        }
+    }
+
     public delegate void SquadCompDeathHandler(int squadIndex);
     public event SquadCompDeathHandler SquadCompDeath;
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 public delegate void EnemySpottedHandler(Transform enemySpotted);
+public delegate void EnemyLostHandler();
 
 public class EnemyVisualSensor : MonoBehaviour {
 
@@ -74,6 +75,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     public Vector3 LastSeenPosition { get; private set; }
     public Vector3 LastSeenDirection { get; private set; }
     public event EnemySpottedHandler EnemySpotted;
+    public event EnemyLostHandler EnemyLost;
     #endregion
 
     #region cached fields
@@ -121,8 +123,8 @@ public class EnemyVisualSensor : MonoBehaviour {
                 if (currEnemyDistance > sqrMinLoseSightDistance) {
                     visibleEnemy = null;
                     UpdateEnemySeenWS(false);
-                    //TODO: Start searching
                     isEnemySpotted = false;
+                    EnemyLost?.Invoke();
                 }
 
             } else {

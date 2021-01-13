@@ -446,6 +446,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73bea5747ed41a4ba85bf1d8b2771c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+  enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
 --- !u!1 &237138416
 GameObject:
   m_ObjectHideFlags: 0
@@ -77808,6 +77810,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d73bea5747ed41a4ba85bf1d8b2771c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+  enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
 --- !u!1 &1321414604
 GameObject:
   m_ObjectHideFlags: 0

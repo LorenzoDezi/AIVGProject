@@ -429,7 +429,7 @@ MonoBehaviour:
   visionAngle: 120
   visionLenght: 8
   checkTargetDelay: 0.2
-  sqrMinLoseSightDistance: 1000
+  sqrMinLoseSightDistance: 100
   enemyNearTresholdDistance: 4
 --- !u!114 &744502580
 MonoBehaviour:

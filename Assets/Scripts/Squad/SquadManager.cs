@@ -19,7 +19,7 @@ public class SquadManager : MonoBehaviour {
 
     [SerializeField]
     private List<SquadBehaviour> squadBehaviours;
-    private List<SquadSensor> squadSensors;
+    private SquadSensor[] squadSensors;
 
 
     private WorldStates squadPerception;
@@ -50,8 +50,10 @@ public class SquadManager : MonoBehaviour {
 
         squadBehaviours.ForEach((squadBehaviour) => squadBehaviour.Init(this));
 
-        squadSensors = GetComponents<SquadSensor>().ToList();
-        squadSensors.ForEach((squadSensor) => squadSensor.Init(this));
+        squadSensors = GetComponents<SquadSensor>();
+        for(int i = 0; i < squadSensors.Length; i++) {
+            squadSensors[i].Init(this);
+        }
     }
 
     private void OnSquadComponentDeath(int squadCompIndex) {
