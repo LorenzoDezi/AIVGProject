@@ -121,6 +121,7 @@ public class EnemyVisualSensor : MonoBehaviour {
                 if (currEnemyDistance > sqrMinLoseSightDistance) {
                     visibleEnemy = null;
                     UpdateEnemySeenWS(false);
+                    //TODO: Start searching
                     isEnemySpotted = false;
                 }
 

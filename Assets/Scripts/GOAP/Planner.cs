@@ -53,11 +53,9 @@ namespace GOAP {
     public class Planner {
 
         private PlanGraph graph = null;
-        private List<WorldStateValue> heuristicCache;
 
         public Planner(List<Action> actions) {
             graph = new PlanGraph(actions);
-            heuristicCache = new List<WorldStateValue>();
         }
 
         public void AddAction(Action action) {
@@ -140,6 +138,7 @@ namespace GOAP {
         private List<PlanNodeRecord> GetOpenList(Goal goal, WorldStates worldPerception) {
 
             List<PlanNodeRecord> open = new List<PlanNodeRecord>();
+
             var world = World.WorldStates.WorldStateValues;
             var desiredWorld = goal.DesiredStates.WorldStateValues;
             world.UpdateWith(worldPerception.WorldStateValues);

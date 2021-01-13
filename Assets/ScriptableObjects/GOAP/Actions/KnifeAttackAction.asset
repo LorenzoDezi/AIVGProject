@@ -52,4 +52,4 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-  cost: 2
+  cost: 1
