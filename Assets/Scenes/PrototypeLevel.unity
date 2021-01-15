@@ -448,6 +448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
   enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
+  alertTime: 5
 --- !u!1 &237138416
 GameObject:
   m_ObjectHideFlags: 0
@@ -76389,6 +76390,11 @@ PrefabInstance:
       propertyPath: obstacleLayerMask.m_Bits
       value: 33792
       objectReference: {fileID: 0}
+    - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: sqrMinLoseSightDistance
+      value: 200
+      objectReference: {fileID: 0}
     - target: {fileID: 4238676141369403258, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: damageStateKey
@@ -77812,6 +77818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
   enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
+  alertTime: 0
 --- !u!1 &1321414604
 GameObject:
   m_ObjectHideFlags: 0
@@ -78866,6 +78873,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 182847145, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 495220359, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: tagPenalties.Array.data[1]
       value: 10
@@ -78894,6 +78905,11 @@ PrefabInstance:
         type: 3}
       propertyPath: enemyNearTresholdDistance
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: sqrMinLoseSightDistance
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}

@@ -50,6 +50,11 @@ public class SquadComponent : MonoBehaviour
         enemySensor.SpotEnemy(enemySpotted);
     }
 
+    public void UpdateEnemy(Transform enemy) {
+        enemySensor.LastSeenPosition = enemy.position;
+        enemySensor.LastSeenDirection = enemy.right;
+    }
+
     public void AddGoalWith(SquadGoal goalTemplate) {
         currentSquadGoal = Instantiate(goalTemplate);
         agent.Add(currentSquadGoal);

@@ -22,6 +22,10 @@ public class EnemyVisualSensor : MonoBehaviour {
     private WorldState enemyNearWSTracked;
 
     [SerializeField]
+    private WorldStateKey enemyLostKey;
+    private WorldState enemyLostWSTracked;
+
+    [SerializeField]
     private WorldStateKey enemyInWeaponRangeKey;
     private WorldState enemyInWeaponRangeWSTracked;
     #endregion
@@ -72,8 +76,12 @@ public class EnemyVisualSensor : MonoBehaviour {
     private Transform visibleEnemy;
     public Transform VisibleEnemy => visibleEnemy;
 
-    public Vector3 LastSeenPosition { get; private set; }
-    public Vector3 LastSeenDirection { get; private set; }
+    [SerializeField]
+    private float searchTime = 5f;
+    private Coroutine searchTimer;
+
+    public Vector3 LastSeenPosition { get; set; }
+    public Vector3 LastSeenDirection { get; set; }
     public event EnemySpottedHandler EnemySpotted;
     public event EnemyLostHandler EnemyLost;
     #endregion
@@ -90,17 +98,24 @@ public class EnemyVisualSensor : MonoBehaviour {
 
         agentToUpdate = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
-        healthComp.HealthChanged += OnEnemyAttack;
         transform = GetComponent<Transform>();
 
-        enemySeenWSTracked = new WorldState(enemySeenKey, false);
-        enemyNearWSTracked = new WorldState(enemyNearKey, false);
-        enemyInWeaponRangeWSTracked = new WorldState(enemyInWeaponRangeKey, true);
-        agentToUpdate.UpdatePerception(enemySeenWSTracked);
-        agentToUpdate.UpdatePerception(enemyNearWSTracked);
-        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
+        InitPerception();
 
         CurrWeaponRange = Mathf.Infinity;
+        healthComp.HealthChanged += OnEnemyAttack;
+    }
+
+    private void InitPerception() {
+        enemySeenWSTracked = new WorldState(enemySeenKey, false);
+        enemyNearWSTracked = new WorldState(enemyNearKey, false);
+        enemyLostWSTracked = new WorldState(enemyLostKey, false);
+        enemyInWeaponRangeWSTracked = new WorldState(enemyInWeaponRangeKey, true);
+
+        agentToUpdate.UpdatePerception(enemySeenWSTracked);
+        agentToUpdate.UpdatePerception(enemyLostWSTracked);
+        agentToUpdate.UpdatePerception(enemyNearWSTracked);
+        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
     }
 
     private void Start() {
@@ -117,15 +132,11 @@ public class EnemyVisualSensor : MonoBehaviour {
         while (true) {
 
             if (isEnemySpotted) {
-
                 UpdateEnemyDistance();
 
-                if (currEnemyDistance > sqrMinLoseSightDistance) {
-                    visibleEnemy = null;
-                    UpdateEnemySeenWS(false);
-                    isEnemySpotted = false;
-                    EnemyLost?.Invoke();
-                }
+                if (currEnemyDistance > sqrMinLoseSightDistance 
+                    && !transform.HasObstacleInBetween(visibleEnemy, obstacleLayerMask))
+                    LoseEnemy();
 
             } else {
                 Transform visibleEnemy = GetVisibleEnemy();
@@ -139,11 +150,28 @@ public class EnemyVisualSensor : MonoBehaviour {
         }
     }
 
-    private void UpdateEnemyDistance() {
+    private void LoseEnemy() {
+        UpdatePerception(false, enemySeenWSTracked);
+        UpdatePerception(true, enemyLostWSTracked);
 
+        searchTimer = StartCoroutine(SearchTimer());
+        LastSeenPosition = visibleEnemy.position;
+        LastSeenDirection = visibleEnemy.right;
+
+        visibleEnemy = null;
+        isEnemySpotted = false;
+        EnemyLost?.Invoke();
+    }
+
+    private IEnumerator SearchTimer() {
+        yield return new WaitForSeconds(searchTime);
+        UpdatePerception(false, enemyLostWSTracked);
+    }
+
+    private void UpdateEnemyDistance() {
         currEnemyDistance = transform.SqrDistance(visibleEnemy);
-        UpdateEnemyNearWS(currEnemyDistance < enemyNearTresholdDistance);
-        UpdateEnemyInWeaponRangeWS(currEnemyDistance <= currWeaponRangeSqr);
+        UpdatePerception(currEnemyDistance < enemyNearTresholdDistance, enemyNearWSTracked);
+        UpdatePerception(currEnemyDistance <= currWeaponRangeSqr, enemyInWeaponRangeWSTracked);
     }
 
     private void OnEnemyAttack(float currHealth) {
@@ -170,11 +198,6 @@ public class EnemyVisualSensor : MonoBehaviour {
                 !transform.HasObstacleInBetween(currEnemyTransform, obstacleLayerMask)) {
 
                 visibleEnemyTransform = currEnemyTransform;
-
-                if (visibleEnemyTransform != null) {
-                    LastSeenPosition = currEnemyTransform.position;
-                    LastSeenDirection = currEnemyTransform.right;
-                }
             }
         }
 
@@ -185,25 +208,21 @@ public class EnemyVisualSensor : MonoBehaviour {
     #region public methods
     public void SpotEnemy(Transform visibleEnemy) {
         this.visibleEnemy = visibleEnemy;
-        UpdateEnemySeenWS(true);
+        UpdatePerception(true, enemySeenWSTracked);
+        if(searchTimer != null) {
+            StopCoroutine(searchTimer);
+            searchTimer = null;
+        }
+        UpdatePerception(false, enemyLostWSTracked);
         isEnemySpotted = true;
     } 
     #endregion
 
     #region update WorldStates methods
-    private void UpdateEnemySeenWS(bool value) {
-        enemySeenWSTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(enemySeenWSTracked);
-    }
 
-    private void UpdateEnemyNearWS(bool value) {
-        enemyNearWSTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(enemyNearWSTracked);
-    }
-
-    private void UpdateEnemyInWeaponRangeWS(bool value) {
-        enemyInWeaponRangeWSTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
+    private void UpdatePerception(bool value, WorldState worldState) {
+        worldState.BoolValue = value;
+        agentToUpdate.UpdatePerception(worldState);
     }
     #endregion
 }

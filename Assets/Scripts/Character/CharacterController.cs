@@ -36,7 +36,12 @@ public class CharacterController : MonoBehaviour {
     }
 
     private float angleToTarget;
-    public float AngleToTarget => angleToTarget; 
+    public float AngleToTarget => angleToTarget;
+    
+    public float MovementSpeed {
+        get => movementSpeed;
+        set => movementSpeed = value;
+    }
     #endregion
 
     #region monobehaviour methods

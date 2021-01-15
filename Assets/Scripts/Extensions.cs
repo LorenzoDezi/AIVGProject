@@ -31,4 +31,8 @@ public static class TransformExtensions {
     public static float SqrDistance(this Transform start, Transform end) {
         return (end.position - start.position).sqrMagnitude;
     }
+
+    public static float SqrDistance(this Transform start, Vector3 end) {
+        return (end - start.position).sqrMagnitude;
+    }
 }

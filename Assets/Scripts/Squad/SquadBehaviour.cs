@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "SquadBehaviour", menuName = "Squad/SquadBehaviour")]
 public class SquadBehaviour : ScriptableObject {
 
     [SerializeField]
@@ -59,7 +60,6 @@ public class SquadBehaviour : ScriptableObject {
         }
         membersAssigned.Clear();
     }
-    
 
 }
 

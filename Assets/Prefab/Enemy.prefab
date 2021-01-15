@@ -313,6 +313,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 174acb19926e5b04f8b77d7c77436ae2, type: 2}
   - {fileID: 11400000, guid: e18819d2573361d4b8763b474b5d6621, type: 2}
   - {fileID: 11400000, guid: 9f6524620f9ea414db109de1123e8f2f, type: 2}
+  - {fileID: 11400000, guid: b83e0fd3cbc5e394a9f6d2619b6d9663, type: 2}
   goalTemplates:
   - {fileID: 11400000, guid: b3da32f27ee89e64891657a612310793, type: 2}
   - {fileID: 11400000, guid: 401074a9325a1bc4d8dbc912d4823718, type: 2}
@@ -320,6 +321,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
   - {fileID: 11400000, guid: f705ea121b419284ca7d10ed94308945, type: 2}
+  - {fileID: 11400000, guid: 194b1d1957548f74e9904d0dc81b1a88, type: 2}
   replanInterval: 0.5
   worldPerception:
     states: []
@@ -418,6 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
   enemyNearKey: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
+  enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
   enemyInWeaponRangeKey: {fileID: 11400000, guid: 9d9e979f65a44e445b51c58a94ffbdcd,
     type: 2}
   enemyLayerMask:
@@ -429,8 +432,9 @@ MonoBehaviour:
   visionAngle: 120
   visionLenght: 8
   checkTargetDelay: 0.2
-  sqrMinLoseSightDistance: 100
+  sqrMinLoseSightDistance: 200
   enemyNearTresholdDistance: 4
+  searchTime: 5
 --- !u!114 &744502580
 MonoBehaviour:
   m_ObjectHideFlags: 0
