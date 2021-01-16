@@ -19,39 +19,31 @@ public class SquadVisualSensor : SquadSensor {
 
     private Transform enemy;
 
-    private List<SquadComponent> squadMembers;
     private bool spotted;
     private int lostCount;
 
     [SerializeField, Tooltip("Time needed for the squad to forget the enemy encounter (enemyLost = false)")]
     private float alertTime;
     private Coroutine alertTimer;
+    private SearchCoordinator searchCoordinator;
 
-    private void Update() {
-        if(spotted) {
-            foreach(var member in squadMembers) {
-                member.UpdateEnemy(enemy);
-            }
-        }
+    private void Awake() {
+        searchCoordinator = GetComponent<SearchCoordinator>();
     }
 
+    #region override methods
     public override void Init(SquadManager manager) {
 
         base.Init(manager);
-
-        InitPerception();
-
-        this.squadMembers = manager.CurrSquadMembers;
         foreach (SquadComponent squadMember in squadMembers) {
             squadMember.EnemySpotted += OnEnemySpotted;
             squadMember.EnemyLost += OnEnemyLost;
         }
 
-        manager.AddedMember += OnAddMember;
-        manager.RemovedMember += OnRemoveMember;
+        InitPerception();
     }
 
-    private void OnAddMember(SquadComponent newMember) {
+    protected override void OnAddMember(SquadComponent newMember) {
         if (!squadMembers.Contains(newMember)) {
             squadMembers.Add(newMember);
             newMember.EnemySpotted += OnEnemySpotted;
@@ -59,10 +51,20 @@ public class SquadVisualSensor : SquadSensor {
         }
     }
 
-    private void OnRemoveMember(SquadComponent removedMember) {
-        squadMembers.Remove(removedMember);
+    protected override void OnRemoveMember(SquadComponent removedMember) {
+        base.OnRemoveMember(removedMember);
         removedMember.EnemySpotted -= OnEnemySpotted;
         removedMember.EnemyLost -= OnEnemyLost;
+    } 
+    #endregion
+
+
+    private void Update() {
+        if (spotted) {
+            foreach (var member in squadMembers) {
+                member.UpdateLastSeen(enemy);
+            }
+        }
     }
 
     private void OnEnemySpotted(Transform enemy) {
@@ -91,7 +93,9 @@ public class SquadVisualSensor : SquadSensor {
             lostCount = 0;
             spotted = false;
             UpdatePerception();
+            //TODO -> maybe take the alert to searchCoordinator
             alertTimer = StartCoroutine(StartAlertTimer());
+            searchCoordinator?.SetupSearchPoints(enemy.position);
         }
     }
 
@@ -101,6 +105,7 @@ public class SquadVisualSensor : SquadSensor {
         manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     }
 
+    #region perception
     private void InitPerception() {
         enemySeenWS = new WorldState(enemySeenKey, false);
         if (manager.SquadPerception[enemySeenKey] == null)
@@ -116,6 +121,7 @@ public class SquadVisualSensor : SquadSensor {
         manager.SquadPerception[enemySeenKey].Update(enemySeenWS);
         enemyLostWS.BoolValue = !spotted;
         manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
-    }
+    } 
+    #endregion
 }
 

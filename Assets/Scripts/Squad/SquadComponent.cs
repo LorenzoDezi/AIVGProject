@@ -50,7 +50,11 @@ public class SquadComponent : MonoBehaviour
         enemySensor.SpotEnemy(enemySpotted);
     }
 
-    public void UpdateEnemy(Transform enemy) {
+    public void UpdatePerception(WorldState worldState) {
+        agent.UpdatePerception(worldState);
+    }
+
+    public void UpdateLastSeen(Transform enemy) {
         enemySensor.LastSeenPosition = enemy.position;
         enemySensor.LastSeenDirection = enemy.right;
     }
