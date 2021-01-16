@@ -35,6 +35,8 @@ public class EnemyVisualSensor : MonoBehaviour {
     [SerializeField]
     private LayerMask enemyLayerMask;
     [SerializeField]
+    private LayerMask wallLayerMask;
+    [SerializeField]
     private LayerMask obstacleLayerMask;
     public LayerMask ObstacleLayerMask => obstacleLayerMask;
     #endregion
@@ -53,8 +55,6 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     #region enemy distance
     [Header("Sight and enemy distance parameters")]
-    [SerializeField]
-    private float sqrMinLoseSightDistance = 10f;
     [SerializeField]
     private float enemyNearTresholdDistance = 0.1f;
     private float currEnemyDistance;
@@ -77,8 +77,12 @@ public class EnemyVisualSensor : MonoBehaviour {
     public Transform VisibleEnemy => visibleEnemy;
 
     [SerializeField]
-    private float searchTime = 5f;
+    private float searchTime = 3f;
     private Coroutine searchTimer;
+
+    [SerializeField]
+    private float timeToLoseEnemy = 5f;
+    private float currTimeToLoseEnemy;
 
     public Vector3 LastSeenPosition { get; set; }
     public Vector3 LastSeenDirection { get; set; }
@@ -133,10 +137,7 @@ public class EnemyVisualSensor : MonoBehaviour {
 
             if (isEnemySpotted) {
                 UpdateEnemyDistance();
-
-                if (currEnemyDistance > sqrMinLoseSightDistance 
-                    && !transform.HasObstacleInBetween(visibleEnemy, obstacleLayerMask))
-                    LoseEnemy();
+                CheckVisibility(delay);
 
             } else {
                 Transform visibleEnemy = GetVisibleEnemy();
@@ -147,6 +148,19 @@ public class EnemyVisualSensor : MonoBehaviour {
             }
 
             yield return wait;
+        }
+    }
+
+    private void CheckVisibility(float timeSinceLastCheck) {
+        if (!IsEnemyVisible(visibleEnemy, wallLayerMask)) {
+            if (currTimeToLoseEnemy > timeToLoseEnemy) {
+                LoseEnemy();
+                currTimeToLoseEnemy = 0f;
+            } else
+                currTimeToLoseEnemy += timeSinceLastCheck;
+
+        } else {
+            currTimeToLoseEnemy = 0f;
         }
     }
 
@@ -185,23 +199,25 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     private Transform GetVisibleEnemy() {
 
-        Transform visibleEnemyTransform = null;
+        Transform visibleEnemy = null;
 
         if (Physics2D.OverlapCircleNonAlloc(transform.position, visionLenght,
             cachedCheckResults, enemyLayerMask) == 1) {
 
             var enemyCollider = cachedCheckResults[0];
-            Transform currEnemyTransform = enemyCollider.transform;
-            Vector2 dirToPlayer = (currEnemyTransform.position - transform.position).normalized;
-
-            if (Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
-                !transform.HasObstacleInBetween(currEnemyTransform, obstacleLayerMask)) {
-
-                visibleEnemyTransform = currEnemyTransform;
-            }
+            Transform candidateEnemy = enemyCollider.transform;
+            if(IsEnemyVisible(candidateEnemy, obstacleLayerMask))
+                visibleEnemy = candidateEnemy;
         }
 
-        return visibleEnemyTransform;
+        return visibleEnemy;
+    }
+
+    private bool IsEnemyVisible(Transform enemy, LayerMask obstacleLayerMask) {
+        Vector2 dirToPlayer = (enemy.position - transform.position).normalized;
+
+        return Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
+            !transform.HasObstacleInBetween(enemy, obstacleLayerMask);
     }
     #endregion
 

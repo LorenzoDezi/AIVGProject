@@ -426,6 +426,9 @@ MonoBehaviour:
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 2048
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 32768
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 33792
@@ -435,6 +438,7 @@ MonoBehaviour:
   sqrMinLoseSightDistance: 200
   enemyNearTresholdDistance: 4
   searchTime: 5
+  timeToLoseEnemy: 5
 --- !u!114 &744502580
 MonoBehaviour:
   m_ObjectHideFlags: 0
