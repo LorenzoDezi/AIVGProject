@@ -1,10 +1,13 @@
 ﻿using GOAP;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+
+public delegate void SearchTerminatedHandler();
 
 public class SearchCoordinator : SquadSensor {
 
@@ -18,12 +21,20 @@ public class SearchCoordinator : SquadSensor {
     private LayerMask obstacleMask;
     [SerializeField]
     private LayerMask wallLayerMask;
+
     [SerializeField]
     private float searchRadius = 10f;
     [SerializeField]
     private int maxSearchPoints = 5;
     [SerializeField]
     private int maxRandomSearchPointIterations = 5;
+
+    [SerializeField]
+    private float searchTime = 10f;
+    private Coroutine searchTimer;
+
+    public event SearchTerminatedHandler SearchTerminated;
+
     private Queue<Vector3> searchPoints;
 
     private void Awake() {
@@ -58,15 +69,31 @@ public class SearchCoordinator : SquadSensor {
                 searchPoints.Enqueue(randomSearchPoint.Value);
         }
 
-        //DEBUG
-        foreach (var searchPoint in searchPoints)
-            Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 5f);
+        searchTimer = StartCoroutine(StartSearchTimer());
+        //foreach (var searchPoint in searchPoints)
+        //    Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 5f);
     }
 
     public Vector3? GetSearchPoint() {
         if(searchPoints.Count > 0)
             return searchPoints.Dequeue();
         return null;
+    }
+
+    public void Add(Vector3 searchPoint) {
+        searchPoints.Enqueue(searchPoint);
+    }
+
+    public void StopTimer() {
+        if(searchTimer != null) {
+            StopCoroutine(searchTimer);
+            searchTimer = null;
+        }
+    }
+
+    private IEnumerator StartSearchTimer() {
+        yield return new WaitForSeconds(searchTime);
+        SearchTerminated?.Invoke();
     }
 
     private void AddHidingSearchPoints(Vector3 lastEnemyPosition) {

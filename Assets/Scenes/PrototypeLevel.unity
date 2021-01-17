@@ -538,7 +538,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e4efdc2f497f7e84390f18f9d44d3215, type: 2}
   - {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c, type: 2}
   - {fileID: 11400000, guid: 89bd674ba14e3db42bca1c22e8a18c78, type: 2}
-  squadBehaviours: []
+  squadBehaviourTemplates:
+  - {fileID: 11400000, guid: ba294902f354bd843806e456eb5709e7, type: 2}
 --- !u!4 &199099429
 Transform:
   m_ObjectHideFlags: 0
@@ -581,7 +582,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896585ea8f1d6d149b3247f08137e7b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squadObjectKey: {fileID: 0}
+  squadObjectKey: {fileID: 11400000, guid: babc2c2d588368643b7ae0a4ca19f3ef, type: 2}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 1024
@@ -591,6 +592,7 @@ MonoBehaviour:
   searchRadius: 10
   maxSearchPoints: 5
   maxRandomSearchPointIterations: 5
+  searchTime: 8
 --- !u!1 &237138416
 GameObject:
   m_ObjectHideFlags: 0
@@ -85426,7 +85428,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89bd674ba14e3db42bca1c22e8a18c78, type: 2}
   - {fileID: 11400000, guid: e4efdc2f497f7e84390f18f9d44d3215, type: 2}
   - {fileID: 11400000, guid: 7dd8d9f9feff01e40ab2c20ce92cdfad, type: 2}
-  squadBehaviours: []
+  squadBehaviourTemplates: []
 --- !u!4 &1308882680
 Transform:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ public class SquadVisualSensor : SquadSensor {
     private WorldState enemyLostWS;
 
     private Transform enemy;
-    private Queue<Vector3> lastEnemyPositions;
+    private Queue<Vector3> enemyPosBuffer;
     [SerializeField]
     private int enemyPosBufferMaxSize = 2;
     [SerializeField]
@@ -32,7 +32,8 @@ public class SquadVisualSensor : SquadSensor {
 
     private void Awake() {
         searchCoordinator = GetComponent<SearchCoordinator>();
-        lastEnemyPositions = new Queue<Vector3>();
+        searchCoordinator.SearchTerminated += OnTerminateSearch;
+        enemyPosBuffer = new Queue<Vector3>();
     }
 
     #region override methods
@@ -72,9 +73,9 @@ public class SquadVisualSensor : SquadSensor {
                 member.UpdateLastSeen(enemy);
             }
 
-            if (lastEnemyPositions.Count >= enemyPosBufferMaxSize)
-                lastEnemyPositions.Dequeue();
-            lastEnemyPositions.Enqueue(enemy.position);
+            if (enemyPosBuffer.Count >= enemyPosBufferMaxSize)
+                enemyPosBuffer.Dequeue();
+            enemyPosBuffer.Enqueue(enemy.position);
 
         } else {
             currTimeToUpdateEnemyPos += Time.deltaTime;
@@ -94,8 +95,15 @@ public class SquadVisualSensor : SquadSensor {
 
             currTimeToUpdateEnemyPos = timeToUpdateEnemyPos;
 
+            searchCoordinator.StopTimer();
+
             UpdatePerception();
         }        
+    }
+
+    private void OnTerminateSearch() {
+        enemyLostWS.BoolValue = false;
+        manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     }
 
     private void OnEnemyLost() {
@@ -104,9 +112,9 @@ public class SquadVisualSensor : SquadSensor {
             lostCount = 0;
             spotted = false;
             UpdatePerception();
-            if(lastEnemyPositions.Count > 0) {
-                searchCoordinator?.SetupSearchPoints(lastEnemyPositions.Dequeue());
-                lastEnemyPositions.Clear();
+            if(enemyPosBuffer.Count > 0) {
+                searchCoordinator?.SetupSearchPoints(enemyPosBuffer.Dequeue());
+                enemyPosBuffer.Clear();
             }
         }
     }

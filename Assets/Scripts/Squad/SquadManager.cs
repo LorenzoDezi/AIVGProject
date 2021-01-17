@@ -18,6 +18,7 @@ public class SquadManager : MonoBehaviour {
     private int currentSquadGoalIndex;
 
     [SerializeField]
+    private List<SquadBehaviour> squadBehaviourTemplates;
     private List<SquadBehaviour> squadBehaviours;
     private SquadSensor[] squadSensors;
 
@@ -48,7 +49,12 @@ public class SquadManager : MonoBehaviour {
             }
         }
 
-        squadBehaviours.ForEach((squadBehaviour) => squadBehaviour.Init(this));
+        squadBehaviours = new List<SquadBehaviour>();
+        foreach(var squadBehaviourTempl in squadBehaviourTemplates) {
+            var squadBehaviour = Instantiate(squadBehaviourTempl);
+            squadBehaviour.Init(this);
+            squadBehaviours.Add(squadBehaviour);
+        }
 
         squadSensors = GetComponents<SquadSensor>();
         for(int i = 0; i < squadSensors.Length; i++) {

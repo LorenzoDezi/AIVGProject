@@ -1,36 +1,30 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "SearchAction", menuName = "GOAP/Actions/SearchAction")]
-public class SearchAction : GOAP.Action {
+public abstract class SearchAction : GOAP.Action {
 
-    private EnemyVisualSensor visualSensor;
-    private NavigationComponent navComponent;
-    private CharacterController charController;
-    private Transform transform;
-
-    [SerializeField]
-    private int maxSearchPointIterations = 5;
-    [SerializeField]
-    private float searchDistance = 5f;
+    protected EnemyVisualSensor visualSensor;
+    protected NavigationComponent navComponent;
+    protected CharacterController charController;
+    protected Transform transform;
 
     [SerializeField]
-    private float deltaLookRot = 10f;
+    protected float deltaLookRot = 10f;
     [SerializeField]
-    private float maxLookRot = 50f;
+    protected float maxLookRot = 50f;
     [SerializeField]
-    private float minSearchSpeed = 2f;
-    [SerializeField]
-    private float changeSearchPointThreshold = 4f;
+    protected float minSearchSpeed = 2f;
 
-    private float currentLookRot;
+    protected float currentLookRot;
 
-    private Vector2 lookDir;
-    private Vector2 startLookDir;
-    private Vector3 searchPoint;
+    protected Vector2 lookDir;
+    protected Vector2 startLookDir;
+    protected Vector3 searchPoint;
 
-    private float startSqrDistance;
-    private float startSpeed;
+    protected float startSqrDistance;
+    protected float startSpeed;
 
+    protected abstract void OnPathCompleted(bool success);
+ 
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
 
@@ -43,34 +37,17 @@ public class SearchAction : GOAP.Action {
 
 
     public override bool Activate() {
-        SetSearchPoint(visualSensor.LastSeenPosition);
         currentLookRot = 0f;
         navComponent.PathCompleted += OnPathCompleted;
         return true;
     }
 
-    private void SetSearchPoint(Vector3 searchPoint) {
+    protected void SetSearchPoint(Vector3 searchPoint) {
         this.searchPoint = searchPoint;
         startSqrDistance = transform.SqrDistance(searchPoint);
         navComponent.MoveTo(searchPoint);
         startLookDir = (searchPoint - transform.position).normalized;
         charController.MovementSpeed = startSpeed;
-    }
-
-    private void OnPathCompleted(bool success) {
-
-        if (!success)
-            return;
-
-        for(int i = 0; i < maxSearchPointIterations; i++) {
-            Vector2 direction = ((Vector2)visualSensor.LastSeenDirection).RotatedBy(Random.Range(-90f, 90f));
-            Vector2 possibleSearchPoint = (Vector2) transform.position + direction * searchDistance;
-            var node = AstarPath.active.GetNearest(possibleSearchPoint).node;
-            if (node.Walkable) {
-                SetSearchPoint(possibleSearchPoint);
-                return;
-            }
-        }
     }
 
     public override void Deactivate() {
@@ -79,11 +56,6 @@ public class SearchAction : GOAP.Action {
     }
 
     public override void Update() {
-
-        if((visualSensor.LastSeenPosition - searchPoint).sqrMagnitude 
-            > changeSearchPointThreshold) {
-            SetSearchPoint(visualSensor.LastSeenPosition);
-        }
 
         charController.MovementSpeed = Mathf.Lerp(
             minSearchSpeed, startSpeed, 

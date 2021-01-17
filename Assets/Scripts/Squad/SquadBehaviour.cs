@@ -10,7 +10,7 @@ using UnityEngine;
 public class SquadBehaviour : ScriptableObject {
 
     [SerializeField]
-    private List<SquadGoal> goalsToComplete;
+    private List<SquadGoal> goalTemplates;
     [SerializeField, Tooltip("The world states that need to be matched to trigger this behaviour")]
     private WorldStates triggerStates;   
     SquadManager manager;
@@ -22,12 +22,13 @@ public class SquadBehaviour : ScriptableObject {
 
     public void Init(SquadManager manager) {
         this.manager = manager;
+        active = false;
         membersAssigned = new List<SquadComponent>();
         WorldStates perception = manager.SquadPerception;
         foreach(WorldState triggerState in triggerStates) {
             WorldState percState = perception[triggerState.Key];
             if (percState == null) {
-                percState = triggerState;
+                percState = new WorldState(triggerState);
                 perception.Add(percState);
             }
             percState.StateChanged += OnStateChange;
@@ -43,19 +44,19 @@ public class SquadBehaviour : ScriptableObject {
     }
 
     protected virtual void StartBehaviour() {
-        var members = manager.GetMembers(goalsToComplete.Count);
+        var members = manager.GetMembers(goalTemplates.Count);
         if(members.Count > 0) {
             active = true;
             membersAssigned.AddRange(members);
-            for(int i = 0; i < goalsToComplete.Count; i++) {
-                membersAssigned[i].AddGoalWith(goalsToComplete[i]);
+            for(int i = 0; i < goalTemplates.Count; i++) {
+                membersAssigned[i].AddGoalWith(goalTemplates[i]);
             }
         }
     }
 
     protected virtual void StopBehaviour() {
+        active = false;
         foreach(var member in membersAssigned) {
-            member.ResetGoal();
             manager.AddMember(member);
         }
         membersAssigned.Clear();
