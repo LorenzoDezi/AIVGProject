@@ -169,6 +169,7 @@ public class EnemyVisualSensor : MonoBehaviour {
         UpdatePerception(true, enemyLostWSTracked);
 
         searchTimer = StartCoroutine(SearchTimer());
+
         LastSeenPosition = visibleEnemy.position;
         LastSeenDirection = visibleEnemy.right;
 

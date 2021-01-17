@@ -13,15 +13,18 @@ public class SearchCoordinator : SquadSensor {
     private WorldState squadObjectWS;
 
     private Collider2D[] results;
+
     [SerializeField]
-    private LayerMask hideLayerMask;
-    private Queue<Vector3> searchPoints;
+    private LayerMask obstacleMask;
+    [SerializeField]
+    private LayerMask wallLayerMask;
     [SerializeField]
     private float searchRadius = 10f;
     [SerializeField]
     private int maxSearchPoints = 5;
     [SerializeField]
     private int maxRandomSearchPointIterations = 5;
+    private Queue<Vector3> searchPoints;
 
     private void Awake() {
         searchPoints = new Queue<Vector3>();
@@ -46,7 +49,6 @@ public class SearchCoordinator : SquadSensor {
     public void SetupSearchPoints(Vector3 lastEnemyPosition) {
 
         searchPoints.Clear();
-        searchPoints.Enqueue(lastEnemyPosition);
 
         AddHidingSearchPoints(lastEnemyPosition);
 
@@ -69,18 +71,18 @@ public class SearchCoordinator : SquadSensor {
 
     private void AddHidingSearchPoints(Vector3 lastEnemyPosition) {
 
-        int count = Physics2D.OverlapCircleNonAlloc(lastEnemyPosition, searchRadius, results, hideLayerMask);
-
+        int count = Physics2D.OverlapCircleNonAlloc(lastEnemyPosition, searchRadius, results, obstacleMask);
+        float searchRadiusSqr = searchRadius * searchRadius;
         for(int i = 0; i < count; i++) {
             Collider2D result = results[i];
-            Vector3 dir = (result.transform.position - lastEnemyPosition).normalized;
-            var outerHit = Physics2D.Raycast(result.bounds.center, dir, 2.5f, hideLayerMask);
-            if (!outerHit)
-                continue;
-            Vector3 searchPoint = outerHit.point;
-            var nodeInfo = AstarPath.active.GetNearest(searchPoint).node;
-            if (nodeInfo.Walkable)
-                searchPoints.Enqueue((Vector3)nodeInfo.position);
+
+            CoverComponent[] covers = result.GetComponentsInChildren<CoverComponent>();
+            foreach(var cover in covers) {
+                if (cover.CanCoverFrom(lastEnemyPosition)) {
+                    searchPoints.Enqueue(cover.Transform.position);
+                    return;                    
+                }
+            }
         }
     }
 
@@ -88,10 +90,15 @@ public class SearchCoordinator : SquadSensor {
 
         int iteration = 0;
         while (iteration < maxRandomSearchPointIterations) {
+
             Vector3 point = lastEnemyPosition;
             Vector2 displacement = UnityEngine.Random.insideUnitCircle * searchRadius;
             point.x += displacement.x;
             point.y += displacement.y;
+
+            if (Physics2D.Linecast(point, lastEnemyPosition, wallLayerMask))
+                continue;
+
             var node = AstarPath.active.GetNearest(point).node;
             if (node.Walkable)
                 return (Vector3)node.position;

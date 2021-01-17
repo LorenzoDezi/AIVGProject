@@ -18,17 +18,21 @@ public class SquadVisualSensor : SquadSensor {
     private WorldState enemyLostWS;
 
     private Transform enemy;
+    private Queue<Vector3> lastEnemyPositions;
+    [SerializeField]
+    private int enemyPosBufferMaxSize = 2;
+    [SerializeField]
+    private float timeToUpdateEnemyPos = 1.5f;
+    private float currTimeToUpdateEnemyPos;
 
     private bool spotted;
     private int lostCount;
 
-    [SerializeField, Tooltip("Time needed for the squad to forget the enemy encounter (enemyLost = false)")]
-    private float alertTime;
-    private Coroutine alertTimer;
     private SearchCoordinator searchCoordinator;
 
     private void Awake() {
         searchCoordinator = GetComponent<SearchCoordinator>();
+        lastEnemyPositions = new Queue<Vector3>();
     }
 
     #region override methods
@@ -55,15 +59,25 @@ public class SquadVisualSensor : SquadSensor {
         base.OnRemoveMember(removedMember);
         removedMember.EnemySpotted -= OnEnemySpotted;
         removedMember.EnemyLost -= OnEnemyLost;
-    } 
+    }
     #endregion
 
 
     private void Update() {
-        if (spotted) {
+        if (spotted && currTimeToUpdateEnemyPos >= timeToUpdateEnemyPos) {
+
+            currTimeToUpdateEnemyPos = 0f;
+
             foreach (var member in squadMembers) {
                 member.UpdateLastSeen(enemy);
             }
+
+            if (lastEnemyPositions.Count >= enemyPosBufferMaxSize)
+                lastEnemyPositions.Dequeue();
+            lastEnemyPositions.Enqueue(enemy.position);
+
+        } else {
+            currTimeToUpdateEnemyPos += Time.deltaTime;
         }
     }
 
@@ -78,10 +92,7 @@ public class SquadVisualSensor : SquadSensor {
                 squadMember.Spotted(enemy);
             }
 
-            if(alertTimer != null) {
-                StopCoroutine(alertTimer);
-                alertTimer = null;
-            }
+            currTimeToUpdateEnemyPos = timeToUpdateEnemyPos;
 
             UpdatePerception();
         }        
@@ -93,16 +104,11 @@ public class SquadVisualSensor : SquadSensor {
             lostCount = 0;
             spotted = false;
             UpdatePerception();
-            //TODO -> maybe take the alert to searchCoordinator
-            alertTimer = StartCoroutine(StartAlertTimer());
-            searchCoordinator?.SetupSearchPoints(enemy.position);
+            if(lastEnemyPositions.Count > 0) {
+                searchCoordinator?.SetupSearchPoints(lastEnemyPositions.Dequeue());
+                lastEnemyPositions.Clear();
+            }
         }
-    }
-
-    private IEnumerator StartAlertTimer() {
-        yield return new WaitForSeconds(alertTime);
-        enemyLostWS.BoolValue = false;
-        manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     }
 
     #region perception
