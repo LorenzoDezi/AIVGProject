@@ -61,13 +61,19 @@ namespace GOAP {
         }
 
         #region monobehaviour calls
-        protected virtual void Start() {
+        protected virtual void Awake() {
+            goals = new List<Goal>();
+            actions = new List<Action>();
+        }
+
+        private void Start() {
 
             InitActions();
-            InitGoals();
             planner = new Planner(actions);
 
+            InitGoals();
             UpdateGoals();
+
             checkPlanCoroutine = StartCoroutine(CheckPlan());
         }
 
@@ -110,7 +116,6 @@ namespace GOAP {
 
         #region private methods
         private void InitActions() {
-            actions = new List<Action>();
             for (int i = 0; i < actionTemplates.Count; i++) {
                 actions.Add(Instantiate(actionTemplates[i]));
                 actions[i].Init(gameObject);
@@ -143,7 +148,6 @@ namespace GOAP {
         }
 
         private void InitGoals() {
-            goals = new List<Goal>();
             for (int i = 0; i < goalTemplates.Count; i++) {
                 goals.Add(Instantiate(goalTemplates[i]));
                 goals[i].Init(gameObject);

@@ -9,19 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57852d195c6f55e4f92639576d8f18c0, type: 3}
-  m_Name: GoInKnifeRange
+  m_Script: {fileID: 11500000, guid: cbd0f1f2681c3584bb9c8606e5a22fd1, type: 3}
+  m_Name: SingleSearchAction
   m_EditorClassIdentifier: 
   preconditions:
     states:
     - value:
-        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
-        intValue: 0
-        floatValue: 0
-        boolValue: 1
-        gameObjectValue: {fileID: 0}
-    - value:
-        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        key: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
         intValue: 0
         floatValue: 0
         boolValue: 1
@@ -29,12 +23,15 @@ MonoBehaviour:
   effects:
     states:
     - value:
-        key: {fileID: 11400000, guid: 79e62a6151a9d934f919b29a5f3821cc, type: 2}
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
         intValue: 0
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-  cost: 2
-  obstacleLayerMask:
-    serializedVersion: 2
-    m_Bits: 33792
+  cost: 0
+  deltaLookRot: 75
+  maxLookRot: 75
+  minSearchSpeed: 2
+  maxSearchPointIterations: 5
+  searchDistance: 10
+  changeSearchPointThreshold: 4

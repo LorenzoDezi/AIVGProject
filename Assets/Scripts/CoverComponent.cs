@@ -39,11 +39,15 @@ public class CoverComponent : MonoBehaviour
 
         var wait = new WaitForSeconds(checkCoverInterval);
         while(hasTransformInSight) {
-            canCover = transform.HasObstacleInBetween(enemyTransf, obstacleMask) && 
-                !transform.HasObstacleInBetween(enemyTransf, wallMask);
+            canCover = CanCoverFrom(enemyTransf.position);
             CanCoverChangedEvent?.Invoke(canCover);
             yield return wait;
         }
+    }
+
+    public bool CanCoverFrom(Vector3 position) {
+        return Physics2D.Linecast(position, transform.position, obstacleMask) &&
+            !Physics2D.Linecast(position, transform.position, wallMask);
     }
 
     private void OnTriggerEnter2D(Collider2D other) {

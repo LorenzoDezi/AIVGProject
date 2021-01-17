@@ -21,6 +21,15 @@ public class SquadComponent : MonoBehaviour
         }
     }
 
+    public event EnemyLostHandler EnemyLost {
+        add {
+            enemySensor.EnemyLost += value;
+        }
+        remove {
+            enemySensor.EnemyLost -= value;
+        }
+    }
+
     public delegate void SquadCompDeathHandler(int squadIndex);
     public event SquadCompDeathHandler SquadCompDeath;
 
@@ -39,6 +48,15 @@ public class SquadComponent : MonoBehaviour
 
     public void Spotted(Transform enemySpotted) {
         enemySensor.SpotEnemy(enemySpotted);
+    }
+
+    public void UpdatePerception(WorldState worldState) {
+        agent.UpdatePerception(worldState);
+    }
+
+    public void UpdateLastSeen(Transform enemy) {
+        enemySensor.LastSeenPosition = enemy.position;
+        enemySensor.LastSeenDirection = enemy.right;
     }
 
     public void AddGoalWith(SquadGoal goalTemplate) {

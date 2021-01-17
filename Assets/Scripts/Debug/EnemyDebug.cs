@@ -22,12 +22,14 @@ public class EnemyDebug : MonoBehaviour
 
     void Awake()
     {
+#if UNITY_EDITOR
         agent = GetComponent<Agent>();
         agent.PlanCompleted += (plan) => currentPlan = plan;
         visualSensor = GetComponent<EnemyVisualSensor>();
         coverSensor = GetComponent<CoverSensor>();
         healthComponent = GetComponent<HealthComponent>();
         healthComponent.Death.AddListener(OnDeath);
+#endif
     }
 
     private void OnDeath() {
