@@ -10,7 +10,7 @@ public class SquadComponent : MonoBehaviour
     private EnemyVisualSensor enemySensor;
 
     private SquadGoal currentSquadGoal;
-    public int SquadGoalIndex { get; set; }
+    public int SquadIndex { get; set; }
 
     public event EnemySpottedHandler EnemySpotted {
         add {
@@ -43,7 +43,7 @@ public class SquadComponent : MonoBehaviour
 
     private void OnDeath() {
         ResetGoal();
-        SquadCompDeath?.Invoke(SquadGoalIndex);
+        SquadCompDeath?.Invoke(SquadIndex);
     }
 
     public void Spotted(Transform enemySpotted) {

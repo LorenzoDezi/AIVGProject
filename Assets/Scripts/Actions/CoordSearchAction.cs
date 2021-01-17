@@ -35,9 +35,8 @@ public class CoordSearchAction : SearchAction {
         Vector3? possibleSearchPoint = searchCoordinator.GetSearchPoint();
         if (possibleSearchPoint.HasValue) {
             SetSearchPoint(possibleSearchPoint.Value);
-            return true;
         }
-        return false;
+        return true;
     }
 
     public override void Deactivate() {
