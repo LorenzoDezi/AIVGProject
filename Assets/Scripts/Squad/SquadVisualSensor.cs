@@ -111,11 +111,11 @@ public class SquadVisualSensor : SquadSensor {
         if (lostCount == squadMembers.Count) {
             lostCount = 0;
             spotted = false;
-            UpdatePerception();
             if(enemyPosBuffer.Count > 0) {
                 searchCoordinator?.SetupSearchPoints(enemyPosBuffer.Dequeue());
                 enemyPosBuffer.Clear();
             }
+            UpdatePerception();
         }
     }
 

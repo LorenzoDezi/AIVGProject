@@ -13,6 +13,7 @@ public class CoordSearchAction : SearchAction {
     private WorldStateKey squadObjectKey;
 
     private WorldStates perception;
+
     private SearchCoordinator searchCoordinator;
 
     private bool currSearchPointReached;
