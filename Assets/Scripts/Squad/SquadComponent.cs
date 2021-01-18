@@ -46,6 +46,10 @@ public class SquadComponent : MonoBehaviour
         SquadCompDeath?.Invoke(SquadIndex);
     }
 
+    public WorldState this[WorldStateKey key] {
+        get => agent.WorldPerception[key];
+    }
+
     public void Spotted(Transform enemySpotted) {
         enemySensor.SpotEnemy(enemySpotted);
     }

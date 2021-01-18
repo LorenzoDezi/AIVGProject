@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6412692240534204491}
   - component: {fileID: 6412692240534204490}
   m_Layer: 0
-  m_Name: Squad1
+  m_Name: Squad
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acfb83dd93bde2a4ba8971ff0bae852a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squadObjectKey: {fileID: 11400000, guid: babc2c2d588368643b7ae0a4ca19f3ef, type: 2}
   squadMembers:
   - {fileID: 0}
   - {fileID: 0}
@@ -83,7 +84,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 896585ea8f1d6d149b3247f08137e7b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squadObjectKey: {fileID: 11400000, guid: babc2c2d588368643b7ae0a4ca19f3ef, type: 2}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 1024

@@ -11,10 +11,6 @@ public delegate void SearchTerminatedHandler();
 
 public class SearchCoordinator : SquadSensor {
 
-    [SerializeField]
-    private WorldStateKey squadObjectKey;
-    private WorldState squadObjectWS;
-
     private Collider2D[] results;
 
     [SerializeField]
@@ -40,21 +36,10 @@ public class SearchCoordinator : SquadSensor {
     private void Awake() {
         searchPoints = new Queue<Vector3>();
         results = new Collider2D[maxSearchPoints];
-        squadObjectWS = new WorldState(squadObjectKey, this.gameObject);
     }
 
     public override void Init(SquadManager manager) {
-        base.Init(manager);
-        foreach(var squadMember in squadMembers) {
-            squadMember.UpdatePerception(squadObjectWS);
-        }
-    }
-
-    protected override void OnAddMember(SquadComponent newMember) {
-        if (!squadMembers.Contains(newMember)) {
-            squadMembers.Add(newMember);
-            newMember.UpdatePerception(squadObjectWS);
-        }
+        base.Init(manager);        
     }
 
     public void SetupSearchPoints(Vector3 lastEnemyPosition) {
@@ -68,10 +53,10 @@ public class SearchCoordinator : SquadSensor {
             if (randomSearchPoint.HasValue)
                 searchPoints.Enqueue(randomSearchPoint.Value);
         }
-
+        //DEBUG
+        foreach (var searchPoint in searchPoints)
+            Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 10f);
         searchTimer = StartCoroutine(StartSearchTimer());
-        //foreach (var searchPoint in searchPoints)
-        //    Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 5f);
     }
 
     public Vector3? GetSearchPoint() {

@@ -9,6 +9,11 @@ public delegate void SquadChange(SquadComponent member);
 
 public class SquadManager : MonoBehaviour {
 
+
+    [SerializeField]
+    private WorldStateKey squadObjectKey;
+    private WorldState squadObjectWS;
+
     [SerializeField]
     private List<SquadComponent> squadMembers;
     public List<SquadComponent> CurrSquadMembers => squadMembers.ToList();
@@ -31,6 +36,7 @@ public class SquadManager : MonoBehaviour {
 
     private void Awake() {
         squadPerception = new WorldStates();
+        squadObjectWS = new WorldState(squadObjectKey, this.gameObject);
     }
 
     private void Start() {
@@ -42,6 +48,7 @@ public class SquadManager : MonoBehaviour {
             var squadMember = squadMembers[i];
             squadMember.SquadIndex = i;
             squadMember.SquadCompDeath += OnSquadComponentDeath;
+            squadMember.UpdatePerception(squadObjectWS);
 
             if (i < squadGoals.Count) {
                 squadMember.AddGoalWith(squadGoals[i]);
