@@ -11,10 +11,6 @@ public delegate void SearchTerminatedHandler();
 
 public class SearchCoordinator : SquadSensor {
 
-    [SerializeField]
-    private WorldStateKey squadObjectKey;
-    private WorldState squadObjectWS;
-
     private Collider2D[] results;
 
     [SerializeField]
@@ -35,26 +31,15 @@ public class SearchCoordinator : SquadSensor {
 
     public event SearchTerminatedHandler SearchTerminated;
 
-    private Queue<Vector3> searchPoints;
+    private List<Vector3> searchPoints;
 
     private void Awake() {
-        searchPoints = new Queue<Vector3>();
+        searchPoints = new List<Vector3>();
         results = new Collider2D[maxSearchPoints];
-        squadObjectWS = new WorldState(squadObjectKey, this.gameObject);
     }
 
     public override void Init(SquadManager manager) {
-        base.Init(manager);
-        foreach(var squadMember in squadMembers) {
-            squadMember.UpdatePerception(squadObjectWS);
-        }
-    }
-
-    protected override void OnAddMember(SquadComponent newMember) {
-        if (!squadMembers.Contains(newMember)) {
-            squadMembers.Add(newMember);
-            newMember.UpdatePerception(squadObjectWS);
-        }
+        base.Init(manager);        
     }
 
     public void SetupSearchPoints(Vector3 lastEnemyPosition) {
@@ -66,22 +51,31 @@ public class SearchCoordinator : SquadSensor {
         for (int i = searchPoints.Count; i < maxSearchPoints; i++) {
             Vector3? randomSearchPoint = GetRandomSearchPoint(lastEnemyPosition);
             if (randomSearchPoint.HasValue)
-                searchPoints.Enqueue(randomSearchPoint.Value);
+                searchPoints.Add(randomSearchPoint.Value);
         }
-
+        //DEBUG
+        foreach (var searchPoint in searchPoints)
+            Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 10f);
         searchTimer = StartCoroutine(StartSearchTimer());
-        //foreach (var searchPoint in searchPoints)
-        //    Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 5f);
     }
 
-    public Vector3? GetSearchPoint() {
-        if(searchPoints.Count > 0)
-            return searchPoints.Dequeue();
-        return null;
+    public Vector3? GetSearchPoint(Vector3 from) {
+        Vector3? result = null;
+        float minSqrDist = Mathf.Infinity;
+        foreach(var searchPoint in searchPoints) {
+            float currSqrDist = Vector3.SqrMagnitude(from - searchPoint);
+            if(currSqrDist < minSqrDist) {
+                minSqrDist = currSqrDist;
+                result = searchPoint;
+            }
+        }
+        if (result.HasValue)
+            searchPoints.Remove(result.Value);
+        return result;
     }
 
     public void Add(Vector3 searchPoint) {
-        searchPoints.Enqueue(searchPoint);
+        searchPoints.Add(searchPoint);
     }
 
     public void StopTimer() {
@@ -106,7 +100,7 @@ public class SearchCoordinator : SquadSensor {
             CoverComponent[] covers = result.GetComponentsInChildren<CoverComponent>();
             foreach(var cover in covers) {
                 if (cover.CanCoverFrom(lastEnemyPosition)) {
-                    searchPoints.Enqueue(cover.Transform.position);
+                    searchPoints.Add(cover.Transform.position);
                     return;                    
                 }
             }

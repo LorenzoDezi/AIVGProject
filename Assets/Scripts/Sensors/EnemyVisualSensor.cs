@@ -127,6 +127,24 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
     #endregion
 
+
+    #region public methods
+    public void SpotEnemy(Transform visibleEnemy) {
+        this.visibleEnemy = visibleEnemy;
+        UpdatePerception(true, enemySeenWSTracked);
+        StopSearch();
+        UpdatePerception(false, enemyLostWSTracked);
+        isEnemySpotted = true;
+    }
+
+    public void StopSearch() {
+        if (searchTimer != null) {
+            StopCoroutine(searchTimer);
+            searchTimer = null;
+        }
+    }
+    #endregion
+
     #region private methods
     private IEnumerator CheckTargetWithDelay(float delay) {
 
@@ -220,19 +238,6 @@ public class EnemyVisualSensor : MonoBehaviour {
         return Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
             !transform.HasObstacleInBetween(enemy, obstacleLayerMask);
     }
-    #endregion
-
-    #region public methods
-    public void SpotEnemy(Transform visibleEnemy) {
-        this.visibleEnemy = visibleEnemy;
-        UpdatePerception(true, enemySeenWSTracked);
-        if(searchTimer != null) {
-            StopCoroutine(searchTimer);
-            searchTimer = null;
-        }
-        UpdatePerception(false, enemyLostWSTracked);
-        isEnemySpotted = true;
-    } 
     #endregion
 
     #region update WorldStates methods

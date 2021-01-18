@@ -9,19 +9,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 071b742aeb626da47a985e1c4b63ea7f, type: 3}
-  m_Name: CoverAllyGoal
+  m_Script: {fileID: 11500000, guid: 07339efdc6fd5e845a43493ee3cb75e8, type: 3}
+  m_Name: CoverMemberGoal
   m_EditorClassIdentifier: 
   desiredStates:
     states:
     - value:
-        key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+        key: {fileID: 11400000, guid: 95ccc3a36138c5644beb0c925681ccc7, type: 2}
         intValue: 0
         floatValue: 0
-        boolValue: 0
+        boolValue: 1
         gameObjectValue: {fileID: 0}
   priorityUpdater:
-    isWorldWS: 1
+    isWorldWS: 0
     referenceWS:
       value:
         key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
@@ -30,4 +30,5 @@ MonoBehaviour:
         boolValue: 0
         gameObjectValue: {fileID: 0}
     priorityMultiplier: 9
-    inversePriority: 0
+    inversePriority: 1
+  squadPriority: 0

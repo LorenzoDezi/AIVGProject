@@ -9,9 +9,15 @@ using UnityEngine;
 public class IdleAction : GOAP.Action {
 
     private CharacterController charController;
+    private NavigationComponent navComponent;
+    private Transform transform;
+
     [SerializeField]
     private float timeToSwitchLook = 5f;
     private float timeSinceLastSwitchLook = 0f;
+
+    private Vector3 idlePosition;
+    private bool atIdlePosition;
     [SerializeField]
     private List<Vector2> lookDirections;
     private int currLookDirection;
@@ -19,9 +25,12 @@ public class IdleAction : GOAP.Action {
     public override void Init(GameObject agentGameObj) {
 
         base.Init(agentGameObj);
-        charController = agentGameObj.GetComponent<CharacterController>();
 
-        var transform = agentGameObj.transform;
+        charController = agentGameObj.GetComponent<CharacterController>();
+        navComponent = agentGameObj.GetComponent<NavigationComponent>();
+        transform = agentGameObj.GetComponent<Transform>();
+
+        idlePosition = transform.position;
         if (lookDirections.Count == 0) {
             lookDirections.Add(transform.position + transform.right);
             return;
@@ -31,21 +40,31 @@ public class IdleAction : GOAP.Action {
     }
 
     public override bool Activate() {
-
-        currLookDirection = 0;
-        charController.AimAt(lookDirections[currLookDirection]);
-        timeSinceLastSwitchLook = 0f;
-
+        navComponent.MoveTo(idlePosition);
+        navComponent.PathCompleted += OnPathCompleted;
+        atIdlePosition = false;
         return true;
     }
 
     public override void Deactivate() {
-        
+        navComponent.PathCompleted -= OnPathCompleted;
+    }
+
+    private void OnPathCompleted(bool success) {
+        atIdlePosition = true;
+        currLookDirection = 0;
+        charController.AimAt(lookDirections[currLookDirection]);
+        timeSinceLastSwitchLook = 0f;
     }
 
     public override void Update() {
 
-        if(timeSinceLastSwitchLook >= timeToSwitchLook) {
+        if (!atIdlePosition) {
+            charController.AimAt(transform.position + navComponent.DirectionToWaypoint);
+            return;
+        }
+
+        if (timeSinceLastSwitchLook >= timeToSwitchLook) {
 
             currLookDirection++;
             if (currLookDirection == lookDirections.Count)

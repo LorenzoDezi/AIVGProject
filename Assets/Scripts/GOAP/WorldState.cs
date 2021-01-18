@@ -34,6 +34,8 @@ namespace GOAP {
         }
     }
 
+    public delegate void StateChangedHandler();
+
     [Serializable]
     public class WorldState {
 
@@ -47,6 +49,7 @@ namespace GOAP {
             get => value.intValue;
             set {
                 this.value.intValue = value;
+                StateChanged?.Invoke();
             }
         }
 
@@ -55,6 +58,7 @@ namespace GOAP {
             set {
                 this.value.floatValue = value;
                 this.value.intValue = Convert.ToInt32(value);
+                StateChanged?.Invoke();
             }
         }
 
@@ -63,6 +67,7 @@ namespace GOAP {
             set {
                 this.value.boolValue = value;
                 this.value.intValue = Convert.ToInt32(value);
+                StateChanged?.Invoke();
             }
         }
 
@@ -70,10 +75,10 @@ namespace GOAP {
             get => value.gameObjectValue;
             set {
                 this.value.gameObjectValue = value;
+                StateChanged?.Invoke();
             }
         }
 
-        public delegate void StateChangedHandler();
         public StateChangedHandler StateChanged;
 
         #region constructors
@@ -121,7 +126,6 @@ namespace GOAP {
         public void Update(WorldState newWorldState) {
             value = newWorldState.value;
             StateChanged?.Invoke();
-            //TODO: StateChanged invoked only on update... how to model this properly?
         }
 
         public bool Match(WorldState other) {

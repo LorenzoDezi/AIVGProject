@@ -30,7 +30,7 @@ public class PatrolAction : GOAP.Action {
 
 
     public override void Update() {
-
+        patroller.UpdateAim();
     }
 
     public override void Deactivate() {

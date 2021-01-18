@@ -27,6 +27,10 @@ public class PatrollerComponent : MonoBehaviour {
         navigationComp.PathCompleted -= OnPathCompleted;
     }
 
+    public void UpdateAim() {
+        characterController.AimAt(transform.position + navigationComp.DirectionToWaypoint);
+    }
+
     private void OnPathCompleted(bool success) {
         currPatrolIndex++;
         if (currPatrolIndex >= patrolPoints.Count)
@@ -49,7 +53,6 @@ public class PatrollerComponent : MonoBehaviour {
     }
 
     private void SetPatrolTo(Transform closerPatrolPoint) {
-        characterController.AimAt(closerPatrolPoint.position);
         navigationComp.MoveTo(closerPatrolPoint.position);
     }
 }

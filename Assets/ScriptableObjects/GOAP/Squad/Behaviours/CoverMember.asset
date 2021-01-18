@@ -10,16 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e37556b5fe184a24399ca7aaba992ae3, type: 3}
-  m_Name: Search
+  m_Name: CoverMember
   m_EditorClassIdentifier: 
   goalTemplates:
-  - {fileID: 11400000, guid: a56f0b29de46da8418b4021341620fd3, type: 2}
-  - {fileID: 11400000, guid: a56f0b29de46da8418b4021341620fd3, type: 2}
-  - {fileID: 11400000, guid: a56f0b29de46da8418b4021341620fd3, type: 2}
+  - {fileID: 11400000, guid: e4baf341ba91cc3408eb49da03e2169b, type: 2}
   triggerStates:
     states:
     - value:
-        key: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
+        key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
         intValue: 0
         floatValue: 0
         boolValue: 1

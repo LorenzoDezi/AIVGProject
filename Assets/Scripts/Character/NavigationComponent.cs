@@ -15,6 +15,8 @@ public class NavigationComponent : MonoBehaviour {
     private int currentWaypoint = 0;
     private bool reachedEndOfPath;
 
+    public Vector3 DirectionToWaypoint { get; private set; }
+
     [SerializeField]
     private float recalculatePathToTargetInterval = 0.5f;
     private Coroutine pathTargetCoroutine;
@@ -72,15 +74,16 @@ public class NavigationComponent : MonoBehaviour {
         while (sqrDistanceToWaypoint < waypointDistSqrTreshold) {
             if (currentWaypoint + 1 < path.vectorPath.Count) {
                 currentWaypoint++;
-                sqrDistanceToWaypoint = Vector3.SqrMagnitude(path.vectorPath[currentWaypoint] - transform.position);
+                sqrDistanceToWaypoint = (path.vectorPath[currentWaypoint] - transform.position).sqrMagnitude;
             } else {
                 PathCompleted?.Invoke(true);
                 Stop();
                 return;
             }
         }
-        Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-        controller.Move(dir);
+
+        DirectionToWaypoint = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+        controller.Move(DirectionToWaypoint);
     }
 
     private IEnumerator RecalculatePathToTarget() {

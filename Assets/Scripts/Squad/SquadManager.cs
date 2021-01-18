@@ -9,6 +9,11 @@ public delegate void SquadChange(SquadComponent member);
 
 public class SquadManager : MonoBehaviour {
 
+
+    [SerializeField]
+    private WorldStateKey squadObjectKey;
+    private WorldState squadObjectWS;
+
     [SerializeField]
     private List<SquadComponent> squadMembers;
     public List<SquadComponent> CurrSquadMembers => squadMembers.ToList();
@@ -31,6 +36,7 @@ public class SquadManager : MonoBehaviour {
 
     private void Awake() {
         squadPerception = new WorldStates();
+        squadObjectWS = new WorldState(squadObjectKey, this.gameObject);
     }
 
     private void Start() {
@@ -42,11 +48,11 @@ public class SquadManager : MonoBehaviour {
             var squadMember = squadMembers[i];
             squadMember.SquadIndex = i;
             squadMember.SquadCompDeath += OnSquadComponentDeath;
+            squadMember.UpdatePerception(squadObjectWS);
 
             if (i < squadGoals.Count) {
                 squadMember.AddGoalWith(squadGoals[i]);
                 currGoalIndex = i;
-                Debug.Log("CurrentSquadGoal " + currGoalIndex);
             }
         }
 
@@ -107,7 +113,6 @@ public class SquadManager : MonoBehaviour {
     private void AssignSquadGoal(SquadComponent squadMember) {
         if (currGoalIndex < squadGoals.Count - 1) {
             currGoalIndex++;
-            Debug.Log("CurrentSquadGoal " + currGoalIndex);
             squadMember.AddGoalWith(squadGoals[currGoalIndex]);
         }
     }
@@ -115,15 +120,10 @@ public class SquadManager : MonoBehaviour {
     public List<SquadComponent> GetMembers(int count) {
 
         List<SquadComponent> members = new List<SquadComponent>();
-
-        if (squadMembers.Count < count)
-            return members;
-
-        for(int i = 0; i < count; i++) {
+        for(int i = 0; i < count && squadMembers.Count > 0; i++) {
             members.Add(RemoveMemberAt(squadMembers.Count - 1));
         }
 
-        Debug.Log("CurrentSquadGoal after get members " + currGoalIndex);
         return members;
     }
 

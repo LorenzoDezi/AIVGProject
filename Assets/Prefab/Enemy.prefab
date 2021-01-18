@@ -132,7 +132,6 @@ GameObject:
   - component: {fileID: 3102854622975787686}
   - component: {fileID: 2089853290383079075}
   - component: {fileID: 495220359}
-  - component: {fileID: 1595948071}
   - component: {fileID: 495220353}
   - component: {fileID: 727441786284930137}
   - component: {fileID: 4238676141369403258}
@@ -265,28 +264,6 @@ MonoBehaviour:
   tagPenalties: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: -1
---- !u!114 &1595948071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8077473535347200378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1
-  smoothType: 1
-  subdivisions: 2
-  iterations: 2
-  strength: 0.5
-  uniformLength: 1
-  maxSegmentLength: 2
-  bezierTangentLength: 0.4
-  offset: 0.2
-  factor: 0.1
 --- !u!114 &495220353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,7 +298,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 81a38778b81deee4db31e127eb8604c5, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
-  - {fileID: 11400000, guid: f705ea121b419284ca7d10ed94308945, type: 2}
   - {fileID: 11400000, guid: 194b1d1957548f74e9904d0dc81b1a88, type: 2}
   replanInterval: 0.5
   worldPerception:
@@ -437,7 +413,7 @@ MonoBehaviour:
   visionLenght: 8
   checkTargetDelay: 0.2
   enemyNearTresholdDistance: 4
-  searchTime: 5
+  searchTime: 10
   timeToLoseEnemy: 3
 --- !u!114 &744502580
 MonoBehaviour:

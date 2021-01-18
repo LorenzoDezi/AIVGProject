@@ -27,9 +27,6 @@ public class RefillHealthAction : GOAP.Action {
 
     [Header("WorldState fields")]
     [SerializeField]
-    private WorldStateKey someoneNeedCoverKey;
-    private WorldState someoneNeedCoverWS;
-    [SerializeField]
     private WorldStateKey needCoverKey;
     private WorldState needCoverWS;
 
@@ -40,8 +37,7 @@ public class RefillHealthAction : GOAP.Action {
         transform = agentGameObj.GetComponent<Transform>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
 
-        someoneNeedCoverWS = new WorldState(someoneNeedCoverKey, false);
-        needCoverWS = new WorldState(needCoverKey, null);
+        needCoverWS = new WorldState(needCoverKey, false);
 
         cachedCheckHSResults = new Collider2D[checkHSMaxQueryResults];
     }
@@ -79,6 +75,7 @@ public class RefillHealthAction : GOAP.Action {
             float currSqrDist = Vector3.SqrMagnitude(
                 cachedCheckHSResults[i].transform.position - transform.position
             );
+
             if(currSqrDist < sqrMinDistance) {
                 result = current;
                 sqrMinDistance = currSqrDist;
@@ -128,12 +125,8 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     private void UpdateNeedCoverWS(bool value) {
-        someoneNeedCoverWS.BoolValue = value;
-        World.Update(someoneNeedCoverWS);
-        if (value) {
-            needCoverWS.GameObjectValue = transform.gameObject;
-            World.Update(needCoverWS);
-        }
+        needCoverWS.BoolValue = value;
+        agent.UpdatePerception(needCoverWS);
     }
 
     public override void Update() { }

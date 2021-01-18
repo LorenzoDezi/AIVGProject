@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: CoordSearchAction
   m_EditorClassIdentifier: 
   preconditions:
-    states: []
+    states:
+    - value:
+        key: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
   effects:
     states:
     - value:

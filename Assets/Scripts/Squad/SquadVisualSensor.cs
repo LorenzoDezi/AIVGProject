@@ -65,7 +65,11 @@ public class SquadVisualSensor : SquadSensor {
 
 
     private void Update() {
-        if (spotted && currTimeToUpdateEnemyPos >= timeToUpdateEnemyPos) {
+
+        if (!spotted)
+            return;
+
+        if (currTimeToUpdateEnemyPos >= timeToUpdateEnemyPos) {
 
             currTimeToUpdateEnemyPos = 0f;
 
@@ -83,15 +87,16 @@ public class SquadVisualSensor : SquadSensor {
     }
 
     private void OnEnemySpotted(Transform enemy) {
+
         if (spotted)
             lostCount--;
+
         else {
 
             spotted = true;
             this.enemy = enemy;
-            foreach (var squadMember in squadMembers) {
-                squadMember.Spotted(enemy);
-            }
+
+            squadMembers.ForEach((member) => member.SpotEnemy(enemy));
 
             currTimeToUpdateEnemyPos = timeToUpdateEnemyPos;
 
@@ -111,11 +116,13 @@ public class SquadVisualSensor : SquadSensor {
         if (lostCount == squadMembers.Count) {
             lostCount = 0;
             spotted = false;
-            UpdatePerception();
             if(enemyPosBuffer.Count > 0) {
                 searchCoordinator?.SetupSearchPoints(enemyPosBuffer.Dequeue());
                 enemyPosBuffer.Clear();
             }
+            //Stopping "single" enemy search
+            squadMembers.ForEach((member) => member.StopSearch());
+            UpdatePerception();
         }
     }
 

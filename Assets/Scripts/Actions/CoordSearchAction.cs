@@ -32,7 +32,7 @@ public class CoordSearchAction : SearchAction {
             return false;
 
         searchCoordinator = squadObject.GetComponent<SearchCoordinator>();
-        Vector3? possibleSearchPoint = searchCoordinator.GetSearchPoint();
+        Vector3? possibleSearchPoint = searchCoordinator.GetSearchPoint(transform.position);
         if (possibleSearchPoint.HasValue) {
             SetSearchPoint(possibleSearchPoint.Value);
         }
@@ -52,7 +52,7 @@ public class CoordSearchAction : SearchAction {
 
             currSearchPointReached = true;
 
-            Vector3? possibleSearchPoint = searchCoordinator.GetSearchPoint();
+            Vector3? possibleSearchPoint = searchCoordinator.GetSearchPoint(transform.position);
             if (possibleSearchPoint.HasValue) {
                 SetSearchPoint(possibleSearchPoint.Value);
                 currSearchPointReached = false;

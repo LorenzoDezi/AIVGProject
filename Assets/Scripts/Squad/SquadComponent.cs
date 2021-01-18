@@ -11,6 +11,7 @@ public class SquadComponent : MonoBehaviour
 
     private SquadGoal currentSquadGoal;
     public int SquadIndex { get; set; }
+    public Transform Transform { get; private set; }
 
     public event EnemySpottedHandler EnemySpotted {
         add {
@@ -38,6 +39,7 @@ public class SquadComponent : MonoBehaviour
         agent = GetComponent<Agent>();
         enemySensor = GetComponent<EnemyVisualSensor>();
         healthComp = GetComponent<HealthComponent>();
+        Transform = GetComponent<Transform>();
         healthComp.Death.AddListener(OnDeath);
     }
 
@@ -46,8 +48,16 @@ public class SquadComponent : MonoBehaviour
         SquadCompDeath?.Invoke(SquadIndex);
     }
 
-    public void Spotted(Transform enemySpotted) {
+    public WorldState this[WorldStateKey key] {
+        get => agent.WorldPerception[key];
+    }
+
+    public void SpotEnemy(Transform enemySpotted) {
         enemySensor.SpotEnemy(enemySpotted);
+    }
+
+    public void StopSearch() {
+        enemySensor.StopSearch();
     }
 
     public void UpdatePerception(WorldState worldState) {
