@@ -53,7 +53,6 @@ public class SquadManager : MonoBehaviour {
             if (i < squadGoals.Count) {
                 squadMember.AddGoalWith(squadGoals[i]);
                 currGoalIndex = i;
-                Debug.Log("CurrentSquadGoal " + currGoalIndex);
             }
         }
 
@@ -114,7 +113,6 @@ public class SquadManager : MonoBehaviour {
     private void AssignSquadGoal(SquadComponent squadMember) {
         if (currGoalIndex < squadGoals.Count - 1) {
             currGoalIndex++;
-            Debug.Log("CurrentSquadGoal " + currGoalIndex);
             squadMember.AddGoalWith(squadGoals[currGoalIndex]);
         }
     }
@@ -130,7 +128,6 @@ public class SquadManager : MonoBehaviour {
             members.Add(RemoveMemberAt(squadMembers.Count - 1));
         }
 
-        Debug.Log("CurrentSquadGoal after get members " + currGoalIndex);
         return members;
     }
 

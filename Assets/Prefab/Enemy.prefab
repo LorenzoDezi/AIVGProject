@@ -298,7 +298,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 81a38778b81deee4db31e127eb8604c5, type: 2}
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
-  - {fileID: 11400000, guid: f705ea121b419284ca7d10ed94308945, type: 2}
   - {fileID: 11400000, guid: 194b1d1957548f74e9904d0dc81b1a88, type: 2}
   replanInterval: 0.5
   worldPerception:

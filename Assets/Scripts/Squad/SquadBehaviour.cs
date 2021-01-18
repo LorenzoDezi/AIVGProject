@@ -36,9 +36,9 @@ public class SquadBehaviour : ScriptableObject {
     }
 
     private void OnStateChange() {
-        if (!active && manager.SquadPerception.Contains(triggerStates)) {
+        if (manager.SquadPerception.Contains(triggerStates)) {
             StartBehaviour();
-        } else if (active && !manager.SquadPerception.Contains(triggerStates)) {
+        } else {
             StopBehaviour();
         }
     }
@@ -50,20 +50,21 @@ public class SquadBehaviour : ScriptableObject {
     }
 
     protected virtual void StartBehaviour() {
+        Debug.Log("Refill behaviour started");
         var members = manager.GetMembers(goalTemplates.Count);
-        if(members.Count > 0) {
-            active = true;
+        if(members.Count == goalTemplates.Count) {
             members.ForEach((member) => member.SquadCompDeath += OnSquadComponentDeath);
+            int startIndex = membersAssigned.Count;
             membersAssigned.AddRange(members);
             for(int i = 0; i < goalTemplates.Count; i++) {
-                membersAssigned[i].AddGoalWith(goalTemplates[i]);
+                membersAssigned[startIndex + i].AddGoalWith(goalTemplates[i]);
             }
         }
     }
 
     protected virtual void StopBehaviour() {
-        active = false;
-        foreach(var member in membersAssigned) {
+        Debug.Log("Refill behaviour stopped");
+        foreach (var member in membersAssigned) {
             member.SquadCompDeath -= OnSquadComponentDeath;
             member.ResetGoal();
             manager.AddMember(member);

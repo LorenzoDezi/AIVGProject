@@ -29,5 +29,5 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 0
         gameObjectValue: {fileID: 0}
-    priorityMultiplier: 0.15
+    priorityMultiplier: 0.2
     inversePriority: 0

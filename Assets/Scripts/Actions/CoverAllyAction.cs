@@ -5,30 +5,39 @@ using UnityEngine;
 public class CoverAllyAction : CircleShootAction {
 
     [SerializeField]
-    private WorldStateKey needCoverKey;
-    private Transform allyToCover;
+    private WorldStateKey squadObjectKey;
 
-    [SerializeField]
-    private float maxDistanceFromAlly = 10f;
-    private float maxDistanceSqr;
+    private SquadNeedCoverSensor needCoverSensor;
+    WorldStates perception;
+    private SquadComponent agentToCover;
 
     public override void Init(GameObject agentGameObj) {
 
         base.Init(agentGameObj);
-
-        maxDistanceSqr = maxDistanceFromAlly * maxDistanceFromAlly;
+        perception = agentGameObj.GetComponent<Agent>().WorldPerception;
     }
 
-    public override bool CheckProceduralConditions() {
-        var ally = World.WorldStates[needCoverKey]?.GameObjectValue;
-        if (ally == null || ally.GetInstanceID() == transform.GetInstanceID())
+    public override bool Activate() {
+
+        if (!base.Activate())
             return false;
-        allyToCover = ally.transform;
-        return allyToCover.SqrDistance(transform) <= maxDistanceSqr;
+
+        var squadGameObject = perception[squadObjectKey]?.GameObjectValue;
+        if (!squadGameObject)
+            return false;
+
+        needCoverSensor = squadGameObject.GetComponent<SquadNeedCoverSensor>();
+        agentToCover = needCoverSensor.GetMemberWhoNeedCover(transform.position);
+
+        return agentToCover != null;
+    }
+
+    public override void Deactivate() {
+        needCoverSensor.AddMemberWhoNeedCover(agentToCover);
     }
 
     protected override void SetMovementTargetPosition() {
-        movementTargetPos = target.position + (allyToCover.position - target.position) / 2f;
+        movementTargetPos = target.position + (agentToCover.Transform.position - target.position) / 2f;
     }
 
 }

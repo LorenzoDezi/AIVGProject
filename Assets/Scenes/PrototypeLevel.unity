@@ -87431,6 +87431,15 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: goalTemplates.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 495220353, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
+      propertyPath: goalTemplates.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 194b1d1957548f74e9904d0dc81b1a88,
+        type: 2}
     - target: {fileID: 495220359, guid: 32f6da04792d1114fa3b0af6f1b898bb, type: 3}
       propertyPath: tagPenalties.Array.data[1]
       value: 10
@@ -87664,7 +87673,7 @@ PrefabInstance:
     - target: {fileID: 7138088295002142971, guid: 14fe00b1532f8a5429a53e291b6dc5d3,
         type: 3}
       propertyPath: maxRefills
-      value: 2
+      value: 1000000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14fe00b1532f8a5429a53e291b6dc5d3, type: 3}
@@ -87851,9 +87860,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
+      propertyPath: squadBehaviourTemplates.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
       propertyPath: squadMembers.Array.data[0]
       value: 
-      objectReference: {fileID: 821130744}
+      objectReference: {fileID: 2089853290383079074}
     - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
       propertyPath: squadMembers.Array.data[1]
@@ -87863,7 +87877,7 @@ PrefabInstance:
         type: 3}
       propertyPath: squadMembers.Array.data[2]
       value: 
-      objectReference: {fileID: 2089853290383079074}
+      objectReference: {fileID: 821130744}
     - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
       propertyPath: squadGoals.Array.data[3]
@@ -87880,6 +87894,17 @@ PrefabInstance:
       propertyPath: squadMembers.Array.data[4]
       value: 
       objectReference: {fileID: 995676636}
+    - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
+      propertyPath: squadBehaviourTemplates.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: d76039819ee20dd4aa97776910f55b9f,
+        type: 2}
+    - target: {fileID: 6412692240534204490, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
+      propertyPath: searchTime
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6412692240534204494, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
       propertyPath: m_Name

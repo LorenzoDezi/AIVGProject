@@ -32,13 +32,19 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
-  effects:
-    states:
     - value:
         key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
         intValue: 0
         floatValue: 0
         boolValue: 0
+        gameObjectValue: {fileID: 0}
+  effects:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 95ccc3a36138c5644beb0c925681ccc7, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
         gameObjectValue: {fileID: 0}
   cost: 4
   obstacleLayerMask:
@@ -46,5 +52,4 @@ MonoBehaviour:
     m_Bits: 33792
   distance: 4
   maxSearchFirePointIteration: 5
-  needCoverKey: {fileID: 11400000, guid: edaf99e35015b464d8791b9b900aaa9e, type: 2}
-  maxDistanceFromAlly: 10
+  squadObjectKey: {fileID: 11400000, guid: babc2c2d588368643b7ae0a4ca19f3ef, type: 2}

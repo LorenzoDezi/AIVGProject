@@ -11,6 +11,7 @@ public class SquadComponent : MonoBehaviour
 
     private SquadGoal currentSquadGoal;
     public int SquadIndex { get; set; }
+    public Transform Transform { get; private set; }
 
     public event EnemySpottedHandler EnemySpotted {
         add {
@@ -38,6 +39,7 @@ public class SquadComponent : MonoBehaviour
         agent = GetComponent<Agent>();
         enemySensor = GetComponent<EnemyVisualSensor>();
         healthComp = GetComponent<HealthComponent>();
+        Transform = GetComponent<Transform>();
         healthComp.Death.AddListener(OnDeath);
     }
 

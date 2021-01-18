@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6412692240534204489}
   - component: {fileID: 6412692240534204491}
   - component: {fileID: 6412692240534204490}
+  - component: {fileID: 7324593339286323427}
   m_Layer: 0
   m_Name: Squad
   m_TagString: Untagged
@@ -56,6 +57,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 89bd674ba14e3db42bca1c22e8a18c78, type: 2}
   squadBehaviourTemplates:
   - {fileID: 11400000, guid: ba294902f354bd843806e456eb5709e7, type: 2}
+  - {fileID: 11400000, guid: d76039819ee20dd4aa97776910f55b9f, type: 2}
 --- !u!114 &6412692240534204491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -94,3 +96,16 @@ MonoBehaviour:
   maxSearchPoints: 5
   maxRandomSearchPointIterations: 5
   searchTime: 10
+--- !u!114 &7324593339286323427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412692240534204494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 540047263bbecc64395f8776bb649009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  needCoverKey: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
