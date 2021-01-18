@@ -143,6 +143,18 @@ public class EnemyVisualSensor : MonoBehaviour {
             searchTimer = null;
         }
     }
+
+    public GameObject CheckInConeOfVision(LayerMask goalLayerMask) {
+        //TODO: with results cached and more than one result
+        GameObject result = null;
+        if (Physics2D.OverlapCircleNonAlloc(transform.position, visionLenght,
+            cachedCheckResults, goalLayerMask) == 1) {
+            Transform candidateObj = cachedCheckResults[0].transform;
+            if (IsObjectVisible(candidateObj, obstacleLayerMask))
+                result = candidateObj.gameObject;
+        }
+        return result;
+    }
     #endregion
 
     #region private methods
@@ -170,7 +182,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
 
     private void CheckVisibility(float timeSinceLastCheck) {
-        if (!IsEnemyVisible(visibleEnemy, wallLayerMask)) {
+        if (!IsObjectVisible(visibleEnemy, wallLayerMask)) {
             if (currTimeToLoseEnemy > timeToLoseEnemy) {
                 LoseEnemy();
                 currTimeToLoseEnemy = 0f;
@@ -225,18 +237,20 @@ public class EnemyVisualSensor : MonoBehaviour {
 
             var enemyCollider = cachedCheckResults[0];
             Transform candidateEnemy = enemyCollider.transform;
-            if(IsEnemyVisible(candidateEnemy, obstacleLayerMask))
+            if(IsObjectVisible(candidateEnemy, obstacleLayerMask))
                 visibleEnemy = candidateEnemy;
         }
 
         return visibleEnemy;
     }
 
-    private bool IsEnemyVisible(Transform enemy, LayerMask obstacleLayerMask) {
-        Vector2 dirToPlayer = (enemy.position - transform.position).normalized;
+    
+
+    private bool IsObjectVisible(Transform obj, LayerMask obstacleLayerMask) {
+        Vector2 dirToPlayer = (obj.position - transform.position).normalized;
 
         return Vector2.Angle(transform.right, dirToPlayer) <= visionAngle / 2f &&
-            !transform.HasObstacleInBetween(enemy, obstacleLayerMask);
+            !transform.HasObstacleInBetween(obj, obstacleLayerMask);
     }
     #endregion
 

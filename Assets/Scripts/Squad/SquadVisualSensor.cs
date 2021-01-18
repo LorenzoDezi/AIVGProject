@@ -108,6 +108,7 @@ public class SquadVisualSensor : SquadSensor {
 
     private void OnTerminateSearch() {
         enemyLostWS.BoolValue = false;
+        squadMembers.ForEach((member) => member.UpdatePerception(enemyLostWS));
         manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     }
 

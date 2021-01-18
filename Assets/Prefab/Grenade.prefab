@@ -215,7 +215,7 @@ MonoBehaviour:
     m_Bits: 6144
   obstacleLayerMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 33792
   wallLayerMask:
     serializedVersion: 2
     m_Bits: 32768
@@ -223,7 +223,8 @@ MonoBehaviour:
   linearSpeed: 5
   rotationSpeed: 500
   timeToExplode: 1.5
-  explosionRadius: 2.5
+  explosionRadius: 2
+  senseThickness: 3
 --- !u!58 &7810718427281659346
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -239,4 +240,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 2.5

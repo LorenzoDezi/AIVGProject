@@ -435,6 +435,7 @@ MonoBehaviour:
     m_Bits: 16384
   inDangerKey: {fileID: 11400000, guid: 72bfe183608433645ab563edd95387ee, type: 2}
   dangerAroundKey: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+  timeToCheckDanger: 0.5
 --- !u!114 &2089853290383079077
 MonoBehaviour:
   m_ObjectHideFlags: 0

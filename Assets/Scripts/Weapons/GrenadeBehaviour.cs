@@ -38,6 +38,8 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
     private float timeToExplode = 2f;
     [SerializeField]
     private float explosionRadius;
+    [SerializeField, Tooltip("explRadius + senseThickness = enemySensingRadius")]
+    private float senseThickness = 2.5f;
 
     public float DangerRadius => explosionRadius;
     public Vector3 DangerSource => transform.position;
@@ -67,7 +69,7 @@ public class GrenadeBehaviour : MonoBehaviour, IDangerous
         spawner = GameManager.BulletSpawner;
         collider.enabled = false;
         radiusRenderer.enabled = false;
-        collider.radius = explosionRadius + 2f;
+        collider.radius = explosionRadius + senseThickness;
 
         Transform radiusTransform = radiusRenderer.transform;
         Vector3 localScale = radiusTransform.localScale;

@@ -24,3 +24,4 @@ MonoBehaviour:
         gameObjectValue: {fileID: 0}
   cost: 0
   maxSearchOutOfDangerIterations: 5
+  safeDistance: 3
