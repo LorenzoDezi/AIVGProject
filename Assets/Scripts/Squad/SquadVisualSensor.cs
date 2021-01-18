@@ -65,7 +65,11 @@ public class SquadVisualSensor : SquadSensor {
 
 
     private void Update() {
-        if (spotted && currTimeToUpdateEnemyPos >= timeToUpdateEnemyPos) {
+
+        if (!spotted)
+            return;
+
+        if (currTimeToUpdateEnemyPos >= timeToUpdateEnemyPos) {
 
             currTimeToUpdateEnemyPos = 0f;
 
@@ -83,8 +87,10 @@ public class SquadVisualSensor : SquadSensor {
     }
 
     private void OnEnemySpotted(Transform enemy) {
+
         if (spotted)
             lostCount--;
+
         else {
 
             spotted = true;

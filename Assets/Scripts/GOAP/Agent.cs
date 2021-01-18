@@ -149,9 +149,12 @@ namespace GOAP {
 
         private void InitGoals() {
             for (int i = 0; i < goalTemplates.Count; i++) {
-                goals.Add(Instantiate(goalTemplates[i]));
-                goals[i].Init(gameObject);
-                goals[i].PriorityChanged += UpdateGoals;
+
+                var goal = Instantiate(goalTemplates[i]);
+                goal.Init(gameObject);
+                goal.PriorityChanged += UpdateGoals;
+
+                goals.Add(goal);
             }
         }
 

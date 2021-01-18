@@ -413,7 +413,7 @@ MonoBehaviour:
   visionLenght: 8
   checkTargetDelay: 0.2
   enemyNearTresholdDistance: 4
-  searchTime: 5
+  searchTime: 10
   timeToLoseEnemy: 3
 --- !u!114 &744502580
 MonoBehaviour:

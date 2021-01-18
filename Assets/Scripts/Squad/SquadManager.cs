@@ -120,11 +120,7 @@ public class SquadManager : MonoBehaviour {
     public List<SquadComponent> GetMembers(int count) {
 
         List<SquadComponent> members = new List<SquadComponent>();
-
-        if (squadMembers.Count < count)
-            return members;
-
-        for(int i = 0; i < count; i++) {
+        for(int i = 0; i < count && squadMembers.Count > 0; i++) {
             members.Add(RemoveMemberAt(squadMembers.Count - 1));
         }
 

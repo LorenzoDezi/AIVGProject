@@ -9,6 +9,7 @@ namespace GOAP {
         private bool isWorldWS;
         [SerializeField]
         WorldState referenceWS;
+
         WorldState currReferenceWS;
         public WorldState CurrReferenceWS => currReferenceWS;
 

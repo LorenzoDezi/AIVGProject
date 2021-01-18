@@ -50,20 +50,18 @@ public class SquadBehaviour : ScriptableObject {
     }
 
     protected virtual void StartBehaviour() {
-        Debug.Log("Refill behaviour started");
         var members = manager.GetMembers(goalTemplates.Count);
-        if(members.Count == goalTemplates.Count) {
+        if(members.Count <= goalTemplates.Count) {
             members.ForEach((member) => member.SquadCompDeath += OnSquadComponentDeath);
             int startIndex = membersAssigned.Count;
             membersAssigned.AddRange(members);
-            for(int i = 0; i < goalTemplates.Count; i++) {
+            for(int i = 0; i < members.Count; i++) {
                 membersAssigned[startIndex + i].AddGoalWith(goalTemplates[i]);
             }
         }
     }
 
     protected virtual void StopBehaviour() {
-        Debug.Log("Refill behaviour stopped");
         foreach (var member in membersAssigned) {
             member.SquadCompDeath -= OnSquadComponentDeath;
             member.ResetGoal();
