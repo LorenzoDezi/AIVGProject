@@ -89,9 +89,8 @@ public class SquadVisualSensor : SquadSensor {
 
             spotted = true;
             this.enemy = enemy;
-            foreach (var squadMember in squadMembers) {
-                squadMember.Spotted(enemy);
-            }
+
+            squadMembers.ForEach((member) => member.SpotEnemy(enemy));
 
             currTimeToUpdateEnemyPos = timeToUpdateEnemyPos;
 
@@ -115,6 +114,8 @@ public class SquadVisualSensor : SquadSensor {
                 searchCoordinator?.SetupSearchPoints(enemyPosBuffer.Dequeue());
                 enemyPosBuffer.Clear();
             }
+            //Stopping "single" enemy search
+            squadMembers.ForEach((member) => member.StopSearch());
             UpdatePerception();
         }
     }

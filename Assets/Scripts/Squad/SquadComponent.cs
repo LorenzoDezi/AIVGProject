@@ -50,8 +50,12 @@ public class SquadComponent : MonoBehaviour
         get => agent.WorldPerception[key];
     }
 
-    public void Spotted(Transform enemySpotted) {
+    public void SpotEnemy(Transform enemySpotted) {
         enemySensor.SpotEnemy(enemySpotted);
+    }
+
+    public void StopSearch() {
+        enemySensor.StopSearch();
     }
 
     public void UpdatePerception(WorldState worldState) {

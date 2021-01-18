@@ -70,7 +70,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySeenKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
   enemyLostKey: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
-  enemyPosBufferMaxSize: 2
+  enemyPosBufferMaxSize: 3
   timeToUpdateEnemyPos: 1
 --- !u!114 &6412692240534204490
 MonoBehaviour:
@@ -93,4 +93,4 @@ MonoBehaviour:
   searchRadius: 10
   maxSearchPoints: 5
   maxRandomSearchPointIterations: 5
-  searchTime: 8
+  searchTime: 10
