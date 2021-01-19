@@ -8,14 +8,10 @@ using UnityEngine;
 
 public delegate void DangerFoundHandler(IDangerous danger);
 
-public class GrenadeController : MonoBehaviour {
+public class GrenadeController : WeaponController {
 
-    private BulletSpawner spawner;
     private new Transform transform;
 
-    [SerializeField]
-    private int maxAmmo = 3;
-    private int currAmmo;
     public int NeededAmmo => maxAmmo - currAmmo;
 
     [SerializeField]
@@ -35,10 +31,9 @@ public class GrenadeController : MonoBehaviour {
         transform = GetComponent<Transform>();
     }
 
-    private void Start() {
-        spawner = GameManager.BulletSpawner;
+    protected override void Start() {
+        base.Start();
         maxHitDistanceSqr = maxHitDistance * maxHitDistance;
-        currAmmo = maxAmmo;
         canLaunch = true;
     }
 
@@ -57,6 +52,7 @@ public class GrenadeController : MonoBehaviour {
             GrenadeLaunched?.Invoke(behaviour);
             canLaunch = false;
             currAmmo--;
+            RaiseAmmoChangedEvent(currAmmo);
             StartCoroutine(ReloadCoroutine());
         }
     }
@@ -65,6 +61,7 @@ public class GrenadeController : MonoBehaviour {
         currAmmo += grenades;
         if (currAmmo > maxAmmo)
             currAmmo = maxAmmo;
+        RaiseAmmoChangedEvent(currAmmo);
     }
 }
 

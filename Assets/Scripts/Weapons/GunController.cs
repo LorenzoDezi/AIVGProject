@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GunController : MonoBehaviour
+public class GunController : WeaponController
 {
     private float lastShotTime;
     [SerializeField]
     private float shootInterval = 0.5f;
-    [SerializeField]
-    private int maxShotsPerClip = 5;
-    private int currentShotsInClip;
 
     [SerializeField]
     private float timeToReload = 1f;
@@ -24,17 +21,15 @@ public class GunController : MonoBehaviour
 
     [SerializeField]
     private Transform bulletSpawn;
-    private BulletSpawner spawner;
 
-    public bool HasShotsInClip => currentShotsInClip > 0;
+    public bool HasShotsInClip => currAmmo > 0;
 
     public delegate void GunLoadHandler(bool isLoaded);
     public event GunLoadHandler GunLoadStatusChanged;
 
-    private void Start() {
-        spawner = GameManager.BulletSpawner;
+    protected override void Start() {
+        base.Start();
         lastShotTime = shootInterval;
-        currentShotsInClip = maxShotsPerClip;
         reloadSprite.enabled = false;
     }
 
@@ -46,21 +41,23 @@ public class GunController : MonoBehaviour
         if((Time.time - lastShotTime) >= shootInterval && HasShotsInClip) {
             lastShotTime = Time.time;
             Shoot();
-            currentShotsInClip--;
-            if (currentShotsInClip == 0)
+            currAmmo--;
+            RaiseAmmoChangedEvent(currAmmo);
+            if (currAmmo == 0)
                 GunLoadStatusChanged?.Invoke(false);
         }
     }
 
     public void Reload() {
-        if(reloadCoroutine == null && currentShotsInClip != maxShotsPerClip)
+        if(reloadCoroutine == null && currAmmo != maxAmmo)
             reloadCoroutine = StartCoroutine(ReloadCoroutine());
     }
 
     private IEnumerator ReloadCoroutine() {
         reloadSprite.enabled = true;
         yield return new WaitForSeconds(timeToReload);
-        currentShotsInClip = maxShotsPerClip;
+        currAmmo = maxAmmo;
+        RaiseAmmoChangedEvent(currAmmo);
         reloadSprite.enabled = false;
         GunLoadStatusChanged?.Invoke(true);
         reloadCoroutine = null;
@@ -71,7 +68,4 @@ public class GunController : MonoBehaviour
         bullet.transform.position = bulletSpawn.position;
         bullet.transform.right = bulletSpawn.right;
     }
-
-    
-
 }

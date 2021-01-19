@@ -873,6 +873,11 @@ PrefabInstance:
       propertyPath: gunSprite
       value: 
       objectReference: {fileID: 508907348529982667}
+    - target: {fileID: 3789864328786370327, guid: 9da5d4cd1be4ef84395165b92745a672,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3789864329941056109, guid: 9da5d4cd1be4ef84395165b92745a672,
         type: 3}
       propertyPath: m_Name
