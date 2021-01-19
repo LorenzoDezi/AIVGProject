@@ -16,7 +16,7 @@ public class CharacterPlayerInput : MonoBehaviour
     private Camera mainCamera;
 
     [SerializeField]
-    private LayerMask healthStationLayerMask;
+    private LayerMask interactableMask;
 
     private bool isShooting;
 
@@ -70,9 +70,31 @@ public class CharacterPlayerInput : MonoBehaviour
     }
 
     public void OnInteraction(InputAction.CallbackContext context) {
-        var hsCollider = Physics2D.OverlapCircle(transform.position, 2f, healthStationLayerMask);
-        if (hsCollider != null && hsCollider.GetComponent<HealthStation>().UseRefill()) {
+        var interactCollider = Physics2D.OverlapCircle(transform.position, 2f, interactableMask);
+        if (interactCollider == null)
+            return;
+
+        if(healthComponent.CurrHealth < healthComponent.MaxHealth)
+            InteractWithHealthStation(interactCollider);
+
+        if (grenadeLauncher.NeededAmmo > 0) {
+            InteractWithGrenadeReloadSpot(interactCollider);
+        }
+
+    }
+
+    private void InteractWithHealthStation(Collider2D interactCollider) {
+        var healthStation = interactCollider.GetComponent<HealthStation>();
+        if (healthStation != null && healthStation.UseRefill()) {
             healthComponent.Restore(healthComponent.MaxHealth);
+        }
+    }
+
+    private void InteractWithGrenadeReloadSpot(Collider2D interactCollider) {
+        var grenadeStation = interactCollider.GetComponent<GrenadeReloadSpot>();
+        if (grenadeStation != null) {
+            int grenades = grenadeStation.GetAmmo(grenadeLauncher.NeededAmmo);
+            grenadeLauncher.ReloadAmmo(grenades);
         }
     }
 

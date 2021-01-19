@@ -14,6 +14,11 @@ public class GrenadeController : MonoBehaviour {
     private new Transform transform;
 
     [SerializeField]
+    private int maxAmmo = 3;
+    private int currAmmo;
+    public int NeededAmmo => maxAmmo - currAmmo;
+
+    [SerializeField]
     private float timeToReload = 2f;
     private float currReloadTime = 0f;
 
@@ -33,6 +38,7 @@ public class GrenadeController : MonoBehaviour {
     private void Start() {
         spawner = GameManager.BulletSpawner;
         maxHitDistanceSqr = maxHitDistance * maxHitDistance;
+        currAmmo = maxAmmo;
         canLaunch = true;
     }
 
@@ -43,15 +49,22 @@ public class GrenadeController : MonoBehaviour {
     }
 
     public void LaunchAt(Vector3 position) {
-        if(canLaunch && (position - transform.position).sqrMagnitude <= maxHitDistanceSqr) {
+        if(currAmmo > 0 && canLaunch && (position - transform.position).sqrMagnitude <= maxHitDistanceSqr) {
             var grenade = spawner.GetGrenade();
             grenade.transform.position = transform.position;
             var behaviour = grenade.GetComponent<GrenadeBehaviour>();
             behaviour.TargetPosition = position;
             GrenadeLaunched?.Invoke(behaviour);
             canLaunch = false;
+            currAmmo--;
             StartCoroutine(ReloadCoroutine());
         }
+    }
+
+    public void ReloadAmmo(int grenades) {
+        currAmmo += grenades;
+        if (currAmmo > maxAmmo)
+            currAmmo = maxAmmo;
     }
 }
 

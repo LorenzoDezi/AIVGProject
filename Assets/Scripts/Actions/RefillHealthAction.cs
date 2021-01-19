@@ -69,7 +69,7 @@ public class RefillHealthAction : GOAP.Action {
 
             HealthStation current = cachedCheckHSResults[i].GetComponent<HealthStation>();
 
-            if (!current.CanRefill)
+            if (current == null || !current.CanRefill)
                 break;
 
             float currSqrDist = Vector3.SqrMagnitude(

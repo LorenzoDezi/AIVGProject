@@ -667,6 +667,11 @@ PrefabInstance:
       propertyPath: maxHitDistance
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 5336021182813110327, guid: c4e3f7f297196ec4fb6ca8cc94e94910,
+        type: 3}
+      propertyPath: maxAmmo
+      value: 10000000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c4e3f7f297196ec4fb6ca8cc94e94910, type: 3}
 --- !u!4 &6600309503241530734 stripped
