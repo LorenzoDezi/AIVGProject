@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 
-public delegate void SquadChange(SquadComponent member);
+public delegate void SquadChangeHandler(SquadComponent member);
 
 public class SquadManager : MonoBehaviour {
 
@@ -31,8 +31,8 @@ public class SquadManager : MonoBehaviour {
     private WorldStates squadPerception;
     public WorldStates SquadPerception => squadPerception;
 
-    public event SquadChange AddedMember;
-    public event SquadChange RemovedMember;
+    public event SquadChangeHandler AddedMember;
+    public event SquadChangeHandler RemovedMember;
 
     private void Awake() {
         squadPerception = new WorldStates();
@@ -77,6 +77,7 @@ public class SquadManager : MonoBehaviour {
 
         if (squadCompIndex == currGoalIndex)
             currGoalIndex--;
+
         ShiftMembers(squadCompIndex);
 
         SquadComponent toBeRemoved = squadMembers[squadCompIndex];

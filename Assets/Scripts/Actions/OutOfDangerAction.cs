@@ -37,9 +37,16 @@ public class OutOfDangerAction : GOAP.Action {
         if(destination.HasValue) {
             navComp.MoveTo(destination.Value);
             navComp.PathCompleted += OnPathCompleted;
+            dangerSensor.DangerFound += OnNewDangerFound;
             return true;
         }
         return false;
+    }
+
+    private void OnNewDangerFound(IDangerous danger) {
+        Vector3? destination = GetDestination();
+        if (destination.HasValue)
+            navComp.MoveTo(destination.Value);
     }
 
     private Vector3? GetDestination() {
@@ -65,7 +72,7 @@ public class OutOfDangerAction : GOAP.Action {
 
     private void OnPathCompleted(bool isCompleted) {
         if(isCompleted) {
-            agent.UpdatePerception(Effects);
+            dangerSensor.SetInDanger(false);
             Terminate(true);
         } else {
             Vector3? destination = GetDestination();
@@ -78,6 +85,7 @@ public class OutOfDangerAction : GOAP.Action {
 
     public override void Deactivate() {
         navComp.PathCompleted -= OnPathCompleted;
+        dangerSensor.DangerFound -= OnNewDangerFound;
     }
 
     public override void Update() {

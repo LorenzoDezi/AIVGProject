@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+public delegate void DangerFoundHandler(IDangerous danger);
+
 public class GrenadeController : MonoBehaviour {
 
     private BulletSpawner spawner;
@@ -21,6 +23,8 @@ public class GrenadeController : MonoBehaviour {
     public float WeaponRange => maxHitDistance;
 
     private bool canLaunch;
+
+    public event DangerFoundHandler GrenadeLaunched;
 
     private void Awake() {
         transform = GetComponent<Transform>();
@@ -42,7 +46,9 @@ public class GrenadeController : MonoBehaviour {
         if(canLaunch && (position - transform.position).sqrMagnitude <= maxHitDistanceSqr) {
             var grenade = spawner.GetGrenade();
             grenade.transform.position = transform.position;
-            grenade.GetComponent<GrenadeBehaviour>().TargetPosition = position;
+            var behaviour = grenade.GetComponent<GrenadeBehaviour>();
+            behaviour.TargetPosition = position;
+            GrenadeLaunched?.Invoke(behaviour);
             canLaunch = false;
             StartCoroutine(ReloadCoroutine());
         }

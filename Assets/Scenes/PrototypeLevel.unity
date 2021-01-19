@@ -88114,6 +88114,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 11400000, guid: d76039819ee20dd4aa97776910f55b9f,
         type: 2}
+    - target: {fileID: 6412692240534204489, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
+      propertyPath: squadGoals.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6455504b6dd374c4285ef207a6d5493c,
+        type: 2}
     - target: {fileID: 6412692240534204490, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
       propertyPath: searchTime

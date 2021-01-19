@@ -224,7 +224,7 @@ MonoBehaviour:
   rotationSpeed: 500
   timeToExplode: 1.5
   explosionRadius: 2
-  senseThickness: 3
+  senseThickness: 1
 --- !u!58 &7810718427281659346
 CircleCollider2D:
   m_ObjectHideFlags: 0

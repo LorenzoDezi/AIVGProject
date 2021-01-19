@@ -3,41 +3,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void SquadCompDeathHandler(int squadIndex);
+
 public class SquadComponent : MonoBehaviour
 {
     private Agent agent;
     private HealthComponent healthComp;
-    private EnemyVisualSensor enemySensor;
-
-    private SquadGoal currentSquadGoal;
-    public int SquadIndex { get; set; }
+    private EnemyVisualSensor visualSensor;
+    private DangerSensor dangerSensor;
     public Transform Transform { get; private set; }
 
+    private SquadGoal currentSquadGoal;
+
+    public int SquadIndex { get; set; }
+
+    #region events
     public event EnemySpottedHandler EnemySpotted {
         add {
-            enemySensor.EnemySpotted += value;
+            visualSensor.EnemySpotted += value;
         }
         remove {
-            enemySensor.EnemySpotted -= value;
+            visualSensor.EnemySpotted -= value;
         }
     }
 
     public event EnemyLostHandler EnemyLost {
         add {
-            enemySensor.EnemyLost += value;
+            visualSensor.EnemyLost += value;
         }
         remove {
-            enemySensor.EnemyLost -= value;
+            visualSensor.EnemyLost -= value;
         }
     }
 
-    public delegate void SquadCompDeathHandler(int squadIndex);
-    public event SquadCompDeathHandler SquadCompDeath;
+    public event DangerFoundHandler DangerFound {
+        add {
+            dangerSensor.DangerFound += value;
+        }
+        remove {
+            dangerSensor.DangerFound -= value;
+        }
+    }
+
+    public event SquadCompDeathHandler SquadCompDeath; 
+    #endregion
 
     private void Awake() {
 
         agent = GetComponent<Agent>();
-        enemySensor = GetComponent<EnemyVisualSensor>();
+        visualSensor = GetComponent<EnemyVisualSensor>();
+        dangerSensor = GetComponent<DangerSensor>();
         healthComp = GetComponent<HealthComponent>();
         Transform = GetComponent<Transform>();
         healthComp.Death.AddListener(OnDeath);
@@ -48,25 +63,30 @@ public class SquadComponent : MonoBehaviour
         SquadCompDeath?.Invoke(SquadIndex);
     }
 
+    #region public methods
     public WorldState this[WorldStateKey key] {
         get => agent.WorldPerception[key];
     }
 
     public void SpotEnemy(Transform enemySpotted) {
-        enemySensor.SpotEnemy(enemySpotted);
+        visualSensor.SpotEnemy(enemySpotted);
     }
 
     public void StopSearch() {
-        enemySensor.StopSearch();
+        visualSensor.StopSearch();
     }
 
     public void UpdatePerception(WorldState worldState) {
         agent.UpdatePerception(worldState);
     }
 
+    public void RegisterDanger(IDangerous danger) {
+        dangerSensor.RegisterDanger(danger);
+    }
+
     public void UpdateLastSeen(Transform enemy) {
-        enemySensor.LastSeenPosition = enemy.position;
-        enemySensor.LastSeenDirection = enemy.right;
+        visualSensor.LastSeenPosition = enemy.position;
+        visualSensor.LastSeenDirection = enemy.right;
     }
 
     public void AddGoalWith(SquadGoal goalTemplate) {
@@ -82,5 +102,6 @@ public class SquadComponent : MonoBehaviour
         agent.Remove(currentSquadGoal);
         Destroy(currentSquadGoal);
         currentSquadGoal = null;
-    }
+    } 
+    #endregion
 }

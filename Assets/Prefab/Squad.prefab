@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6412692240534204491}
   - component: {fileID: 6412692240534204490}
   - component: {fileID: 7324593339286323427}
+  - component: {fileID: 7203657572300498901}
   m_Layer: 0
   m_Name: Squad
   m_TagString: Untagged
@@ -109,3 +110,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   needCoverKey: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+--- !u!114 &7203657572300498901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6412692240534204494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b75e6e620f09542813b471943f4fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
