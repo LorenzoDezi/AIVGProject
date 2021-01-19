@@ -10,11 +10,13 @@ using UnityEngine;
 public class RefillHealthAction : GOAP.Action {
 
     private NavigationComponent navigationComponent;
+    private CharacterController charController;
     private HealthComponent healthComponent;
     private Transform transform;
 
     private bool hasNearHealthStation;
     private HealthStation nearestHealthStation;
+    private HealthStation currentHealthStation;
 
     [Header("HealthStation check parameters")]
     [SerializeField]
@@ -23,6 +25,8 @@ public class RefillHealthAction : GOAP.Action {
     private int checkHSMaxQueryResults = 5;  
     [SerializeField]
     private LayerMask HSLayer;
+    [SerializeField]
+    private LayerMask wallLayerMask;
     private Collider2D[] cachedCheckHSResults;
 
     [Header("WorldState fields")]
@@ -35,6 +39,7 @@ public class RefillHealthAction : GOAP.Action {
 
         navigationComponent = agentGameObj.GetComponent<NavigationComponent>();
         transform = agentGameObj.GetComponent<Transform>();
+        charController = agentGameObj.GetComponent<CharacterController>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
 
         needCoverWS = new WorldState(needCoverKey, false);
@@ -47,12 +52,12 @@ public class RefillHealthAction : GOAP.Action {
         if (healthComponent.CurrHealth == healthComponent.MaxHealth)
             return false;
 
-        var hsCollider = GetBestHealthStation();
-        hasNearHealthStation = hsCollider != null;
+        var foundHealthStation = GetBestHealthStation();
+        hasNearHealthStation = foundHealthStation != null;
 
-        if(hasNearHealthStation)
-            nearestHealthStation = hsCollider.GetComponent<HealthStation>();
-
+        if(hasNearHealthStation) {
+            nearestHealthStation = foundHealthStation;
+        }
         return hasNearHealthStation;
     }
 
@@ -68,20 +73,18 @@ public class RefillHealthAction : GOAP.Action {
         for(int i = 0; i < resultCount && i < checkHSMaxQueryResults; i++) {
 
             HealthStation current = cachedCheckHSResults[i].GetComponent<HealthStation>();
-
-            if (current == null || !current.CanRefill)
-                break;
+            if (current == null || 
+                !current.CanRefill)
+                continue;
 
             float currSqrDist = Vector3.SqrMagnitude(
                 cachedCheckHSResults[i].transform.position - transform.position
             );
-
             if(currSqrDist < sqrMinDistance) {
                 result = current;
                 sqrMinDistance = currSqrDist;
             }            
         }
-
         return result;
     }
 
@@ -129,7 +132,9 @@ public class RefillHealthAction : GOAP.Action {
         agent.UpdatePerception(needCoverWS);
     }
 
-    public override void Update() { }
+    public override void Update() {
+        charController.AimAt(transform.position + navigationComponent.DirectionToWaypoint);
+    }
 
 }
 

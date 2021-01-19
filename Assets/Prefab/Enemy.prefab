@@ -314,7 +314,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d593f50a3b5ca70498bc1cf89fa8b146, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 150
   Death:
     m_PersistentCalls:
       m_Calls:
@@ -409,12 +409,12 @@ MonoBehaviour:
   obstacleLayerMask:
     serializedVersion: 2
     m_Bits: 33792
-  visionAngle: 120
-  visionLenght: 8
+  visionAngle: 160
+  visionLenght: 12
   checkTargetDelay: 0.2
   enemyNearTresholdDistance: 4
   searchTime: 10
-  timeToLoseEnemy: 3
+  timeToLoseEnemy: 5
 --- !u!114 &744502580
 MonoBehaviour:
   m_ObjectHideFlags: 0
