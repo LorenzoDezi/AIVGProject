@@ -366,10 +366,16 @@ MonoBehaviour:
   damageStateKey: {fileID: 11400000, guid: 571e581fe4239c04f83e8d2fd9965e12, type: 2}
   stressLevelKey: {fileID: 11400000, guid: 7c02808b74f072f4dbe9c478c395d989, type: 2}
   inCoverKey: {fileID: 11400000, guid: 245863dcc9ea02c41b2097375241dcf0, type: 2}
-  stressLevelDecreaseForSecond: 0.1
-  stressLevelDecreaseInCover: 2.5
-  stressLevelIncreasePerHealthPoint: 0.2
+  stressDecreasePerSec: 0.2
+  stressDecreaseCoverPerSec: 0.5
+  stressIncreasePerLostHP: 0.1
   maxStressLevel: 10
+  checkForHealthStationsDelay: 1
+  checkForHealthStationsRadius: 10
+  checkHSMaxQueryResults: 5
+  HSLayer:
+    serializedVersion: 2
+    m_Bits: 8192
 --- !u!114 &7274028961393068657
 MonoBehaviour:
   m_ObjectHideFlags: 0

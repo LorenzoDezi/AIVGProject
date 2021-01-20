@@ -1,5 +1,8 @@
 ﻿using GOAP;
+using System.Collections;
 using UnityEngine;
+
+public delegate void NearestHSChangedHandler();
 
 public class HealthSensor : MonoBehaviour {
 
@@ -30,6 +33,22 @@ public class HealthSensor : MonoBehaviour {
     [SerializeField]
     private float maxStressLevel = 10f;
 
+    [Header("HealthStation check parameters")]
+    [SerializeField]
+    private float checkForHealthStationsDelay = 2f;
+    [SerializeField]
+    private float checkForHealthStationsRadius = 5f;
+    [SerializeField]
+    private int checkHSMaxQueryResults = 5;
+    [SerializeField]
+    private LayerMask HSLayer;
+    private Collider2D[] cachedCheckHSResults;
+    private Coroutine checkHSRoutine;
+
+    public HealthStation NearestHealthStation { get; private set; }
+    public bool HasNearHealthStation { get; private set; }
+
+    public event NearestHSChangedHandler NearestHSChanged;
 
     private float currHealth;
 
@@ -42,6 +61,8 @@ public class HealthSensor : MonoBehaviour {
 
         currHealth = healthComp.MaxHealth;
         healthComp.HealthChanged += UpdatePerception;
+
+        cachedCheckHSResults = new Collider2D[checkHSMaxQueryResults];
     }
 
     private void InitPerception() {
@@ -58,16 +79,6 @@ public class HealthSensor : MonoBehaviour {
         }
     }
 
-    private void UpdatePerception(float newCurrHealth) {
-
-        float healthChange = newCurrHealth - this.currHealth;
-        this.currHealth = newCurrHealth;
-
-        ChangeStressLevelAfter(healthChange);
-
-        damageStateWSTracked.FloatValue = healthComp.MaxHealth - this.currHealth;
-    }
-
     private void Start() {
         needCoverCheck = agent.WorldPerception[inCoverKey] != null;
     }
@@ -76,6 +87,39 @@ public class HealthSensor : MonoBehaviour {
 
         if (stressLevelWSTracked.FloatValue > 0f)
             UpdateStressLevel();
+    }
+
+    private void UpdatePerception(float newCurrHealth) {
+
+        float healthChange = newCurrHealth - this.currHealth;
+        this.currHealth = newCurrHealth;
+
+        ChangeStressLevelAfter(healthChange);
+
+        UpdateDamageState();
+    }
+
+    private void ChangeStressLevelAfter(float healthChange) {
+
+        float currStressLevel = stressLevelWSTracked.FloatValue;
+
+        if (healthChange < 0 && currStressLevel < maxStressLevel)
+            currStressLevel -= healthChange * stressIncreasePerLostHP; //More stress under fire
+        else if (healthChange > 0)
+            currStressLevel = 0f; //No stress if health points regained
+    }
+
+    private void UpdateDamageState() {
+        damageStateWSTracked.FloatValue = healthComp.MaxHealth - this.currHealth;
+        if (damageStateWSTracked.FloatValue > healthComp.MaxHealth / 2f) {
+            if (checkHSRoutine == null)
+                checkHSRoutine = StartCoroutine(CheckForHealthStations());
+        } else if (checkHSRoutine != null) {
+            StopCoroutine(checkHSRoutine);
+            HasNearHealthStation = false;
+            NearestHSChanged?.Invoke();
+            checkHSRoutine = null;
+        }
     }
 
     private void UpdateStressLevel() {
@@ -88,18 +132,57 @@ public class HealthSensor : MonoBehaviour {
             newStressValue = 0f;
 
         stressLevelWSTracked.FloatValue = newStressValue;
-    }   
-
-    private void ChangeStressLevelAfter(float healthChange) {
-
-        float currStressLevel = stressLevelWSTracked.FloatValue;
-
-        if (healthChange < 0 && currStressLevel < maxStressLevel)
-            currStressLevel -= healthChange * stressIncreasePerLostHP; //More stress under fire
-        else if (healthChange > 0)
-            currStressLevel = 0f; //No stress if health points regained
-
-        stressLevelWSTracked.FloatValue = currStressLevel;
     }
+
+    private IEnumerator CheckForHealthStations() {
+        var wait = new WaitForSeconds(checkForHealthStationsDelay);
+        while(true) {
+            var foundHealthStation = GetBestHealthStation();
+            HasNearHealthStation = foundHealthStation != null;
+            if(HasNearHealthStation) {
+                if (foundHealthStation != NearestHealthStation) {
+
+                    if (HasNearHealthStation) {
+                        NearestHealthStation = foundHealthStation;
+                    }
+                    NearestHSChanged?.Invoke();
+                }
+            } else {
+                NearestHSChanged?.Invoke();
+            }            
+            yield return wait;
+        }       
+    }
+
+    private HealthStation GetBestHealthStation() {
+
+        int resultCount = Physics2D.OverlapCircleNonAlloc(
+            transform.position, checkForHealthStationsRadius,
+            cachedCheckHSResults, HSLayer
+        );
+
+        float sqrMinDistance = float.PositiveInfinity;
+        HealthStation result = null;
+        for (int i = 0; i < resultCount && i < checkHSMaxQueryResults; i++) {
+
+            HealthStation current = cachedCheckHSResults[i].GetComponent<HealthStation>();
+            if (current == null ||
+                !current.CanRefill)
+                continue;
+
+            float currSqrDist = Vector3.SqrMagnitude(
+                cachedCheckHSResults[i].transform.position - transform.position
+            );
+            if (currSqrDist < sqrMinDistance) {
+                result = current;
+                sqrMinDistance = currSqrDist;
+            }
+        }
+        return result;
+    }
+
+       
+
+    
 }
 
