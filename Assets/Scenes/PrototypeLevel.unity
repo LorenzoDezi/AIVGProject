@@ -88403,6 +88403,11 @@ PrefabInstance:
       propertyPath: maxAmmo
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 6563854298105148249, guid: ebe3b4dcd7f730c4493713604b2ed191,
+        type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6563854298105148251, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}
       propertyPath: maxAmmo

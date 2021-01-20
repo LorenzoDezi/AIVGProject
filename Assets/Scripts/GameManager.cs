@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
-{
+public delegate void GameOver(bool playerWon);
+
+public class GameManager : MonoBehaviour {
+
     [SerializeField]
     private string enemyTag = "Enemy";
     [SerializeField]
@@ -19,6 +21,7 @@ public class GameManager : MonoBehaviour
     public static string PlayerTag => instance.playerTag;
     public static GameObject Player => instance.player;
     public static BulletSpawner BulletSpawner => instance.bulletSpawner;
+    public static event GameOver GameOver;
 
     private void Awake() {
         if(instance != null) {
@@ -26,11 +29,10 @@ public class GameManager : MonoBehaviour
         }
         instance = this;
         var playerHealth = player.GetComponent<HealthComponent>();
-        //TODO: Handle player death
+        playerHealth.Death.AddListener(() => GameOver?.Invoke(false));
     }
 
-    void Start()
-    {
+    void Start() {
         Cursor.visible = false;      
     }
 }

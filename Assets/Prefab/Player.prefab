@@ -68,9 +68,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55da4823d8741dd4cac7d72827820ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthStationLayerMask:
+  interactableMask:
     serializedVersion: 2
-    m_Bits: 8192
+    m_Bits: 0
 --- !u!50 &6563854298345398796
 Rigidbody2D:
   serializedVersion: 4
@@ -124,7 +124,7 @@ MonoBehaviour:
   Death:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6563854298345398786}
+      - m_Target: {fileID: 6563854298345398787}
         m_MethodName: OnDeath
         m_Mode: 1
         m_Arguments:

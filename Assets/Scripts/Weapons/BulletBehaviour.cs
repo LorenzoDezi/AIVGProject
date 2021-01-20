@@ -31,7 +31,7 @@ public class BulletBehaviour : MonoBehaviour
 
     private void Update() {
 
-        var hit = Physics2D.Raycast(transform.position, transform.right, hitDistance, hitLayers.value);
+        var hit = Physics2D.Raycast(transform.position, transform.right, hitDistance, hitLayers);
 
         if (hit) {
             TryToDamage(hit);

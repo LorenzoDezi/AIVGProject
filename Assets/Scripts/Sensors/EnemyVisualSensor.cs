@@ -74,6 +74,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     private bool isEnemySpotted;
     public bool IsEnemySpotted => isEnemySpotted;    
     private Transform visibleEnemy;
+    private HealthComponent visibleEnemyHealth;
     public Transform VisibleEnemy => visibleEnemy;
 
     [SerializeField]
@@ -145,6 +146,8 @@ public class EnemyVisualSensor : MonoBehaviour {
     #region public methods
     public void SpotEnemy(Transform visibleEnemy) {
         this.visibleEnemy = visibleEnemy;
+        visibleEnemyHealth = visibleEnemy.GetComponent<HealthComponent>();
+        visibleEnemyHealth.Death.AddListener(OnEnemyDeath);
         enemySeenWSTracked.BoolValue = true;
         StopSearch();
         enemyLostWSTracked.BoolValue = false;
@@ -171,6 +174,14 @@ public class EnemyVisualSensor : MonoBehaviour {
     #endregion
 
     #region private methods
+
+    private void OnEnemyDeath() {
+        visibleEnemy = null;
+        enemyLostWSTracked.BoolValue = false;
+        enemySeenWSTracked.BoolValue = false;
+        isEnemySpotted = false;
+    }
+
     private IEnumerator CheckTargetWithDelay(float delay) {
 
         var wait = new WaitForSeconds(delay);
@@ -210,13 +221,13 @@ public class EnemyVisualSensor : MonoBehaviour {
     private void LoseEnemy() {
         enemySeenWSTracked.BoolValue = false;
         enemyLostWSTracked.BoolValue = true;
-
         searchTimer = StartCoroutine(SearchTimer());
 
         LastSeenPosition = visibleEnemy.position;
         LastSeenDirection = visibleEnemy.right;
-
         visibleEnemy = null;
+        visibleEnemyHealth.Death.RemoveListener(OnEnemyDeath);
+        visibleEnemyHealth = null;
         isEnemySpotted = false;
         EnemyLost?.Invoke();
     }
@@ -255,9 +266,7 @@ public class EnemyVisualSensor : MonoBehaviour {
         }
 
         return visibleEnemy;
-    }
-
-    
+    }  
 
     private bool IsObjectVisible(Transform obj, LayerMask obstacleLayerMask) {
         Vector2 dirToPlayer = (obj.position - transform.position).normalized;
