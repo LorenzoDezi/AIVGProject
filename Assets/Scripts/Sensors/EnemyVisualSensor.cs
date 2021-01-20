@@ -140,6 +140,17 @@ public class EnemyVisualSensor : MonoBehaviour {
     private void Start() {
         StartCoroutine(CheckTargetWithDelay(checkTargetDelay));
     }
+
+    private void OnCollisionEnter2D(Collision2D collision) {
+        if (isEnemySpotted)
+            return;
+        var gameObj = collision.collider.gameObject;
+        if(enemyLayerMask.ContainsLayer(gameObj.layer)) {
+            Transform visibleEnemy = gameObj.transform;
+            SpotEnemy(visibleEnemy);
+            EnemySpotted?.Invoke(visibleEnemy);
+        }       
+    }
     #endregion
 
 
