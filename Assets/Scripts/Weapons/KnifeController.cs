@@ -34,14 +34,15 @@ public class KnifeController : MonoBehaviour {
     }
 
     public void Attack() {
-        var hit = Physics2D.Linecast(transform.position, transform.position + transform.right * knifeLenght, hitLayerMask);
+        var hit = Physics2D.CircleCast(transform.position, knifeLenght, 
+            transform.right, knifeLenght, 
+            hitLayerMask
+        );
         if(hit) {
             var hitGameObj = hit.collider.gameObject;
             if(enemyLayerMask.ContainsLayer(hitGameObj.layer)) {
-                if(Vector3.Dot(transform.right, (Vector3) hit.point - transform.position) >= 0) {
-                    HealthComponent enemyHealth = hitGameObj.GetComponent<HealthComponent>();
-                    enemyHealth.Damage(damage);
-                }                
+                HealthComponent enemyHealth = hitGameObj.GetComponent<HealthComponent>();
+                enemyHealth.Damage(damage);
             }            
         }        
     }
