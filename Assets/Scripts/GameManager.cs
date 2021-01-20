@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
             Destroy(instance);
         }
         instance = this;
+        var playerHealth = player.GetComponent<HealthComponent>();
+        //TODO: Handle player death
     }
 
     void Start()

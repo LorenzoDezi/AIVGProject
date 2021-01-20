@@ -36,6 +36,5 @@ public class HealthComponent : MonoBehaviour
     public void Die() {
         CurrHealth = 0f;
         Death.Invoke();
-        Destroy(this);
     }
 }

@@ -9,6 +9,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StayAliveAction", menuName = "GOAP/Actions/StayAliveAction")]
 public class RefillHealthAction : GOAP.Action {
 
+    //TODO : SPOSTARE TUTTA LA LOGICA DELLA RICERCA SU HEALTHSENSOR
+
     private NavigationComponent navigationComponent;
     private CharacterController charController;
     private HealthComponent healthComponent;
@@ -42,7 +44,11 @@ public class RefillHealthAction : GOAP.Action {
         charController = agentGameObj.GetComponent<CharacterController>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
 
-        needCoverWS = new WorldState(needCoverKey, false);
+        needCoverWS = agent[needCoverKey];
+        if(needCoverWS == null) {
+            needCoverWS = new WorldState(needCoverKey, false);
+            agent.Add(needCoverWS);
+        }
 
         cachedCheckHSResults = new Collider2D[checkHSMaxQueryResults];
     }
@@ -93,7 +99,7 @@ public class RefillHealthAction : GOAP.Action {
         if (!hasNearHealthStation)
             return false;
 
-        UpdateNeedCoverWS(true);
+        needCoverWS.BoolValue = true;
         navigationComponent.MoveTo(nearestHealthStation.Transform.position);
         AddListeners();
         return true;
@@ -113,7 +119,7 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     public override void Deactivate() {
-        UpdateNeedCoverWS(false);
+        needCoverWS.BoolValue = false;
         RemoveListeners();
     }
 
@@ -125,11 +131,6 @@ public class RefillHealthAction : GOAP.Action {
     private void RemoveListeners() {
         navigationComponent.PathCompleted -= Refill;
         nearestHealthStation.RefillsEmpty -= OnRefillsEmpty;
-    }
-
-    private void UpdateNeedCoverWS(bool value) {
-        needCoverWS.BoolValue = value;
-        agent.UpdatePerception(needCoverWS);
     }
 
     public override void Update() {

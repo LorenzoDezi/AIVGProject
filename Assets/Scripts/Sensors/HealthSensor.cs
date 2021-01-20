@@ -4,7 +4,7 @@ using UnityEngine;
 public class HealthSensor : MonoBehaviour {
 
     private HealthComponent healthComp;
-    private Agent agentToUpdate;
+    private Agent agent;
 
     [Header("World State Keys")]
     [SerializeField]
@@ -22,65 +22,84 @@ public class HealthSensor : MonoBehaviour {
 
     [Header("Stress parameters")]
     [SerializeField]
-    private float stressLevelDecreaseForSecond = 0.2f;
+    private float stressDecreasePerSec = 0.2f;
     [SerializeField]
-    private float stressLevelDecreaseInCover = 0.5f;
+    private float stressDecreaseCoverPerSec = 0.5f;
     [SerializeField]
-    private float stressLevelIncreasePerHealthPoint = 0.1f;
+    private float stressIncreasePerLostHP = 0.1f;
     [SerializeField]
     private float maxStressLevel = 10f;
 
 
-    private float lastHealthRegistered;
+    private float currHealth;
 
     private void Awake() {
 
-        agentToUpdate = GetComponent<Agent>();
+        agent = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
 
-        damageStateWSTracked = new WorldState(damageStateKey, 0f);
-        agentToUpdate.UpdatePerception(damageStateWSTracked);
-        stressLevelWSTracked = new WorldState(stressLevelKey, 0);
-        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+        InitPerception();
 
-        lastHealthRegistered = healthComp.MaxHealth;
-        healthComp.HealthChanged += UpdatePerception;    
+        currHealth = healthComp.MaxHealth;
+        healthComp.HealthChanged += UpdatePerception;
+    }
+
+    private void InitPerception() {
+        damageStateWSTracked = agent[damageStateKey];
+        if (damageStateWSTracked == null) {
+            damageStateWSTracked = new WorldState(damageStateKey, 0);
+            agent.Add(damageStateWSTracked);
+        }
+
+        stressLevelWSTracked = agent[stressLevelKey];
+        if (stressLevelWSTracked == null) {
+            stressLevelWSTracked = new WorldState(stressLevelKey, 0);
+            agent.Add(stressLevelWSTracked);
+        }
+    }
+
+    private void UpdatePerception(float newCurrHealth) {
+
+        float healthChange = newCurrHealth - this.currHealth;
+        this.currHealth = newCurrHealth;
+
+        ChangeStressLevelAfter(healthChange);
+
+        damageStateWSTracked.FloatValue = healthComp.MaxHealth - this.currHealth;
     }
 
     private void Start() {
-        needCoverCheck = agentToUpdate.WorldPerception[inCoverKey] != null;
+        needCoverCheck = agent.WorldPerception[inCoverKey] != null;
     }
 
     private void Update() {
 
-        if (stressLevelWSTracked.FloatValue <= 0f)
-            return;
-
-        float decreaseForSecond = stressLevelDecreaseForSecond;
-        if (needCoverCheck && agentToUpdate.WorldPerception[inCoverKey].BoolValue)
-            decreaseForSecond = stressLevelDecreaseInCover;
-
-        stressLevelWSTracked.FloatValue -= decreaseForSecond * Time.deltaTime;
-        if (stressLevelWSTracked.FloatValue <= 0f)
-            stressLevelWSTracked.FloatValue = 0f;
-
-        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+        if (stressLevelWSTracked.FloatValue > 0f)
+            UpdateStressLevel();
     }
 
-    private void UpdatePerception(float currHealth) {
+    private void UpdateStressLevel() {
+        float decreaseForSecond = stressDecreasePerSec;
+        if (needCoverCheck && agent.WorldPerception[inCoverKey].BoolValue)
+            decreaseForSecond = stressDecreaseCoverPerSec;
 
-        float healthDecrease = lastHealthRegistered - currHealth;
-        lastHealthRegistered = currHealth;
+        float newStressValue = stressLevelWSTracked.FloatValue - decreaseForSecond * Time.deltaTime;
+        if (newStressValue <= 0f)
+            newStressValue = 0f;
 
-        if (healthDecrease > 0 && stressLevelWSTracked.FloatValue < maxStressLevel)
-            stressLevelWSTracked.FloatValue += healthDecrease * stressLevelIncreasePerHealthPoint;
-        else if (healthDecrease < 0) {
-            stressLevelWSTracked.FloatValue = 0f;
-        }
-        agentToUpdate.UpdatePerception(stressLevelWSTracked);
+        stressLevelWSTracked.FloatValue = newStressValue;
+    }   
 
-        damageStateWSTracked.FloatValue = healthComp.MaxHealth - currHealth;
-        agentToUpdate.UpdatePerception(damageStateWSTracked);
+    private void ChangeStressLevelAfter(float healthChange) {
+
+        float currStressLevel = stressLevelWSTracked.FloatValue;
+
+        if (healthChange < 0 && currStressLevel < maxStressLevel)
+            currStressLevel -= healthChange * stressIncreasePerLostHP; //More stress under fire
+        else if (healthChange > 0)
+            currStressLevel = 0f; //No stress if health points regained
+
+        stressLevelWSTracked.FloatValue = currStressLevel;
     }
 }
 

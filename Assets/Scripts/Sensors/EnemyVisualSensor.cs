@@ -92,7 +92,7 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     #region cached fields
     private new Transform transform;
-    private Agent agentToUpdate;
+    private Agent agent;
     private HealthComponent healthComp;
     private Collider2D[] cachedCheckResults = new Collider2D[1];
     #endregion
@@ -100,7 +100,7 @@ public class EnemyVisualSensor : MonoBehaviour {
     #region monobehaviour methods
     protected void Awake() {
 
-        agentToUpdate = GetComponent<Agent>();
+        agent = GetComponent<Agent>();
         healthComp = GetComponent<HealthComponent>();
         transform = GetComponent<Transform>();
 
@@ -111,15 +111,29 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
 
     private void InitPerception() {
-        enemySeenWSTracked = new WorldState(enemySeenKey, false);
-        enemyNearWSTracked = new WorldState(enemyNearKey, false);
-        enemyLostWSTracked = new WorldState(enemyLostKey, false);
-        enemyInWeaponRangeWSTracked = new WorldState(enemyInWeaponRangeKey, true);
+        enemySeenWSTracked = agent[enemySeenKey];
+        if(enemySeenWSTracked == null) {
+            enemySeenWSTracked = new WorldState(enemySeenKey, false);
+            agent.Add(enemySeenWSTracked);
+        }
 
-        agentToUpdate.UpdatePerception(enemySeenWSTracked);
-        agentToUpdate.UpdatePerception(enemyLostWSTracked);
-        agentToUpdate.UpdatePerception(enemyNearWSTracked);
-        agentToUpdate.UpdatePerception(enemyInWeaponRangeWSTracked);
+        enemyNearWSTracked = agent[enemyNearKey];
+        if(enemyNearWSTracked == null) {
+            enemyNearWSTracked = new WorldState(enemyNearKey, false);
+            agent.Add(enemyNearWSTracked);
+        }
+
+        enemyLostWSTracked = agent[enemyLostKey];
+        if(enemyLostWSTracked == null) {
+            enemyLostWSTracked = new WorldState(enemyLostKey, false);
+            agent.Add(enemyLostWSTracked);
+        }
+
+        enemyInWeaponRangeWSTracked = agent[enemyInWeaponRangeKey];
+        if(enemyInWeaponRangeWSTracked == null) {
+            enemyInWeaponRangeWSTracked = new WorldState(enemyInWeaponRangeKey, true);
+            agent.Add(enemyInWeaponRangeWSTracked);
+        }
     }
 
     private void Start() {
@@ -131,9 +145,9 @@ public class EnemyVisualSensor : MonoBehaviour {
     #region public methods
     public void SpotEnemy(Transform visibleEnemy) {
         this.visibleEnemy = visibleEnemy;
-        UpdatePerception(true, enemySeenWSTracked);
+        enemySeenWSTracked.BoolValue = true;
         StopSearch();
-        UpdatePerception(false, enemyLostWSTracked);
+        enemyLostWSTracked.BoolValue = false;
         isEnemySpotted = true;
     }
 
@@ -145,7 +159,6 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
 
     public GameObject CheckInConeOfVision(LayerMask goalLayerMask) {
-        //TODO: with results cached and more than one result
         GameObject result = null;
         if (Physics2D.OverlapCircleNonAlloc(transform.position, visionLenght,
             cachedCheckResults, goalLayerMask) == 1) {
@@ -195,8 +208,8 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
 
     private void LoseEnemy() {
-        UpdatePerception(false, enemySeenWSTracked);
-        UpdatePerception(true, enemyLostWSTracked);
+        enemySeenWSTracked.BoolValue = false;
+        enemyLostWSTracked.BoolValue = true;
 
         searchTimer = StartCoroutine(SearchTimer());
 
@@ -210,13 +223,13 @@ public class EnemyVisualSensor : MonoBehaviour {
 
     private IEnumerator SearchTimer() {
         yield return new WaitForSeconds(searchTime);
-        UpdatePerception(false, enemyLostWSTracked);
+        enemyLostWSTracked.BoolValue = false;
     }
 
     private void UpdateEnemyDistance() {
         currEnemyDistance = transform.SqrDistance(visibleEnemy);
-        UpdatePerception(currEnemyDistance < enemyNearTresholdDistance, enemyNearWSTracked);
-        UpdatePerception(currEnemyDistance <= currWeaponRangeSqr, enemyInWeaponRangeWSTracked);
+        enemyNearWSTracked.BoolValue = currEnemyDistance < enemyNearTresholdDistance;
+        enemyInWeaponRangeWSTracked.BoolValue = currEnemyDistance <= currWeaponRangeSqr;
     }
 
     private void OnEnemyAttack(float currHealth) {
@@ -254,12 +267,5 @@ public class EnemyVisualSensor : MonoBehaviour {
     }
     #endregion
 
-    #region update WorldStates methods
-
-    private void UpdatePerception(bool value, WorldState worldState) {
-        worldState.BoolValue = value;
-        agentToUpdate.UpdatePerception(worldState);
-    }
-    #endregion
 }
 

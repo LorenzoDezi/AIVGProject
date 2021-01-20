@@ -39,12 +39,13 @@ namespace GOAP {
         public List<Action> ActionTemplates => actionTemplates;
 #endif
 
-        public void UpdatePerception(WorldState state) {
-            worldPerception.Update(state);
+        #region public methods
+        public void Add(WorldState state) {
+            worldPerception.Add(state);
         }
 
-        public void UpdatePerception(WorldStates states) {
-            worldPerception.Update(states);
+        public WorldState this[WorldStateKey key] {
+            get => worldPerception[key];
         }
 
         public void Add(Goal goal) {
@@ -59,6 +60,19 @@ namespace GOAP {
             goal.PriorityChanged -= UpdateGoals;
             UpdateGoals();
         }
+
+        public void Clear() {
+            if (currAction != null) {
+                currAction.Deactivate();
+                currAction = null;
+            }
+            foreach (var goal in goals)
+                Destroy(goal);
+            foreach (var action in actions)
+                Destroy(action);
+            StopCoroutine(checkPlanCoroutine);
+        } 
+        #endregion
 
         #region monobehaviour calls
         protected virtual void Awake() {
@@ -162,17 +176,7 @@ namespace GOAP {
             goals.Sort(Goal.Comparer);
         }
 
-        public void Clear() {
-            if(currAction != null) {
-                currAction.Deactivate();
-                currAction = null;
-            }
-            foreach (var goal in goals)
-                Destroy(goal);
-            foreach (var action in actions)
-                Destroy(action);
-            StopCoroutine(checkPlanCoroutine);
-        }
+        
         #endregion
 
 

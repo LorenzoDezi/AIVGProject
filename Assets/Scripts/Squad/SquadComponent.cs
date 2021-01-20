@@ -76,8 +76,8 @@ public class SquadComponent : MonoBehaviour
         visualSensor.StopSearch();
     }
 
-    public void UpdatePerception(WorldState worldState) {
-        agent.UpdatePerception(worldState);
+    public void Add(WorldState worldState) {
+        agent.Add(worldState);
     }
 
     public void RegisterDanger(IDangerous danger) {

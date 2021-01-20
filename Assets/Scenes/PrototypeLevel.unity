@@ -83181,8 +83181,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transformToFollow: {fileID: 2123887072}
-  smoothTime: 0.5
-  maxSpeed: 8
+  smoothTime: 0.2
+  maxSpeed: 20
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

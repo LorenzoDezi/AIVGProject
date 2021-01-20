@@ -24,7 +24,7 @@ public class SquadNeedCoverSensor : SquadSensor {
             WorldState needCoverWS = member[needCoverKey];
             if(needCoverWS == null) {
                 needCoverWS = new WorldState(needCoverKey, false);
-                member.UpdatePerception(needCoverWS);               
+                member.Add(needCoverWS);               
             }
             needCoverWS.StateChanged += GetOnStateChange(member);
         }

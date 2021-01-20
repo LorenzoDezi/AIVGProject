@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class DangerSensor : MonoBehaviour {
 
-    private Agent agentToUpdate;
+    private Agent agent;
     private EnemyVisualSensor visualSensor;
     private GrenadeController grenadeController;
     private new Transform transform;
@@ -24,6 +24,11 @@ public class DangerSensor : MonoBehaviour {
     private List<IDangerous> dangers;
     public float DangerRadius { get; private set; }
     public Vector3 DangerSource { get; private set; }
+
+    public bool InDanger {
+        get => inDangerWSTracked.BoolValue;
+        set => inDangerWSTracked.BoolValue = value;
+    }
 
     [SerializeField]
     private float timeToCheckDanger = 1f;
@@ -48,21 +53,31 @@ public class DangerSensor : MonoBehaviour {
     #region monobehaviour methods
     private void Awake() {
 
-        agentToUpdate = GetComponent<Agent>();
+        agent = GetComponent<Agent>();
         visualSensor = GetComponent<EnemyVisualSensor>();
         transform = GetComponent<Transform>();
         grenadeController = GetComponentInChildren<GrenadeController>();
         if (grenadeController != null)
             canLaunchGrenades = true;
 
-        inDangerWSTracked = new WorldState(inDangerKey, false);
-        agentToUpdate.UpdatePerception(inDangerWSTracked);
-        dangerAroundWSTracked = new WorldState(dangerAroundKey, false);
-        agentToUpdate.UpdatePerception(dangerAroundWSTracked);
-
+        InitPerception();
         dangers = new List<IDangerous>();
 
         currTimeToCheckDanger = timeToCheckDanger;
+    }
+
+    private void InitPerception() {
+        inDangerWSTracked = agent[inDangerKey];
+        if (inDangerWSTracked == null) {
+            inDangerWSTracked = new WorldState(inDangerKey, false);
+            agent.Add(inDangerWSTracked);
+        }
+
+        dangerAroundWSTracked = agent[dangerAroundKey];
+        if (dangerAroundWSTracked == null) {
+            dangerAroundWSTracked = new WorldState(dangerAroundKey, false);
+            agent.Add(dangerAroundWSTracked);
+        }
     }
 
     private void Update() {
@@ -84,18 +99,13 @@ public class DangerSensor : MonoBehaviour {
     #endregion
 
     #region public methods
+    //Called by the squadDangerSensor when another squad member spots a danger
     public void RegisterDanger(IDangerous danger) {
         if (!dangers.Contains(danger)) {
             danger.DangerEnd += OnDangerEnd;
-            SetDangerAround(true);
+            dangerAroundWSTracked.BoolValue = true;
             dangers.Add(danger);
         }
-    }
-
-
-    public void SetInDanger(bool inDanger) {
-        inDangerWSTracked.BoolValue = inDanger;
-        agentToUpdate.UpdatePerception(inDangerWSTracked);
     }
     #endregion
 
@@ -105,7 +115,7 @@ public class DangerSensor : MonoBehaviour {
         if (!Physics2D.Linecast(danger.DangerSource, transform.position, obstacleMask)) {
             DangerRadius = danger.DangerRadius;
             DangerSource = danger.DangerSource;
-            SetInDanger(true);
+            inDangerWSTracked.BoolValue = true;
         }
         RegisterDanger(danger);
         dangerFound?.Invoke(danger);
@@ -117,15 +127,10 @@ public class DangerSensor : MonoBehaviour {
         if (dangers.Count == 0) {
             DangerRadius = 0f;
             DangerSource = Vector3.zero;
-            SetDangerAround(false);
-            SetInDanger(false);
+            dangerAroundWSTracked.BoolValue = false;
+            inDangerWSTracked.BoolValue = false;
         }
     }
-
-    private void SetDangerAround(bool dangerAround) {
-        dangerAroundWSTracked.BoolValue = dangerAround;
-        agentToUpdate.UpdatePerception(dangerAroundWSTracked);
-    } 
     #endregion
 
 }

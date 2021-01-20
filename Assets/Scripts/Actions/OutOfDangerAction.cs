@@ -72,7 +72,7 @@ public class OutOfDangerAction : GOAP.Action {
 
     private void OnPathCompleted(bool isCompleted) {
         if(isCompleted) {
-            dangerSensor.SetInDanger(false);
+            dangerSensor.InDanger = false;
             Terminate(true);
         } else {
             Vector3? destination = GetDestination();

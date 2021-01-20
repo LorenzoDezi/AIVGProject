@@ -73,43 +73,33 @@ public class SquadVisualSensor : SquadSensor {
 
             currTimeToUpdateEnemyPos = 0f;
 
-            foreach (var member in squadMembers) {
-                member.UpdateLastSeen(enemy);
-            }
+            squadMembers.ForEach((member) => member.UpdateLastSeen(enemy));
 
             if (enemyPosBuffer.Count >= enemyPosBufferMaxSize)
                 enemyPosBuffer.Dequeue();
             enemyPosBuffer.Enqueue(enemy.position);
 
-        } else {
+        } else
             currTimeToUpdateEnemyPos += Time.deltaTime;
-        }
     }
 
     private void OnEnemySpotted(Transform enemy) {
 
         if (spotted)
             lostCount--;
-
         else {
-
             spotted = true;
             this.enemy = enemy;
-
             squadMembers.ForEach((member) => member.SpotEnemy(enemy));
-
             currTimeToUpdateEnemyPos = timeToUpdateEnemyPos;
-
             searchCoordinator.StopTimer();
-
             UpdatePerception();
         }        
     }
 
     private void OnTerminateSearch() {
+        squadMembers.ForEach((member) => member[enemyLostKey].BoolValue = false);
         enemyLostWS.BoolValue = false;
-        squadMembers.ForEach((member) => member.UpdatePerception(enemyLostWS));
-        manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     }
 
     private void OnEnemyLost() {
@@ -129,20 +119,22 @@ public class SquadVisualSensor : SquadSensor {
 
     #region perception
     private void InitPerception() {
-        enemySeenWS = new WorldState(enemySeenKey, false);
-        if (manager.SquadPerception[enemySeenKey] == null)
+        enemySeenWS = manager.SquadPerception[enemySeenKey]; 
+        if (enemySeenWS == null) {
+            enemySeenWS = new WorldState(enemySeenKey, false);
             manager.SquadPerception.Add(enemySeenWS);
+        }
 
-        enemyLostWS = new WorldState(enemyLostKey, false);
-        if (manager.SquadPerception[enemyLostKey] == null)
+        enemyLostWS = manager.SquadPerception[enemyLostKey]; 
+        if (enemyLostWS == null) {
+            enemyLostWS = new WorldState(enemyLostKey, false);
             manager.SquadPerception.Add(enemyLostWS);
+        }
     }
 
     private void UpdatePerception() {
         enemySeenWS.BoolValue = spotted;
-        manager.SquadPerception[enemySeenKey].Update(enemySeenWS);
         enemyLostWS.BoolValue = !spotted;
-        manager.SquadPerception[enemyLostKey].Update(enemyLostWS);
     } 
     #endregion
 }

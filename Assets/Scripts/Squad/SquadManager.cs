@@ -43,29 +43,43 @@ public class SquadManager : MonoBehaviour {
 
         squadGoals.Sort(SquadGoal.SquadComparer);
 
-        for(int i = 0; i < squadMembers.Count; i++) {
+        InitSquadMembers();
+        InitBehaviours();
+        InitSensors();
+    }
+
+    private void InitSensors() {
+        squadSensors = GetComponents<SquadSensor>();
+        for (int i = 0; i < squadSensors.Length; i++) {
+            squadSensors[i].Init(this);
+        }
+    }
+
+    private void InitBehaviours() {
+        squadBehaviours = new List<SquadBehaviour>();
+        foreach (var squadBehaviourTempl in squadBehaviourTemplates) {
+            var squadBehaviour = Instantiate(squadBehaviourTempl);
+            squadBehaviour.Init(this);
+            squadBehaviours.Add(squadBehaviour);
+        }
+    }
+
+    private void InitSquadMembers() {
+        for (int i = 0; i < squadMembers.Count; i++) {
 
             var squadMember = squadMembers[i];
             squadMember.SquadIndex = i;
             squadMember.SquadCompDeath += OnSquadComponentDeath;
-            squadMember.UpdatePerception(squadObjectWS);
+
+            if (squadMember[squadObjectKey] == null)
+                squadMember.Add(squadObjectWS);
+            else
+                squadMember[squadObjectKey].GameObjectValue = this.gameObject;
 
             if (i < squadGoals.Count) {
                 squadMember.AddGoalWith(squadGoals[i]);
                 currGoalIndex = i;
             }
-        }
-
-        squadBehaviours = new List<SquadBehaviour>();
-        foreach(var squadBehaviourTempl in squadBehaviourTemplates) {
-            var squadBehaviour = Instantiate(squadBehaviourTempl);
-            squadBehaviour.Init(this);
-            squadBehaviours.Add(squadBehaviour);
-        }
-
-        squadSensors = GetComponents<SquadSensor>();
-        for(int i = 0; i < squadSensors.Length; i++) {
-            squadSensors[i].Init(this);
         }
     }
 
@@ -73,7 +87,7 @@ public class SquadManager : MonoBehaviour {
         RemovedMember.Invoke(RemoveMemberAt(squadCompIndex));
     }
 
-    public SquadComponent RemoveMemberAt(int squadCompIndex) {
+    private SquadComponent RemoveMemberAt(int squadCompIndex) {
 
         if (squadCompIndex == currGoalIndex)
             currGoalIndex--;
@@ -86,6 +100,14 @@ public class SquadManager : MonoBehaviour {
         squadMembers.RemoveAt(squadCompIndex);
 
         return toBeRemoved;
+    }
+
+    public void AddMember(SquadComponent squadMember) {
+        squadMembers.Add(squadMember);
+        squadMember.SquadIndex = squadMembers.Count - 1;
+        squadMember.SquadCompDeath += OnSquadComponentDeath;
+        AssignSquadGoal(squadMember);
+        AddedMember.Invoke(squadMember);
     }
 
     private void ShiftMembers(int squadIndex) {
@@ -103,13 +125,6 @@ public class SquadManager : MonoBehaviour {
         }
     }
 
-    public void AddMember(SquadComponent squadMember) {
-        squadMembers.Add(squadMember);
-        squadMember.SquadIndex = squadMembers.Count - 1;
-        squadMember.SquadCompDeath += OnSquadComponentDeath;
-        AssignSquadGoal(squadMember);
-        AddedMember.Invoke(squadMember);
-    }
 
     private void AssignSquadGoal(SquadComponent squadMember) {
         if (currGoalIndex < squadGoals.Count - 1) {

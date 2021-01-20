@@ -8,17 +8,20 @@ using UnityEngine;
 
 public class GunSensor : MonoBehaviour {
 
-    private Agent agentToUpdate;
+    private Agent agent;
     [SerializeField]
     private WorldStateKey weaponLoadedKey;
     private WorldState weaponLoadedWSTracked;
 
     protected void Awake() {
 
-        agentToUpdate = GetComponent<Agent>();
+        agent = GetComponent<Agent>();
 
-        weaponLoadedWSTracked = new WorldState(weaponLoadedKey, true);
-        agentToUpdate.UpdatePerception(weaponLoadedWSTracked);
+        weaponLoadedWSTracked = agent[weaponLoadedKey];
+        if(weaponLoadedWSTracked == null) {
+            weaponLoadedWSTracked = new WorldState(weaponLoadedKey, true);
+            agent.Add(weaponLoadedWSTracked);
+        }
 
         var gunController = GetComponentInChildren<GunController>();
         gunController.GunLoadStatusChanged += (isLoaded) => UpdatePerception(isLoaded);
@@ -26,7 +29,6 @@ public class GunSensor : MonoBehaviour {
 
     private void UpdatePerception(bool value) {
         weaponLoadedWSTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(weaponLoadedWSTracked);
     }
 }
 

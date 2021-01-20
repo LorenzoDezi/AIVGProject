@@ -34,4 +34,7 @@ MonoBehaviour:
   HSLayer:
     serializedVersion: 2
     m_Bits: 8192
+  wallLayerMask:
+    serializedVersion: 2
+    m_Bits: 32768
   needCoverKey: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}

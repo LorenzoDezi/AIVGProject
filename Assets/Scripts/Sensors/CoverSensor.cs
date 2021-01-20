@@ -20,7 +20,7 @@ public class CoverSensor : MonoBehaviour {
 
     [SerializeField]
     private LayerMask coverMask;
-    private List<CoverComponent> coversAvailable;
+    private List<CoverComponent> nearCovers;
     private CoverComponent currCover;
 
 
@@ -29,19 +29,20 @@ public class CoverSensor : MonoBehaviour {
     public void EnterCover(CoverComponent cover) {
         currCover = cover;
         currCover.CanCoverChangedEvent += OnCurrCanCoverChanged;
-        UpdateInCoverWS(true);
         navComponent.PathStarted += OutOfCover;
-        Debug.LogWarningFormat("Go in cover {0} -> {1}", gameObject.name, cover.name);
+        inCoverWSTracked.BoolValue = true;
     }
 
     public CoverComponent GetBestCover() {
+
         if (currCover != null && currCover.CanCover)
             return currCover;
+
         float minSqrDist = Mathf.Infinity;
         CoverComponent newBestCover = null;
-        foreach (CoverComponent cover in coversAvailable) {
+        foreach (CoverComponent cover in nearCovers) {
             if (cover.IsAvailable) {
-                float sqrDist = cover.transform.SqrDistance(transform);
+                float sqrDist = cover.Transform.SqrDistance(transform);
                 if (sqrDist < minSqrDist) {
                     minSqrDist = sqrDist;
                     newBestCover = cover;
@@ -55,9 +56,9 @@ public class CoverSensor : MonoBehaviour {
         float minSqrDist = Mathf.Infinity;
         float rangeSqr = range * range;
         CoverComponent newBestCover = null;
-        foreach (CoverComponent cover in coversAvailable) {
+        foreach (CoverComponent cover in nearCovers) {
             if (cover.IsAvailable && cover.Transform.SqrDistance(target) <= rangeSqr) {
-                float sqrDist = cover.transform.SqrDistance(transform);
+                float sqrDist = cover.Transform.SqrDistance(transform);
                 if (sqrDist < minSqrDist) {
                     minSqrDist = sqrDist;
                     newBestCover = cover;
@@ -75,10 +76,13 @@ public class CoverSensor : MonoBehaviour {
         transform = GetComponent<Transform>();
         navComponent = GetComponent<NavigationComponent>();
 
-        coversAvailable = new List<CoverComponent>();
+        nearCovers = new List<CoverComponent>();
 
-        inCoverWSTracked = new WorldState(inCoverKey, false);
-        agentToUpdate.UpdatePerception(inCoverWSTracked);
+        inCoverWSTracked = agentToUpdate[inCoverKey];
+        if(inCoverWSTracked == null) {
+            inCoverWSTracked = new WorldState(inCoverKey, false);
+            agentToUpdate.Add(inCoverWSTracked);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -87,7 +91,7 @@ public class CoverSensor : MonoBehaviour {
             return;
 
         CoverComponent newCover = collider.GetComponent<CoverComponent>();
-        coversAvailable.Add(newCover);
+        nearCovers.Add(newCover);
     }
 
     private void OnTriggerExit2D(Collider2D collider) {
@@ -96,7 +100,7 @@ public class CoverSensor : MonoBehaviour {
             return;
 
         CoverComponent cover = collider.GetComponent<CoverComponent>();
-        coversAvailable.Remove(cover);
+        nearCovers.Remove(cover);
     } 
     #endregion
 
@@ -106,13 +110,8 @@ public class CoverSensor : MonoBehaviour {
         currCover.IsOccupied = false;
         currCover.CanCoverChangedEvent -= OnCurrCanCoverChanged;
         currCover = null;
-        UpdateInCoverWS(false);
+        inCoverWSTracked.BoolValue = false;
         navComponent.PathStarted -= OutOfCover;
-    }
-
-    private void UpdateInCoverWS(bool value) {
-        inCoverWSTracked.BoolValue = value;
-        agentToUpdate.UpdatePerception(inCoverWSTracked);
     }
 
     private void OnCurrCanCoverChanged(bool canCover) {
