@@ -2,34 +2,45 @@
 using UnityEngine;
 
 namespace GOAP {
-    //TODO: Refactor all into GOal? Without GoalPriorityUpdater?
+
     [Serializable]
     public class GoalPriorityUpdater {
         [SerializeField]
         private bool isWorldWS;
         [SerializeField]
+        WorldStateKey refWSKey;
         WorldState referenceWS;
 
-        WorldState currReferenceWS;
-        public WorldState CurrReferenceWS => currReferenceWS;
+        public event StateChangedHandler PriorityChanged {
+            add {
+                referenceWS.StateChanged += value;
+            }
+            remove {
+                referenceWS.StateChanged -= value;
+            }
+        }
 
         [SerializeField]
         private float priorityMultiplier;
+        [SerializeField]
+        private float maxPriority;
         [SerializeField]
         private bool inversePriority;
 
         public void Init(Agent agent) {
             var worldStates = isWorldWS ? World.WorldStates : agent.WorldPerception;
-            currReferenceWS = worldStates[referenceWS.Key];
-            if (currReferenceWS == null) {
-                currReferenceWS = new WorldState(referenceWS);
-                worldStates.Add(currReferenceWS);
+            referenceWS = worldStates[refWSKey];
+            if (referenceWS == null) {
+                referenceWS = new WorldState(refWSKey);
+                worldStates.Add(referenceWS);
             }
         }
 
         public float GetPriority() {
-            float priority = currReferenceWS.IntValue * priorityMultiplier;
-            return inversePriority ? priorityMultiplier - priority : priority;
+            float priority = referenceWS.IntValue * priorityMultiplier;
+            if (priority > maxPriority)
+                priority = maxPriority;
+            return inversePriority ? maxPriority - priority : priority;
         }
     }
 

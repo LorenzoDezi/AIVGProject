@@ -10,7 +10,7 @@ public class EnemyDebug : MonoBehaviour
     [NonSerialized]
     public Agent agent;
     [NonSerialized]
-    public EnemyVisualSensor visualSensor;
+    public VisualSensor visualSensor;
     [NonSerialized]
     public CoverSensor coverSensor;
     [NonSerialized]
@@ -25,7 +25,7 @@ public class EnemyDebug : MonoBehaviour
 #if UNITY_EDITOR
         agent = GetComponent<Agent>();
         agent.PlanCompleted += (plan) => currentPlan = plan;
-        visualSensor = GetComponent<EnemyVisualSensor>();
+        visualSensor = GetComponent<VisualSensor>();
         coverSensor = GetComponent<CoverSensor>();
         healthComponent = GetComponent<HealthComponent>();
         healthComponent.Death.AddListener(OnDeath);

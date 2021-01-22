@@ -4,7 +4,7 @@
 public class KnifeAttackAction : GOAP.Action {
 
     private NavigationComponent navComponent;
-    private EnemyVisualSensor visualSensor;
+    private VisualSensor visualSensor;
     private KnifeController knifeController;
     private CharacterController charController;
 
@@ -14,7 +14,7 @@ public class KnifeAttackAction : GOAP.Action {
 
         knifeController = agentGameObj.GetComponentInChildren<KnifeController>();
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
-        visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        visualSensor = agentGameObj.GetComponent<VisualSensor>();
         charController = agentGameObj.GetComponent<CharacterController>();
     }
 

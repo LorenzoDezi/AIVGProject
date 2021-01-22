@@ -9,7 +9,7 @@ public class SquadComponent : MonoBehaviour
 {
     private Agent agent;
     private HealthComponent healthComp;
-    private EnemyVisualSensor visualSensor;
+    private VisualSensor visualSensor;
     private DangerSensor dangerSensor;
     public Transform Transform { get; private set; }
 
@@ -51,7 +51,7 @@ public class SquadComponent : MonoBehaviour
     private void Awake() {
 
         agent = GetComponent<Agent>();
-        visualSensor = GetComponent<EnemyVisualSensor>();
+        visualSensor = GetComponent<VisualSensor>();
         dangerSensor = GetComponent<DangerSensor>();
         healthComp = GetComponent<HealthComponent>();
         Transform = GetComponent<Transform>();

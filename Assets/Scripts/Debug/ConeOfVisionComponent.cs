@@ -34,7 +34,7 @@ public class ConeOfVisionComponent : MonoBehaviour {
 
     #region Cone of vision parameters
     [SerializeField]
-    private EnemyVisualSensor visualSensor;
+    private VisualSensor visualSensor;
     private float coneOfVisionLenght;
     private float coneOfVisionAngle;
     private LayerMask obstacleLayer;

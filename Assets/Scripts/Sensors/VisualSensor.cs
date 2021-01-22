@@ -10,7 +10,7 @@ using UnityEngine;
 public delegate void EnemySpottedHandler(Transform enemySpotted);
 public delegate void EnemyLostHandler();
 
-public class EnemyVisualSensor : MonoBehaviour {
+public class VisualSensor : MonoBehaviour {
 
     #region WorldStates
     [SerializeField]

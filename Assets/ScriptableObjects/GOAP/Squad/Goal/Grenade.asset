@@ -28,13 +28,8 @@ MonoBehaviour:
         gameObjectValue: {fileID: 0}
   priorityUpdater:
     isWorldWS: 0
-    referenceWS:
-      value:
-        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
-        intValue: 0
-        floatValue: 0
-        boolValue: 0
-        gameObjectValue: {fileID: 0}
+    refWSKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
     priorityMultiplier: 8
+    maxPriority: 8
     inversePriority: 0
   squadPriority: 3

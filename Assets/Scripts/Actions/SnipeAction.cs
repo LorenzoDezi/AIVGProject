@@ -6,7 +6,7 @@ using UnityEngine;
 public class SnipeAction : GOAP.Action {
 
     private CharacterController charController;
-    private EnemyVisualSensor enemyVisualSensor;
+    private VisualSensor enemyVisualSensor;
     private SniperController sniperController;
     private Transform targetTransf;
     private Transform transform;
@@ -24,7 +24,7 @@ public class SnipeAction : GOAP.Action {
 
         sniperController = agentGameObj.GetComponentInChildren<SniperController>();
         charController = agentGameObj.GetComponent<CharacterController>();
-        enemyVisualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        enemyVisualSensor = agentGameObj.GetComponent<VisualSensor>();
         transform = agentGameObj.GetComponent<Transform>();
     }
 

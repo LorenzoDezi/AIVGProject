@@ -3,7 +3,7 @@
 [CreateAssetMenu(fileName = "ShootAction", menuName = "GOAP/Actions/ShootStandingAction")]
 public class ShootAction : GOAP.Action {
 
-    protected EnemyVisualSensor visualSensor;
+    protected VisualSensor visualSensor;
     protected GunController gunController;
     protected CharacterController charController;
     protected Transform transform;
@@ -17,7 +17,7 @@ public class ShootAction : GOAP.Action {
 
         gunController = agentGameObj.GetComponentInChildren<GunController>();
         charController = agentGameObj.GetComponent<CharacterController>();
-        visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        visualSensor = agentGameObj.GetComponent<VisualSensor>();
         transform = agentGameObj.GetComponent<Transform>();
     }
 

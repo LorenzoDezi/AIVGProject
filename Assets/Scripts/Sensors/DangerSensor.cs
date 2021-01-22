@@ -6,7 +6,7 @@ using UnityEngine;
 public class DangerSensor : MonoBehaviour {
 
     private Agent agent;
-    private EnemyVisualSensor visualSensor;
+    private VisualSensor visualSensor;
     private GrenadeController grenadeController;
     private new Transform transform;
 
@@ -54,7 +54,7 @@ public class DangerSensor : MonoBehaviour {
     private void Awake() {
 
         agent = GetComponent<Agent>();
-        visualSensor = GetComponent<EnemyVisualSensor>();
+        visualSensor = GetComponent<VisualSensor>();
         transform = GetComponent<Transform>();
         grenadeController = GetComponentInChildren<GrenadeController>();
         if (grenadeController != null)

@@ -10,7 +10,7 @@ public class LaunchGrenadeAction : GOAP.Action {
 
     private GrenadeController grenadeController;
     private CharacterController charController;
-    private EnemyVisualSensor enemyVisualSensor;
+    private VisualSensor enemyVisualSensor;
 
     private Transform target;
 
@@ -19,7 +19,7 @@ public class LaunchGrenadeAction : GOAP.Action {
 
         charController = agentGameObj.GetComponent<CharacterController>();
         grenadeController = agentGameObj.GetComponentInChildren<GrenadeController>();
-        enemyVisualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        enemyVisualSensor = agentGameObj.GetComponent<VisualSensor>();
     }
 
     public override bool Activate() {

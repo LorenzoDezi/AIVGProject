@@ -36,7 +36,11 @@ namespace GOAP {
             desiredStates = new WorldStates(desiredStates);
             priorityUpdater.Init(agentObj.GetComponent<Agent>());
             UpdatePriority();
-            priorityUpdater.CurrReferenceWS.StateChanged += UpdatePriority;
+            priorityUpdater.PriorityChanged += UpdatePriority;
+        }
+
+        private void OnDisable() {
+            priorityUpdater.PriorityChanged -= UpdatePriority;
         }
 
         protected virtual void UpdatePriority() {

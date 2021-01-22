@@ -2,7 +2,7 @@
 
 public abstract class SearchAction : GOAP.Action {
 
-    protected EnemyVisualSensor visualSensor;
+    protected VisualSensor visualSensor;
     protected NavigationComponent navComponent;
     protected CharacterController charController;
     protected Transform transform;
@@ -28,7 +28,7 @@ public abstract class SearchAction : GOAP.Action {
     public override void Init(GameObject agentGameObj) {
         base.Init(agentGameObj);
 
-        visualSensor = agentGameObj.GetComponent<EnemyVisualSensor>();
+        visualSensor = agentGameObj.GetComponent<VisualSensor>();
         navComponent = agentGameObj.GetComponent<NavigationComponent>();
         charController = agentGameObj.GetComponent<CharacterController>();
         transform = agentGameObj.GetComponent<Transform>();
