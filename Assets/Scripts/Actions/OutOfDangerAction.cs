@@ -8,12 +8,8 @@ public class OutOfDangerAction : GOAP.Action {
     private DangerSensor dangerSensor;
     private Transform transform;
 
-    private Collider2D[] results;
-
     [SerializeField]
     private int maxSearchOutOfDangerIterations = 5;
-    [SerializeField]
-    private int maxSearchHideResults = 10;
 
     [SerializeField]
     private LayerMask obstacleMask;
@@ -29,7 +25,6 @@ public class OutOfDangerAction : GOAP.Action {
         charController = agentGameObj.GetComponent<CharacterController>();
         transform = agentGameObj.transform;
 
-        results = new Collider2D[maxSearchHideResults];
     }
 
     public override bool Activate() {

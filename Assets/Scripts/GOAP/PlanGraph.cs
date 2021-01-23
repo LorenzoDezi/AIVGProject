@@ -13,16 +13,15 @@ namespace GOAP {
             Nodes = new List<PlanNode>();
         }
 
-        public PlanGraph(List<Action> actions, bool forward = true) : this() {
+        public PlanGraph(List<Action> actions) : this() {
             actions.ForEach((action) => Nodes.Add(new PlanNode(action)));
             Nodes.ForEach((node) => AddConnections(node));
         }
 
         
 
-        public void AddConnections(PlanNode node, bool forward = true) {
-            List<PlanNode> connectedPlanNodes = forward ? 
-                GetConnectedNodesFrom(node) : GetConnectedNodesTowards(node);
+        public void AddConnections(PlanNode node) {
+            List<PlanNode> connectedPlanNodes = GetConnectedNodesFrom(node); 
             foreach(var connectedNode in connectedPlanNodes) {
                 PlanConnection planConnection = new PlanConnection(node, connectedNode);
                 node.AddConnection(planConnection);

@@ -18,9 +18,6 @@ namespace GOAP {
 
         [SerializeField]
         protected float cost;
-
-        protected Agent agent;
-
         public float Cost => cost;
 
         public delegate void EndActionHandler(bool isSuccessful);
@@ -31,9 +28,6 @@ namespace GOAP {
         }
 
         public virtual void Init(GameObject agentGameObj) {
-            this.preconditions = new WorldStates(Preconditions);
-            this.effects = new WorldStates(Effects);
-            this.agent = agentGameObj.GetComponent<Agent>();
         }
 
         public abstract bool Activate();
@@ -42,7 +36,7 @@ namespace GOAP {
 
         public abstract void Update();
 
-        protected virtual void Terminate(bool success) {
+        protected void Terminate(bool success) {
             EndAction?.Invoke(success);
         }
 

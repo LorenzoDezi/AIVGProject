@@ -72010,6 +72010,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar
       objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -72157,6 +72162,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthBar (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
@@ -83906,6 +83916,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -84611,6 +84626,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthBar (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
@@ -86931,6 +86951,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealthBar (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -87044,6 +87069,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HealthBar (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8187650902271721392, guid: a2b9d1d84382ebd4f95bd6913501af4a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8187650902271721394, guid: a2b9d1d84382ebd4f95bd6913501af4a,
         type: 3}
@@ -88385,6 +88415,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Squad1
       objectReference: {fileID: 0}
+    - target: {fileID: 6412692240534204494, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a9ac8e3f56ef8244b509244475759b4, type: 3}
 --- !u!1001 &6563854298374801428
@@ -88396,7 +88431,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1946518154, guid: ebe3b4dcd7f730c4493713604b2ed191, type: 3}
       propertyPath: maxHealth
-      value: 200
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 3544019212986778125, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}

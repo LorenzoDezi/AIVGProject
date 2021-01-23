@@ -220,7 +220,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32768
   damage: 100
-  linearSpeed: 5
+  linearSpeed: 10
   rotationSpeed: 500
   timeToExplode: 1.5
   explosionRadius: 2

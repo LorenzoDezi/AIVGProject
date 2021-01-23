@@ -4,7 +4,6 @@
 public class GoToCoverAction : ShootAction {
 
     protected CoverSensor coverSensor;
-    protected NavigationComponent navComponent;
     protected CoverComponent targetCover;
     protected bool coverReached;
 
@@ -14,7 +13,6 @@ public class GoToCoverAction : ShootAction {
         base.Init(agentGameObj);
 
         coverSensor = agentGameObj.GetComponent<CoverSensor>();
-        navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
     public override bool CheckProceduralConditions() {

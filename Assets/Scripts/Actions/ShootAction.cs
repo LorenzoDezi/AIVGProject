@@ -5,6 +5,7 @@ public class ShootAction : GOAP.Action {
 
     protected VisualSensor visualSensor;
     protected GunController gunController;
+    protected NavigationComponent navComponent;
     protected CharacterController charController;
     protected Transform transform;
     protected Transform target;
@@ -18,6 +19,7 @@ public class ShootAction : GOAP.Action {
         gunController = agentGameObj.GetComponentInChildren<GunController>();
         charController = agentGameObj.GetComponent<CharacterController>();
         visualSensor = agentGameObj.GetComponent<VisualSensor>();
+        navComponent = agentGameObj.GetComponent<NavigationComponent>();
         transform = agentGameObj.GetComponent<Transform>();
     }
 
@@ -25,7 +27,7 @@ public class ShootAction : GOAP.Action {
 
         if(!visualSensor.IsEnemySpotted)
             return false;
-
+        navComponent.Stop();
         target = visualSensor.VisibleEnemy;
         return true;
     }

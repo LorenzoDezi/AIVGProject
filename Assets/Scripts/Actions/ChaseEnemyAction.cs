@@ -3,13 +3,8 @@
 [CreateAssetMenu(fileName = "ChaseEnemyAction", menuName = "GOAP/Actions/ChaseEnemyAction")]
 public class ChaseEnemyAction : ShootAction {
 
-    private NavigationComponent navComponent;
-
     public override void Init(GameObject agentGameObj) {
-
         base.Init(agentGameObj);
-
-        navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
     public override bool Activate() {

@@ -16,7 +16,6 @@ public class CircleShootAction : ShootAction {
     private float switchFirePointInterval = 3f;
     private float timeSinceLastSwitchFirePoint;
 
-    protected NavigationComponent navComponent;
     protected Vector3 movementTargetPos;
 
     protected virtual void SetMovementTargetPosition() {
@@ -28,7 +27,6 @@ public class CircleShootAction : ShootAction {
         base.Init(agentGameObj);
 
         visualSensor.CurrWeaponRange = Mathf.Infinity;
-        navComponent = agentGameObj.GetComponent<NavigationComponent>();
     }
 
     public override bool Activate() {

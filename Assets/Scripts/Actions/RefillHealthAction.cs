@@ -27,14 +27,13 @@ public class RefillHealthAction : GOAP.Action {
     }
 
     public override void Init(GameObject agentGameObj) {
-        base.Init(agentGameObj);
-
+    
         navigationComponent = agentGameObj.GetComponent<NavigationComponent>();
         transform = agentGameObj.GetComponent<Transform>();
         charController = agentGameObj.GetComponent<CharacterController>();
         healthComponent = agentGameObj.GetComponent<HealthComponent>();
         healthSensor = agentGameObj.GetComponent<HealthSensor>();
-
+        var agent = agentGameObj.GetComponent<Agent>();
         needCoverWS = agent[needCoverKey];
         if(needCoverWS == null) {
             needCoverWS = new WorldState(needCoverKey, false);

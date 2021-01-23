@@ -22,6 +22,9 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 0
         gameObjectValue: {fileID: 0}
-  cost: 0
+  cost: 10
   maxSearchOutOfDangerIterations: 5
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 33792
   safeDistance: 3

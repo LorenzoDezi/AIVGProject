@@ -7,7 +7,6 @@ public class DangerSensor : MonoBehaviour {
 
     private Agent agent;
     private VisualSensor visualSensor;
-    private GrenadeController grenadeController;
     private new Transform transform;
 
     [SerializeField]
@@ -34,21 +33,7 @@ public class DangerSensor : MonoBehaviour {
     private float timeToCheckDanger = 1f;
     private float currTimeToCheckDanger;
 
-    private bool canLaunchGrenades;
-
-    private event DangerFoundHandler dangerFound;
-    public event DangerFoundHandler DangerFound {
-        add {
-            if(canLaunchGrenades)
-                grenadeController.GrenadeLaunched += value;
-            dangerFound += value;
-        }
-        remove {
-            if(canLaunchGrenades)
-                grenadeController.GrenadeLaunched -= value;
-            dangerFound -= value;
-        }
-    }
+    public event DangerFoundHandler DangerFound;
 
     #region monobehaviour methods
     private void Awake() {
@@ -56,10 +41,6 @@ public class DangerSensor : MonoBehaviour {
         agent = GetComponent<Agent>();
         visualSensor = GetComponent<VisualSensor>();
         transform = GetComponent<Transform>();
-        grenadeController = GetComponentInChildren<GrenadeController>();
-        if (grenadeController != null)
-            canLaunchGrenades = true;
-
         InitPerception();
         dangers = new List<IDangerous>();
 
@@ -84,7 +65,7 @@ public class DangerSensor : MonoBehaviour {
         if (currTimeToCheckDanger >= timeToCheckDanger) {
             var dangerObj = visualSensor.CheckInConeOfVision(dangerLayerMask);
             if (dangerObj != null)
-                ProcessDanger(dangerObj);
+                ProcessDanger(dangerObj.GetComponent<IDangerous>());
             currTimeToCheckDanger = 0f;
         } else {
             currTimeToCheckDanger += Time.deltaTime;
@@ -93,7 +74,7 @@ public class DangerSensor : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D collision) {
         if (dangerLayerMask.ContainsLayer(collision.gameObject.layer)) {
-            ProcessDanger(collision.gameObject);
+            ProcessDanger(collision.GetComponent<IDangerous>());
         }
     }
     #endregion
@@ -110,15 +91,14 @@ public class DangerSensor : MonoBehaviour {
     #endregion
 
     #region private methods
-    private void ProcessDanger(GameObject dangerObj) {
-        var danger = dangerObj.GetComponent<IDangerous>();
+    private void ProcessDanger(IDangerous danger) {
         if (!Physics2D.Linecast(danger.DangerSource, transform.position, obstacleMask)) {
             DangerRadius = danger.DangerRadius;
             DangerSource = danger.DangerSource;
             inDangerWSTracked.BoolValue = true;
         }
         RegisterDanger(danger);
-        dangerFound?.Invoke(danger);
+        DangerFound?.Invoke(danger);
     }
 
     private void OnDangerEnd(IDangerous danger) {

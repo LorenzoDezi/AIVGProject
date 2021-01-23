@@ -25,5 +25,5 @@ MonoBehaviour:
     refWSKey: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
     priorityMultiplier: 9
     maxPriority: 9
-    inversePriority: 0
+    inversePriority: 1
   squadPriority: 0

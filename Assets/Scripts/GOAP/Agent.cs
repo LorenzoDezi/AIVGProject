@@ -100,6 +100,7 @@ namespace GOAP {
         private IEnumerator CheckPlan() {
 
             var replanWaitFor = new WaitForSeconds(replanInterval);
+            var nextFrameWait = new WaitForEndOfFrame();
             Action newAction;
 
             while (true) {
@@ -107,15 +108,19 @@ namespace GOAP {
                 newAction = null;
 
                 foreach(Goal goal in goals.ToList()) {
-                    actionQueue = planner.Plan(goal, worldPerception);
-#if UNITY_EDITOR
+
+                    if (worldPerception.Contains(goal.DesiredStates))
+                        continue;
+
+                    actionQueue = planner.Plan(goal.DesiredStates, worldPerception);
+#if UNITY_EDITOR    
                     PlanCompleted?.Invoke(actionQueue.ToList());
 #endif
                     if (actionQueue.Count > 0) {
                         newAction = actionQueue.Dequeue();
                         break;
                     }
-                    yield return new WaitForEndOfFrame();
+                    yield return nextFrameWait;
                 }
 
                 if (newAction != currAction) {
@@ -137,8 +142,10 @@ namespace GOAP {
         } 
 
         private void EnableCurrAction() {
+
             if (currAction == null)
                 return;
+
             if (currAction.Activate())
                 currAction.EndAction += OnEndAction;
             else
@@ -146,15 +153,19 @@ namespace GOAP {
         }
 
         private void DisableCurrAction() {
-            if (currAction != null) {
-                currAction.Deactivate();
-                currAction.EndAction -= OnEndAction;
-                currAction = null;
-            }
+
+            if (currAction == null)
+                return;
+
+            currAction.Deactivate();
+            currAction.EndAction -= OnEndAction;
+            currAction = null;
         }
 
         private void OnEndAction(bool success) {
+
             DisableCurrAction();
+
             if(success && actionQueue.Count > 0) {
                 currAction = actionQueue.Dequeue();
                 EnableCurrAction();
