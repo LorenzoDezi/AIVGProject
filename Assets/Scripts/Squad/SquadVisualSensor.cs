@@ -98,7 +98,6 @@ public class SquadVisualSensor : SquadSensor {
     }
 
     private void OnTerminateSearch() {
-        squadMembers.ForEach((member) => member[enemyLostKey].BoolValue = false);
         enemyLostWS.BoolValue = false;
     }
 
@@ -111,8 +110,6 @@ public class SquadVisualSensor : SquadSensor {
                 searchCoordinator?.SetupSearchPoints(enemyPosBuffer.Dequeue());
                 enemyPosBuffer.Clear();
             }
-            //Stopping "single" enemy search
-            squadMembers.ForEach((member) => member.StopSearch());
             UpdatePerception();
         }
     }

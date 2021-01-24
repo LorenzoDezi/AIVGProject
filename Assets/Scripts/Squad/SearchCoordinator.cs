@@ -53,9 +53,6 @@ public class SearchCoordinator : SquadSensor {
             if (randomSearchPoint.HasValue)
                 searchPoints.Add(randomSearchPoint.Value);
         }
-        //DEBUG
-        foreach (var searchPoint in searchPoints)
-            Debug.DrawLine(lastEnemyPosition, searchPoint, Color.red, 10f);
         searchTimer = StartCoroutine(StartSearchTimer());
     }
 

@@ -40,7 +40,8 @@ namespace GOAP {
         }
 
         private void OnDisable() {
-            priorityUpdater.PriorityChanged -= UpdatePriority;
+            if(priorityUpdater != null)
+                priorityUpdater.PriorityChanged -= UpdatePriority;
         }
 
         protected virtual void UpdatePriority() {

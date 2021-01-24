@@ -13,10 +13,12 @@ namespace GOAP {
 
         public event StateChangedHandler PriorityChanged {
             add {
-                referenceWS.StateChanged += value;
+                if(referenceWS != null)
+                    referenceWS.StateChanged += value;
             }
             remove {
-                referenceWS.StateChanged -= value;
+                if(referenceWS != null)
+                    referenceWS.StateChanged -= value;
             }
         }
 

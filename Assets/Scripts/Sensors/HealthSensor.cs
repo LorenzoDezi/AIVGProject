@@ -107,6 +107,8 @@ public class HealthSensor : MonoBehaviour {
             currStressLevel -= healthChange * stressIncreasePerLostHP; //More stress under fire
         else if (healthChange > 0)
             currStressLevel = 0f; //No stress if health points regained
+
+        stressLevelWSTracked.FloatValue = currStressLevel;
     }
 
     private void UpdateDamageState() {

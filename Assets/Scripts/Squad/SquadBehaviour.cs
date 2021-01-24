@@ -19,12 +19,8 @@ public class SquadBehaviour : ScriptableObject {
 
     private List<SquadComponent> membersAssigned;
 
-    private bool active;
-    public bool Active => active;
-
     public void Init(SquadManager manager) {
         this.manager = manager;
-        active = false;
         membersAssigned = new List<SquadComponent>();
         WorldStates perception = manager.SquadPerception;
         foreach(WorldState triggerState in triggerStates) {
