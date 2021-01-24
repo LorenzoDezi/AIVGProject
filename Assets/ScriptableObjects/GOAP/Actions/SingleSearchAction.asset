@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbd0f1f2681c3584bb9c8606e5a22fd1, type: 3}
+  m_Name: SingleSearchAction
+  m_EditorClassIdentifier: 
+  preconditions:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: e760dedbd72dadb4e8bd2aac802798b3, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
+  effects:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+  cost: 0
+  deltaLookRot: 75
+  maxLookRot: 75
+  minSearchSpeed: 2
+  maxSearchPointIterations: 5
+  searchDistance: 10
+  changeSearchPointThreshold: 4

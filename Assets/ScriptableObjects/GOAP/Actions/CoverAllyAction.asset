@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba86028304bc3f24a8da9e383c62ac61, type: 3}
+  m_Name: CoverAllyAction
+  m_EditorClassIdentifier: 
+  preconditions:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a7c330866ad1281489e890d70f0b9a8e, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
+  effects:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 95ccc3a36138c5644beb0c925681ccc7, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+  cost: 4
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 33792
+  distance: 4
+  maxSearchFirePointIteration: 5
+  squadObjectKey: {fileID: 11400000, guid: babc2c2d588368643b7ae0a4ca19f3ef, type: 2}

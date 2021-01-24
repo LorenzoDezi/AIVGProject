@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071b742aeb626da47a985e1c4b63ea7f, type: 3}
+  m_Name: KillEnemyGoal
+  m_EditorClassIdentifier: 
+  desiredStates:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 6fa277d18e7270b4a8dd34324f5bb795, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+  priorityUpdater:
+    isWorldWS: 0
+    refWSKey: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+    priorityMultiplier: 5
+    maxPriority: 5
+    inversePriority: 0

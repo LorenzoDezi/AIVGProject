@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f634463e473dc4468ffda94f03ebad7, type: 3}
+  m_Name: ReloadAction
+  m_EditorClassIdentifier: 
+  preconditions:
+    states: []
+  effects:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: 775a0b2d92363a6469367c0b12000973, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}
+  cost: 2
