@@ -22,3 +22,17 @@ MonoBehaviour:
         floatValue: 0
         boolValue: 1
         gameObjectValue: {fileID: 0}
+  memberPreconditions:
+    states:
+    - value:
+        key: {fileID: 11400000, guid: a76a58a7f50597849be91de6b467d119, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 0
+        gameObjectValue: {fileID: 0}
+    - value:
+        key: {fileID: 11400000, guid: 0f810b249915a1b4d946da96b8f2b9cd, type: 2}
+        intValue: 0
+        floatValue: 0
+        boolValue: 1
+        gameObjectValue: {fileID: 0}

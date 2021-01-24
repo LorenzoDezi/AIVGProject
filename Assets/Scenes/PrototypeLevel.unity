@@ -83506,6 +83506,11 @@ PrefabInstance:
       propertyPath: enemyNearTresholdDistance
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2089853290383079076, guid: 32f6da04792d1114fa3b0af6f1b898bb,
+        type: 3}
+      propertyPath: searchTime
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4194562702650776849, guid: 32f6da04792d1114fa3b0af6f1b898bb,
         type: 3}
       propertyPath: m_Enabled
@@ -88410,6 +88415,11 @@ PrefabInstance:
       propertyPath: searchTime
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 6412692240534204491, guid: 2a9ac8e3f56ef8244b509244475759b4,
+        type: 3}
+      propertyPath: enemyPosBufferMaxSize
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6412692240534204494, guid: 2a9ac8e3f56ef8244b509244475759b4,
         type: 3}
       propertyPath: m_Name
@@ -88431,12 +88441,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1946518154, guid: ebe3b4dcd7f730c4493713604b2ed191, type: 3}
       propertyPath: maxHealth
-      value: 100000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3544019212986778125, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}
       propertyPath: maxAmmo
-      value: 5
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 6563854298105148249, guid: ebe3b4dcd7f730c4493713604b2ed191,
         type: 3}

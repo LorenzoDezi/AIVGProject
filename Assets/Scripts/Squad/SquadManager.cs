@@ -133,11 +133,18 @@ public class SquadManager : MonoBehaviour {
         }
     }
 
-    public List<SquadComponent> GetMembers(int count) {
+    public List<SquadComponent> GetMembers(int membersNeeded, WorldStates memberPreconditions) {
 
         List<SquadComponent> members = new List<SquadComponent>();
-        for(int i = 0; i < count && squadMembers.Count > 0; i++) {
-            members.Add(RemoveMemberAt(squadMembers.Count - 1));
+
+        for (int i = 0; i < squadMembers.Count && membersNeeded > 0; ) {
+            var currMember = squadMembers[i];
+            if(memberPreconditions.All((precondition) => currMember[precondition.Key].Equals(precondition))) {
+                members.Add(RemoveMemberAt(i));
+                membersNeeded--;
+            } else {
+                i++;
+            }
         }
 
         return members;

@@ -299,7 +299,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c6a7c2960f6bb744eb76e42af1b3a893, type: 2}
   - {fileID: 11400000, guid: c13d6301c39905843baf8d530e454a3d, type: 2}
   - {fileID: 11400000, guid: 194b1d1957548f74e9904d0dc81b1a88, type: 2}
-  replanInterval: 0.5
+  replanInterval: 0.35
   worldPerception:
     states: []
 --- !u!114 &727441786284930137
@@ -419,7 +419,7 @@ MonoBehaviour:
   visionLenght: 12
   checkTargetDelay: 0.2
   enemyNearTresholdDistance: 4
-  searchTime: 10
+  searchTime: 5
   timeToLoseEnemy: 5
 --- !u!114 &744502580
 MonoBehaviour:

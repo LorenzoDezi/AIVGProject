@@ -12,7 +12,9 @@ public class SquadBehaviour : ScriptableObject {
     [SerializeField]
     private List<SquadGoal> goalTemplates;
     [SerializeField, Tooltip("The world states that need to be matched to trigger this behaviour")]
-    private WorldStates triggerStates;   
+    private WorldStates triggerStates;
+    [SerializeField, Tooltip("The members chosen for the behaviour must have these worldStates")]
+    private WorldStates memberPreconditions;
     SquadManager manager;
 
     private List<SquadComponent> membersAssigned;
@@ -50,7 +52,7 @@ public class SquadBehaviour : ScriptableObject {
     }
 
     protected virtual void StartBehaviour() {
-        var members = manager.GetMembers(goalTemplates.Count);
+        var members = manager.GetMembers(goalTemplates.Count, memberPreconditions);
         if(members.Count <= goalTemplates.Count) {
             members.ForEach((member) => member.SquadCompDeath += OnSquadComponentDeath);
             int startIndex = membersAssigned.Count;
